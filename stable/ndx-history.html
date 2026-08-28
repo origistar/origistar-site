@@ -11,138 +11,140 @@
 <link rel="stylesheet" href="../assets/style.css">
 <link rel="manifest" href="../manifest.json">
 <link rel="apple-touch-icon" href="../assets/icon-192.png">
+<style>
+  .rng{display:flex;gap:6px;flex-wrap:wrap;margin:2px 0 10px}
+  .rng button{border:1px solid var(--border);background:transparent;color:var(--muted);font-size:12px;padding:5px 12px;border-radius:20px;font-weight:600;cursor:pointer}
+  .rng button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+  table.matrix{font-size:10.5px}
+  table.matrix th{padding:5px 3px;font-size:9.5px}
+  table.matrix td{padding:5px 3px}
+  .ph1{color:#34d399;font-weight:700}
+  .ph2{color:#fbbf24;font-weight:700}
+  .ph3{color:#f87171;font-weight:700}
+</style>
 </head>
 <body>
-<script src="../assets/data.js"></script>
 <script src="../assets/nav.js" data-system="stable" data-page="ndx-history"></script>
 
 <div class="wrap">
   <div id="subnav-slot"></div>
+
+  <!-- Hero -->
   <section class="hero" style="padding-top:14px">
     <span class="eyebrow">稳健仓 / Stable</span>
-    <h1 class="section-title">纳指定投 · 历史实盘</h1>
-    <p class="lead">定投流水、每周复盘与收益曲线。轻量跟踪方案：本地 Excel 流水 + 高亮填充，本页用于跨设备查看汇总（示例结构，可后续接入导出脚本自动回填）。</p>
+    <h1 class="section-title">纳指定投历史 <span class="grad">v5.1</span></h1>
+    <p class="lead">数据每日自动更新 · 来源：蛋卷 PE + yfinance VIX/NDX。记录每日 PE、VIX、回撤、评分与实际定投金额。</p>
   </section>
 
-  <!-- 汇总 KPI -->
+  <!-- 区间切换 -->
+  <section class="section">
+    <div class="rng" id="rng">
+      <button class="on" data-n="30">近 30 天</button>
+      <button data-n="90">近 90 天</button>
+      <button data-n="180">近半年</button>
+      <button data-n="365">全部</button>
+    </div>
+  </section>
+
+  <!-- 统计 KPI -->
   <section class="section">
     <div class="grid k4">
       <div class="card kpi">
-        <div class="top">累计投入</div>
-        <div class="val">¥<span id="inv">—</span></div>
-        <span class="tag flat">本金</span>
+        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#4f46e5,#6366f1)">天</span>数据天数</div>
+        <div class="val" id="sDays">—</div>
+        <div class="meta">当前区间</div>
       </div>
       <div class="card kpi">
-        <div class="top">当前市值</div>
-        <div class="val">¥<span id="mv">—</span></div>
-        <span class="tag up">含浮盈</span>
+        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#0ea5e9,#22d3ee)">N</span>最新 NDX</div>
+        <div class="val" style="font-size:17px" id="sNdx">—</div>
+        <div class="meta">最新收盘</div>
       </div>
       <div class="card kpi">
-        <div class="top">总收益率</div>
-        <div class="val"><span id="ret">—</span><small>%</small></div>
-        <span class="tag acc" id="retTag">—</span>
+        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#f59e0b,#fbbf24)">↕</span>区间涨跌</div>
+        <div class="val" style="font-size:17px" id="sChg">—</div>
+        <div class="meta">首→末</div>
       </div>
       <div class="card kpi">
-        <div class="top">年化</div>
-        <div class="val"><span id="cagr">—</span><small>%</small></div>
-        <span class="tag flat">持有期</span>
+        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#10b981,#14b8a6)">评</span>平均评分</div>
+        <div class="val" id="sScore">—</div>
+        <div class="meta">性价比均值</div>
       </div>
     </div>
   </section>
 
-  <!-- 收益曲线 -->
+  <!-- 历史表 -->
   <section class="section">
-    <div class="chart-box">
-      <h3>市值 vs 累计投入</h3>
-      <div class="csub">示例：纳指100 定投市值（蓝）与累计本金（灰）走势对比</div>
-      <div class="cv"><canvas id="hist"></canvas></div>
-    </div>
-  </section>
-
-  <!-- 定投流水 -->
-  <section class="section">
-    <div class="section-head"><h2>定投流水（示例）</h2><span class="sub">每周记录</span></div>
+    <div class="section-head"><h2>历史明细</h2><span class="sub" id="tblMeta">加载中…</span></div>
     <div class="card">
       <div class="scroll-x">
-        <table class="tbl">
-          <thead><tr><th>日期</th><th>操作</th><th>份数/乘数</th><th>金额</th><th>PE</th><th>DD</th></tr></thead>
-          <tbody>
-            <tr><td>每周</td><td>基础定投</td><td class="num">1×</td><td class="num">¥1,500</td><td>30.8</td><td>-5%</td></tr>
-            <tr><td>恐慌周</td><td>加码</td><td class="num">5×</td><td class="num">¥7,500</td><td>26.5</td><td>-15%</td></tr>
-            <tr><td>极端周</td><td>加码</td><td class="num">6×</td><td class="num">¥9,000</td><td>23.1</td><td>-25%</td></tr>
-            <tr><td>高估周</td><td>减仓</td><td class="num">卖 20%</td><td class="num">—</td><td>34.2</td><td>+8%</td></tr>
-            <tr><td>止盈周</td><td>部分了结</td><td class="num">卖 30%</td><td class="num">—</td><td>38.1</td><td>+12%</td></tr>
-          </tbody>
+        <table class="matrix">
+          <thead><tr>
+            <th>日期</th><th>PE</th><th>PE分位</th><th>VIX</th><th>NDX</th><th>DD%</th><th>PE档</th><th>阶段</th><th>评分</th><th>日投</th><th>溢价</th>
+          </tr></thead>
+          <tbody id="tbody"><tr><td colspan="11">加载中…</td></tr></tbody>
         </table>
       </div>
-      <p class="note">完整流水见本地交易记录表（纳指定投交易记录-v5.0.xlsx）；本页数据用于跨设备概览，非实时。</p>
     </div>
-  </section>
-
-  <!-- 每周复盘 -->
-  <section class="section">
-    <div class="section-head"><h2>每周复盘纪律</h2><span class="sub">三问</span></div>
-    <div class="rule ok">
-      <h3>复盘 = 校准而非操作</h3>
-      <p>
-        ① <b>PE 在哪一档？</b> 决定份数基数（对照 PE×VIX 矩阵）；<br>
-        ② <b>DD 回撤多少？</b> 决定加码倍数（4/5/6× 阶梯）；<br>
-        ③ <b>是否触发止盈？</b> PE&gt;33 且浮盈&gt;50% 即减仓，PE&gt;38 加速减。<br>
-        复盘不追涨杀跌，只按既定规则校准份数。
-      </p>
-    </div>
-  </section>
-
-  <!-- 与 v5.1 衔接 -->
-  <section class="section">
-    <div class="section-head"><h2>与 v5.1 衔接</h2><span class="sub">规则一致</span></div>
-    <div class="rule">
-      <h3>历史即规则的验证场</h3>
-      <p>本页流水严格遵循 v5.1 规则：每日 ¥1,500 基础、DD 阶梯加码、PE 止盈。历史复盘用于检验规则在真实波动下的表现，不作为未来收益承诺。</p>
-      <p class="note" id="histNote"></p>
-    </div>
+    <p class="note">DD% 为距 52 周高点回撤（红色 = 低于 -5%）。阶段 ① 日常 / ② 熊市 / ③ 长熊。日投为当日实际定投金额。数据来自 state.json，与决策面板同源。<a href="ndx-dca.html">← 返回决策面板</a></p>
   </section>
 </div>
 
-<footer class="foot">origistar · 纳指定投历史 · 数据仅供参考，非投资建议</footer>
+<footer class="foot">origistar · 纳指定投 v5.1 历史数据 · 每日自动更新 · 仅供参考不构成投资建议</footer>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
 <script>
 (function () {
-  var d = window.ORIGISTAR; if (d) {
-    var e = document.getElementById('histNote');
-    if (e) e.textContent = '更新于 ' + d.updated;
-  }
-  // 示例汇总
-  var inv = 186000, mv = 231500, ret = ((mv - inv) / inv * 100).toFixed(1);
-  function set(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
-  set('inv', inv.toLocaleString()); set('mv', mv.toLocaleString()); set('ret', ret);
-  set('cagr', (ret/2.2).toFixed(1));
-  var rt = document.getElementById('retTag'); if (rt){ rt.textContent = ret>=0?'盈利':'亏损'; rt.className='tag '+(ret>=0?'up':'down'); }
+  var tbody = document.getElementById('tbody');
+  var ALL = [];
 
-  if (window.Chart && document.getElementById('hist')) {
-    var ctx = document.getElementById('hist').getContext('2d');
-    var labels = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
-    var invested = [8000,16000,24000,32000,40000,48000,56000,64000,76000,88000,100000,112000];
-    var market = [8100,16200,23100,29800,40500,47200,49100,53800,71200,82900,101500,118200];
-    new Chart(ctx, {
-      type: 'line',
-      data: {
-        labels: labels,
-        datasets: [
-          { label: '市值', data: market, borderColor: '#4f46e5', tension: .25, pointRadius: 0, borderWidth: 2 },
-          { label: '累计投入', data: invested, borderColor: '#8b97ab', tension: .25, pointRadius: 0, borderWidth: 2, borderDash: [4,3] }
-        ]
-      },
-      options: {
-        responsive: true, maintainAspectRatio: false,
-        interaction: { mode: 'index', intersect: false },
-        plugins: { legend: { position: 'top', labels: { font: { size: 11 }, color: '#8b97ab' } } },
-        scales: { x: { grid: { display: false }, ticks: { font: { size: 9 }, color: '#8b97ab' } },
-                  y: { grid: { display: false }, ticks: { font: { size: 9 }, color: '#8b97ab', callback: function(v){ return '¥'+(v/1000)+'k'; } } } }
-      }
-    });
+  function fmtNum(n) { return n == null ? '—' : Number(n).toLocaleString(); }
+  function esc(s) { return s == null ? '' : String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+
+  function render(n) {
+    var rows = ALL.slice(-n).reverse();
+    if (!rows.length) { tbody.innerHTML = '<tr><td colspan="11">暂无数据</td></tr>'; return; }
+
+    var ndxs = rows.map(function (r) { return r.ndx; }).filter(Boolean);
+    var scores = rows.map(function (r) { return r.score; }).filter(Boolean);
+    var chg = ndxs.length > 1 ? ((ndxs[0] - ndxs[ndxs.length - 1]) / ndxs[ndxs.length - 1] * 100).toFixed(1) : '—';
+    var avg = scores.length ? (scores.reduce(function (a, b) { return a + b; }, 0) / scores.length).toFixed(0) : '—';
+
+    document.getElementById('sDays').textContent = rows.length;
+    document.getElementById('sNdx').textContent = ndxs.length ? fmtNum(ndxs[0]) : '—';
+    var chgEl = document.getElementById('sChg');
+    chgEl.textContent = (chg === '—' ? '—' : (chg >= 0 ? '+' : '') + chg + '%');
+    chgEl.style.color = (chg === '—' ? '' : (chg >= 0 ? '#f87171' : '#34d399'));
+    document.getElementById('sScore').textContent = avg;
+    document.getElementById('tblMeta').textContent = rows.length + ' 条 · ' + rows[0].date + ' ~ ' + rows[rows.length - 1].date;
+
+    tbody.innerHTML = rows.map(function (r) {
+      var ddCls = r.dd_pct < -5 ? 'down' : 'up';
+      var phCls = r.phase === '①' ? 'ph1' : r.phase === '②' ? 'ph2' : r.phase === '③' ? 'ph3' : '';
+      return '<tr>' +
+        '<td class="lb">' + esc(r.date) + '</td>' +
+        '<td>' + (r.pe != null ? r.pe : '—') + '</td>' +
+        '<td>' + (r.pe_pct != null ? r.pe_pct + '%' : '—') + '</td>' +
+        '<td>' + (r.vix != null ? r.vix : '—') + '</td>' +
+        '<td>' + fmtNum(r.ndx) + '</td>' +
+        '<td class="' + (r.dd_pct < -5 ? 'down' : '') + '">' + (r.dd_pct != null ? r.dd_pct + '%' : '—') + '</td>' +
+        '<td>' + esc(r.tier || '—') + '</td>' +
+        '<td class="' + phCls + '">' + esc(r.phase || '—') + '</td>' +
+        '<td style="font-weight:700">' + (r.score != null ? r.score : '—') + '</td>' +
+        '<td style="font-weight:700">' + (r.daily > 0 ? '¥' + fmtNum(r.daily) : '—') + '</td>' +
+        '<td>' + (r.premium != null ? r.premium + '%' : '—') + '</td>' +
+        '</tr>';
+    }).join('');
   }
+
+  document.getElementById('rng').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    Array.prototype.forEach.call(this.querySelectorAll('button'), function (x) { x.classList.toggle('on', x === b); });
+    render(+b.dataset.n);
+  });
+
+  fetch('state.json?t=' + Date.now())
+    .then(function (r) { return r.json(); })
+    .then(function (d) { ALL = d.history || []; render(30); })
+    .catch(function (e) { tbody.innerHTML = '<tr><td colspan="11">加载失败：' + esc(e.message) + '</td></tr>'; });
 })();
 </script>
 </body>
