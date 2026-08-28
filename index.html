@@ -21,41 +21,20 @@
   <!-- 首页 Hero -->
   <section class="home-hero">
     <h1><span class="grad">origistar</span> 投资信号</h1>
-    <p class="lead">个人投资组合监测 · 防守 · 稳健 · 激进 · 低风险 · 策略 · 研习</p>
+    <p class="lead" id="home-lead">个人投资组合监测 · 防守 · 稳健 · 激进 · 低风险 · 策略 · 研习</p>
   </section>
 
-  <!-- 体系入口（由 home.js 自动生成） -->
-  <section class="section" style="margin-top:18px">
-    <div id="home-icon-grid" class="icon-grid"></div>
-  </section>
-
-  <!-- 核心信号仪表盘 -->
-  <section class="section" style="margin-top:10px">
+  <!-- 今日信号（直截了当的清单，不做仪表盘） -->
+  <section class="section" style="margin-top:16px">
     <div class="dash-card">
       <div class="dash-head">
         <span class="dash-title">今日信号</span>
         <span class="dash-date" id="dash-date">更新中…</span>
       </div>
-      <div class="gauge-row">
-        <div class="gauge" id="gauge-ndx" style="--pct:0.5; --gauge-color:var(--accent)">
-          <div class="g-inner"><div class="g-val">—</div><div class="g-label">纳指</div><div class="g-sub">—</div></div>
-        </div>
-        <div class="gauge" id="gauge-btc" style="--pct:0.5; --gauge-color:var(--accent)">
-          <div class="g-inner"><div class="g-val">—</div><div class="g-label">BTC</div><div class="g-sub">—</div></div>
-        </div>
-        <div class="gauge" id="gauge-def" style="--pct:0.5; --gauge-color:var(--accent)">
-          <div class="g-inner"><div class="g-val">—</div><div class="g-label">防守</div><div class="g-sub">—</div></div>
-        </div>
-      </div>
+      <div id="signal-list" class="signal-list"></div>
       <div class="dash-text" id="dash-text"><h4>本周解析</h4><p>加载中…</p></div>
       <a class="cta-btn" id="home-cta" href="stable/ndx-dca.html">去定投</a>
     </div>
-  </section>
-
-  <!-- 跟踪标的 -->
-  <section class="section">
-    <div class="list-head"><h2>跟踪标的</h2><a class="more" href="stable/ndx-dca.html">全部 ›</a></div>
-    <div id="home-track-list" class="track-list"></div>
   </section>
 
 </div>
