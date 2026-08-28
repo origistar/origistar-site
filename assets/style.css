@@ -126,8 +126,7 @@ img { max-width: 100%; }
 /* ---------------- 底部 Tab（移动端） ---------------- */
 .btab { position: fixed; left: 0; right: 0; bottom: 0; z-index: 45;
   height: calc(var(--tab-h) + env(safe-area-inset-bottom, 34px));
-  display: flex; background: color-mix(in srgb, var(--surface) 92%, transparent);
-  backdrop-filter: saturate(180%) blur(14px); -webkit-backdrop-filter: saturate(180%) blur(14px);
+  display: flex; background: var(--surface);
   border-top: 1px solid var(--border); padding-bottom: env(safe-area-inset-bottom, 34px);
 }
 /* 安全区实色填充：独立于主背景，避免 gradient 内嵌 env() 在 iOS 26 失效导致整条透明 */
