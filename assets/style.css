@@ -300,6 +300,21 @@ table.matrix caption { caption-side: bottom; text-align:left; color: var(--muted
 .syscard .sct-d { color: var(--muted); font-size: 13px; margin-top: 2px; }
 .syscard .arrow { color: var(--muted); font-size: 22px; line-height: 1; }
 
+/* ---------------- 聚合页重点概览 ---------------- */
+.ovw { margin: 16px 0 4px; }
+.ovw .section-head { margin-bottom: 12px; }
+.ovw .kv { margin-bottom: 12px; }
+.ovw-sig { display: flex; align-items: center; justify-content: space-between; gap: 12px;
+  padding: 13px 16px; border: 1px solid var(--border); border-radius: var(--radius-sm);
+  background: var(--surface); box-shadow: var(--shadow); }
+.ovw-sig .lab { color: var(--muted); font-size: 12px; }
+.ovw-sig .val { font-size: 16px; font-weight: 800; margin-top: 2px; font-variant-numeric: tabular-nums; }
+.ovw-sig .st { font-size: 13px; font-weight: 700; padding: 5px 13px; border-radius: 999px; white-space: nowrap; }
+.ovw-sig .st.up { color: var(--up); background: color-mix(in srgb, var(--up) 12%, transparent); }
+.ovw-sig .st.down { color: var(--down); background: color-mix(in srgb, var(--down) 12%, transparent); }
+.ovw-sig .st.flat { color: var(--muted); background: var(--surface-2); }
+.ovw-sig .st.acc { color: var(--accent); background: var(--accent-soft); }
+
 /* 底部 Tab 按钮/链接通用（现在均为链接，保留以防旧结构） */
 .btab button { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
   color: var(--muted); font-size: 10px; font-weight: 600; background: transparent; border: none; padding: 0; cursor: pointer; }

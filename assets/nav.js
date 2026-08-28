@@ -76,6 +76,88 @@
     return out;
   }
 
+  // ---------- 聚合页"重点概览"渲染（数据来自 data.js，单一来源） ----------
+  function fmt(n, d) { return (n == null || isNaN(n)) ? '—' : (d ? Number(n).toFixed(d) : n); }
+  function sectionHead(t) {
+    var u = (window.ORIGISTAR && window.ORIGISTAR.updated) || '—';
+    return '<div class="section-head"><h2>' + t + '</h2><span class="sub">更新于 ' + u + '</span></div>';
+  }
+  function kv(items) {
+    return '<div class="kv">' + items.map(function (it) {
+      return '<div class="item"><div class="k">' + it.k + '</div><div class="v">' + it.v +
+        (it.sub ? '<small> ' + it.sub + '</small>' : '') + '</div></div>';
+    }).join('') + '</div>';
+  }
+  function sigRow(text, type, val) {
+    return '<div class="ovw-sig"><div><div class="lab">当前信号</div><div class="val">' + val + '</div></div>' +
+      '<span class="st ' + (type || 'flat') + '">' + text + '</span></div>';
+  }
+  function renderOverview(k) {
+    var d = window.ORIGISTAR; if (!d) return '';
+    if (k === 'stable') {
+      var n = d.ndx, b = d.btc;
+      return sectionHead('重点概览') +
+        kv([
+          { k: '纳指 PE', v: fmt(n.pe, 2), sub: n.peLabel },
+          { k: 'VIX', v: fmt(n.vix, 2) },
+          { k: '回撤', v: fmt(n.dd, 2) + '%', sub: '52周高点' },
+          { k: '今日定投', v: '¥' + n.dailyDCA, sub: '份数' }
+        ]) +
+        sigRow(n.signal, n.signalType, '今日定投 ¥' + n.dailyDCA) +
+        kv([
+          { k: 'BTC AHR999', v: fmt(b.ahr999, 2), sub: b.ahr999Label },
+          { k: 'BTC 价格', v: '$' + (b.price ? b.price.toLocaleString() : '—') },
+          { k: '周定投', v: '¥' + b.weeklyDCA }
+        ]);
+    }
+    if (k === 'defensive') {
+      var df = d.defensive;
+      var schdOk = df.schd.price <= df.schd.sweet, brkOk = df.brk.price <= df.brk.sweet;
+      return sectionHead('重点概览') +
+        kv([
+          { k: 'SCHD 价', v: '$' + fmt(df.schd.price, 2), sub: '甜区 $' + df.schd.sweet },
+          { k: 'SCHD 状态', v: schdOk ? '可定投' : df.schd.zone },
+          { k: 'BRK 价', v: '$' + fmt(df.brk.price, 2), sub: '甜区 $' + df.brk.sweet },
+          { k: 'BRK 状态', v: brkOk ? '可定投' : df.brk.zone }
+        ]) +
+        sigRow('等待便宜价', 'flat', '均未达甜区');
+    }
+    if (k === 'low-risk') {
+      var h = d.hkIpo;
+      return sectionHead('重点概览') +
+        kv([
+          { k: '港股观察', v: (h.watch || 0) + ' 支' },
+          { k: '申购管线', v: (h.pipeline || 0) + ' 支' },
+          { k: '可转债', v: '双低筛选', sub: '待建' },
+          { k: '信号', v: h.signal }
+        ]) +
+        sigRow('观察 · 无极端超额', 'flat', '低风险投资窗口');
+    }
+    if (k === 'strategy') {
+      var st = d.strategy;
+      return sectionHead('重点概览') +
+        kv([
+          { k: '动量', v: st.momentum.signal, sub: st.momentum.label },
+          { k: '13F 跟踪', v: st.superinvestors.tracked + ' 位', sub: '超级投资者' },
+          { k: '更新', v: st.superinvestors.signal }
+        ]) +
+        sigRow('跟踪中', 'acc', '因子 + 顶级投资者');
+    }
+    if (k === 'aggressive') {
+      return sectionHead('重点概览') +
+        '<div class="rule warn"><h3>版式预留</h3><p>激进仓（高弹性个股 / 主题）尚在规划中，子页面将随策略落地逐步补充。此区未来承载仓位、标的与信号监控。</p></div>';
+    }
+    if (k === 'study') {
+      return sectionHead('重点概览') +
+        kv([
+          { k: '最近阅读', v: '待补充' },
+          { k: '主题', v: '财报·估值·行为金融', sub: '等' }
+        ]) +
+        sigRow('知识库', 'flat', '一本书一页');
+    }
+    return '';
+  }
+
   // ---------- 顶部导航 ----------
   var sysNav = ORDER.map(function (k) {
     var s = S[k];
@@ -161,6 +243,13 @@
         '<span class="sct"><span class="sct-t">' + p.name + '</span><span class="sct-d">' + p.desc + '</span></span>' +
         '<span class="arrow">›</span></a>';
     }).join('');
+  }
+
+  // ---------- 聚合页重点概览 ----------
+  var ovw = document.getElementById('overview-slot');
+  if (ovw && SYS !== 'home' && S[SYS]) {
+    ovw.className = 'ovw';
+    ovw.innerHTML = renderOverview(SYS);
   }
 
   // ---------- 数据时间戳 ----------
