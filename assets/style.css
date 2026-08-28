@@ -295,25 +295,26 @@ table.matrix caption { caption-side: bottom; text-align:left; color: var(--muted
 .sys-picker .picker-mask { position: absolute; inset: 0; background: rgba(5,10,20,.55); backdrop-filter: blur(2px); opacity: 0; transition: opacity .18s ease; }
 .sys-picker.show .picker-mask { opacity: 1; }
 .sys-picker .picker-sheet {
-  position: absolute; left: 0; right: 0; bottom: 0;
-  background: var(--surface); border-top: 1px solid var(--border);
-  border-radius: 18px 18px 0 0;
-  padding: 12px 12px calc(12px + env(safe-area-inset-bottom));
+  position: absolute; left: 50%; right: auto; bottom: 0;
+  width: calc(100% - 24px); max-width: 420px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 10px 10px calc(10px + env(safe-area-inset-bottom));
   box-shadow: var(--shadow-lg);
-  transform: translateY(100%);
+  transform: translateX(-50%) translateY(120%);
   transition: transform .28s cubic-bezier(0.16, 1, 0.3, 1);
+  margin-bottom: 12px;
 }
-.sys-picker.show .picker-sheet { transform: translateY(0); }
-.sys-picker .picker-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; padding: 0 4px; }
-.sys-picker .picker-head b { font-size: 14px; color: var(--ink-soft); }
-.sys-picker .picker-head button { width: 28px; height: 28px; border-radius: 50%; border: 1px solid var(--border); background: transparent; color: var(--muted); font-size: 13px; }
-.sys-picker .picker-list { display: grid; gap: 6px; }
-.sys-picker .picker-list a { display: flex; align-items: center; gap: 10px; padding: 9px 10px; border-radius: 10px; background: var(--surface-2); border: 1px solid var(--border); transition: background .12s, transform .12s; }
+.sys-picker.show .picker-sheet { transform: translateX(-50%) translateY(0); }
+.sys-picker .picker-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; padding: 0 6px; }
+.sys-picker .picker-head b { font-size: 13px; color: var(--muted); }
+.sys-picker .picker-head button { width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--border); background: transparent; color: var(--muted); font-size: 12px; }
+.sys-picker .picker-list { display: grid; gap: 4px; }
+.sys-picker .picker-list a { display: flex; align-items: center; gap: 9px; padding: 8px 10px; border-radius: 9px; background: var(--surface-2); border: 1px solid var(--border); transition: background .12s, transform .12s; }
 .sys-picker .picker-list a:active { background: var(--accent-soft); transform: scale(.985); }
-.sys-picker .picker-list .pi { width: 30px; height: 30px; border-radius: 8px; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; flex: none; }
-.sys-picker .picker-list .pi svg { width: 16px; height: 16px; }
-.sys-picker .picker-list .pt { font-weight: 700; font-size: 14px; display: flex; flex-direction: column; }
-.sys-picker .picker-list .pd { color: var(--muted); font-size: 11px; margin-top: 2px; font-weight: 500; }
+.sys-picker .picker-list .pi { width: 26px; height: 26px; border-radius: 7px; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; flex: none; }
+.sys-picker .picker-list .pi svg { width: 15px; height: 15px; }
+.sys-picker .picker-list .pt { font-weight: 600; font-size: 14px; color: var(--ink); }
 
 /* 底部 Tab 按钮样式与链接统一 */
 .btab button { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
