@@ -296,14 +296,14 @@ table.matrix caption { caption-side: bottom; text-align:left; color: var(--muted
 .sys-picker.show .picker-mask { opacity: 1; }
 .sys-picker .picker-sheet {
   position: absolute; left: 50%; right: auto; bottom: 0;
-  width: calc(100% - 24px); max-width: 420px;
+  width: calc(100% - 48px); max-width: 320px;
   background: var(--surface); border: 1px solid var(--border);
   border-radius: 16px;
   padding: 10px 10px calc(10px + env(safe-area-inset-bottom));
   box-shadow: var(--shadow-lg);
   transform: translateX(-50%) translateY(120%);
   transition: transform .28s cubic-bezier(0.16, 1, 0.3, 1);
-  margin-bottom: 12px;
+  margin-bottom: 18px;
 }
 .sys-picker.show .picker-sheet { transform: translateX(-50%) translateY(0); }
 .sys-picker .picker-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; padding: 0 6px; }
