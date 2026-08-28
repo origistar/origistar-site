@@ -11,111 +11,178 @@
 <link rel="stylesheet" href="../assets/style.css">
 <link rel="manifest" href="../manifest.json">
 <link rel="apple-touch-icon" href="../assets/icon-192.png">
+<style>
+  /* 打新卡专用补充样式（深色主题适配） */
+  .ipo-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:14px 15px;margin-bottom:12px}
+  .ipo-top{display:flex;justify-content:space-between;align-items:flex-start;gap:8px}
+  .ipo-nm{font-size:17px;font-weight:700;letter-spacing:-.2px;color:var(--ink)}
+  .ipo-cd{font-size:12px;color:var(--muted);font-weight:600;margin-top:1px}
+  .ipo-price{display:flex;align-items:baseline;gap:8px;margin:10px 0 4px}
+  .ipo-price .now{font-size:24px;font-weight:800;letter-spacing:-.5px;color:var(--muted)}
+  .ipo-price .chg{font-size:14px;font-weight:700;color:var(--muted)}
+  .mini{display:grid;grid-template-columns:1fr 1fr;gap:7px 12px;margin-top:9px;font-size:12.5px}
+  .mini>div{display:flex;justify-content:space-between;gap:6px;border-bottom:1px solid var(--border);padding-bottom:5px}
+  .mini span:first-child{color:var(--muted);font-weight:500;white-space:nowrap}
+  .mini span:last-child{color:var(--ink);font-weight:600;text-align:right}
+  .cs{margin-top:10px;font-size:12px;color:var(--muted);line-height:1.55}
+  .cs b{color:var(--ink);font-weight:600}
+  .adv{margin-top:10px;background:var(--surface-2);border-radius:11px;padding:10px 11px;font-size:12.5px;line-height:1.6;color:var(--ink-soft)}
+  .adv .h{font-weight:700;color:var(--accent);font-size:11.5px;margin-bottom:3px;display:block}
+  .gate{background:linear-gradient(135deg,rgba(245,158,11,.10),transparent);border:1px solid rgba(245,158,11,.28);border-radius:13px;padding:11px 12px;margin-top:11px}
+  .gate .gtitle{font-size:12px;font-weight:700;color:#f59e0b;margin-bottom:7px}
+  .bar{height:9px;background:var(--surface-2);border-radius:6px;overflow:hidden;position:relative;margin:6px 0 4px}
+  .bar i{position:absolute;left:0;top:0;bottom:0;border-radius:6px;background:linear-gradient(90deg,#f59e0b,#ef4444)}
+  .ahbox{background:rgba(14,165,233,.08);border:1px solid rgba(14,165,233,.22);border-radius:13px;padding:11px 12px;margin-top:11px;font-size:12.5px;line-height:1.55;color:var(--ink-soft)}
+  .ahbox .gtitle{font-size:12px;font-weight:700;color:#22d3ee;margin-bottom:6px}
+  .dl{margin-top:10px;font-size:12.5px;font-weight:600;padding:9px 11px;border-radius:11px;background:rgba(245,158,11,.12);color:#f59e0b;border:1px solid rgba(245,158,11,.28);line-height:1.4}
+  .conn{display:inline-block;margin-top:9px;font-size:11px;font-weight:700;padding:3px 9px;border-radius:8px;background:rgba(16,185,129,.14);color:#34d399}
+  .up{color:#f87171} .down{color:#34d399} .mut{color:var(--muted)}
+</style>
 </head>
 <body>
-<script src="../assets/data.js"></script>
 <script src="../assets/nav.js" data-system="low-risk" data-page="hk-ipo"></script>
 
 <div class="wrap">
   <div id="subnav-slot"></div>
+
+  <!-- Hero -->
   <section class="hero" style="padding-top:14px">
-    <span class="eyebrow">低风险 / Low-risk</span>
-    <h1 class="section-title">港股打新 · 次新入通追踪</h1>
-    <p class="lead">聚焦小盘新 IPO：筹码集中、超额认购倍数极端、突破潜力。同步跟踪港股通纳入名单（2026年9月窗口的「先买后卖」套利）。</p>
+    <span class="eyebrow">低风险 / Low-Risk</span>
+    <h1 class="section-title">港股打新</h1>
+    <p class="lead">待上市新股追踪 · 招股价、基石阵容、保荐人、入通路径测算与申购截止提醒。数据每日更新，行情来自腾讯财经。</p>
   </section>
 
-  <!-- KPI 三卡 -->
+  <!-- 打新列表（JS 渲染） -->
   <section class="section">
-    <div class="grid c3">
-      <div class="card kpi">
-        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#8b5cf6,#a855f7)">👀</span>观察标的</div>
-        <div class="val"><span id="watch">—</span> <small>只</small></div>
-        <div class="meta">超额认购极端值筛选</div>
-        <span class="tag flat" id="ipoTg">—</span>
-      </div>
-      <div class="card kpi">
-        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#8b5cf6,#a855f7)">📋</span>纳入管线</div>
-        <div class="val"><span id="pipe">—</span> <small>条</small></div>
-        <div class="meta">港股通 2026-09 名单</div>
-        <span class="tag acc">跟踪中</span>
-      </div>
-      <div class="card kpi">
-        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#8b5cf6,#a855f7)">⚡</span>策略信号</div>
-        <div class="val" style="font-size:20px">极端超额 = 关注</div>
-        <div class="meta">基石 / 锁定期 / 解禁</div>
-        <span class="tag flat">多维评分</span>
-      </div>
-    </div>
+    <div class="section-head"><h2>打新待上市</h2><span class="sub" id="ipoCount">加载中…</span></div>
+    <div id="ipoList"><p class="note">数据加载中…</p></div>
   </section>
 
-  <!-- 评分维度 -->
+  <!-- 入通规则 -->
   <section class="section">
-    <div class="section-head"><h2>评分维度</h2><span class="sub">八维对比</span></div>
-    <div class="card">
-      <table class="tbl">
-        <thead><tr><th>维度</th><th>关注点</th><th>偏好</th></tr></thead>
-        <tbody>
-          <tr><td>超额认购倍数</td><td>公开发售超购</td><td class="num">极端值 &gt; 100×</td></tr>
-          <tr><td>基石比例</td><td>基石认购占比</td><td class="num">适中 30–60%</td></tr>
-          <tr><td>锁定期</td><td>基石禁售期</td><td class="num">越长越稳</td></tr>
-          <tr><td>解禁日</td><td>首波解禁时点</td><td class="num">避开窗口</td></tr>
-          <tr><td>流通股</td><td>自由流通盘</td><td class="num">小盘易拉</td></tr>
-          <tr><td>行业景气</td><td>赛道热度</td><td class="num">新经济优先</td></tr>
-          <tr><td>破发历史</td><td>保荐人往绩</td><td class="num">低破发</td></tr>
-          <tr><td>保荐人</td><td>承销实力</td><td class="num">头部券商</td></tr>
-        </tbody>
-      </table>
-    </div>
-  </section>
-
-  <!-- 港股通纳入套利 -->
-  <section class="section">
-    <div class="section-head"><h2>港股通纳入套利</h2><span class="sub">先买后卖</span></div>
-    <div class="rule warn">
-      <h3>纳入前买入，纳入后卖出</h3>
-      <p>
-        港股通定期扩容（关注 <b>2026 年 9 月</b> 纳入窗口）。逻辑：纳入前 mainland 资金预期买入 → 价格提前反应，<b>纳入前布局、正式纳入后兑现</b>。<br>
-        重点筛选：结构简洁的小盘新 IPO（筹码集中、超额认购极端、突破潜力），避免大盘蓝筹（套利空间薄）。
-      </p>
-    </div>
-  </section>
-
-  <!-- 多维评分示例 -->
-  <section class="section">
-    <div class="section-head"><h2>多维评分表示例</h2><span class="sub">待填实时</span></div>
-    <div class="card">
-      <div class="scroll-x">
-        <table class="matrix">
-          <tr><th>标的＼指标</th><th>超购</th><th>基石%</th><th>锁定期</th><th>流通盘</th><th>综合</th></tr>
-          <tr><td class="lb">示例 A</td><td>312×</td><td>42%</td><td>6月</td><td>小</td><td class="hi">88</td></tr>
-          <tr><td class="lb">示例 B</td><td>96×</td><td>55%</td><td>12月</td><td>中</td><td>76</td></tr>
-          <tr><td class="lb">示例 C</td><td>18×</td><td>70%</td><td>3月</td><td>大</td><td class="dim">54</td></tr>
-          <caption>评分越高越优先关注；示例数据为占位，待接入 AASTOCKS IPO 列表自动抓取回填。</caption>
-        </table>
-      </div>
-    </div>
-  </section>
-
-  <!-- 历史回测 -->
-  <section class="section">
-    <div class="section-head"><h2>历史回测支撑</h2><span class="sub">结论依据</span></div>
+    <div class="section-head"><h2>入通规则</h2><span class="sub">三类路径</span></div>
     <div class="rule ok">
-      <h3>用数据而非直觉</h3>
-      <p>小盘新 IPO 在极端超额认购 + 低流通盘组合下，上市初期超额收益显著；但破发率随市场情绪波动。回测用于确认评分权重，不保证单体胜率。每季复盘权重，剔除失效维度。</p>
-      <p class="note" id="ipoTgNote"></p>
+      <h3>① AH 股</h3>
+      <p>上市 → 价格稳定期（通常 30 天，自公开发售截止次日起算）结束即自动调入港股通，<b>不考核 100 亿市值门槛</b>（如君正 03223 约 9-20~9-24 入通）。</p>
     </div>
+    <div class="rule ok" style="margin-top:10px">
+      <h3>② 同股不同权（W）</h3>
+      <p>满上市 6 月 + 20 日，且考察日前 183 日日均市值 ≥ 200 亿、成交 ≥ 60 亿。</p>
+    </div>
+    <div class="rule ok" style="margin-top:10px">
+      <h3>③ 常规纯 H 新股</h3>
+      <p>走恒生综指半年度检讨（3/9 月），考察期截至 6/30 或 12/31，市值达 94% 覆盖率门槛（本次约 <b>101.56 亿</b>，随市况浮动）+ 流动性测试。</p>
+    </div>
+    <p class="note">打新卡「涨多少能入通」仅对 <b>③ 类</b>（纯 H）有意义；AH / W 按 ①② 规则。最终名单以恒生指数公司公告及沪深交易所为准。实时行情来自腾讯财经，红涨绿跌。</p>
   </section>
 </div>
 
-<footer class="foot">origistar · 港股打新 · 数据仅供参考，非投资建议</footer>
+<footer class="foot">origistar · 港股打新 · 本页为个人研究工具，非投资建议<br>数据源：Live Report / 港交所披露易 / 捷利交易宝 / 腾讯财经</footer>
 
 <script>
-(function(){
-  var d=window.ORIGISTAR;if(!d)return;
-  function set(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
-  function tag(id,t,c){var e=document.getElementById(id);e.textContent=t;e.className='tag '+c;}
-  set('watch',d.hkIpo.watch);set('pipe',d.hkIpo.pipeline);tag('ipoTg',d.hkIpo.signal,d.hkIpo.signalType);
-  var n=document.getElementById('ipoTgNote');if(n)n.textContent='更新于 '+d.updated;
+(function () {
+  var RATE = 0.92;
+  var list = document.getElementById('ipoList');
+  var cntEl = document.getElementById('ipoCount');
+
+  function fmt(n, d) { if (n == null || isNaN(n)) return '—'; return Number(n).toLocaleString('zh-CN', { minimumFractionDigits: d == null ? 2 : d, maximumFractionDigits: d == null ? 2 : d }); }
+  function pct(n) { if (n == null || isNaN(n)) return '—'; return (n >= 0 ? '+' : '') + n.toFixed(1) + '%'; }
+  function esc(s) { return s == null ? '' : String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+
+  // 实时行情（腾讯财经 JSONP）
+  function loadQuote(sym) {
+    return new Promise(function (res) {
+      var s = document.createElement('script');
+      s.src = 'https://qt.gtimg.cn/q=' + sym;
+      s.onload = function () {
+        try {
+          var raw = window['v_' + sym] || '';
+          var a = raw.split('~');
+          res(a && a[3] ? { price: +a[3], prev: +a[4], name: a[1] } : null);
+        } catch (e) { res(null); }
+      };
+      s.onerror = function () { res(null); };
+      document.head.appendChild(s);
+      setTimeout(function () { res(null); }, 4000);
+    });
+  }
+
+  function deadlineInfo(s) {
+    var dl = s.deadline;
+    if (!dl && s.ipoDate && s.ipoDate.indexOf('~') > -1) {
+      var end = s.ipoDate.split('~')[1];
+      dl = (end.length <= 5 ? '2026-' + end : end) + ' 09:00';
+    }
+    if (!dl) return '';
+    var t = new Date(dl.replace(' ', 'T'));
+    var status = '';
+    if (!isNaN(t)) {
+      var diff = t - new Date();
+      if (diff <= 0) status = '<span class="down">已截止</span>';
+      else {
+        var d = Math.floor(diff / 86400000), h = Math.floor((diff % 86400000) / 3600000);
+        status = '<span class="up">剩 ' + d + '天' + h + '时</span>';
+      }
+    }
+    return '<div class="dl">🕘 富途申购截止 <b>' + dl + '</b>' + (status ? ' · ' + status : '') + '</div>';
+  }
+
+  function ipoCard(s) {
+    var gate = '';
+    if (s.isAH) {
+      gate = '<div class="ahbox"><div class="gtitle">🔵 AH 股入通规则（非 100 亿门槛）</div>' +
+        esc(s.ahRule || '') + '<br><b>潜在 AH 溢价</b>（发行价 vs A股）：<span class="' + (s._ahPotential >= 0 ? 'up' : 'down') + '">' +
+        (s._ahPotential != null ? pct(s._ahPotential) : '计算中…') + '</span>' +
+        (s._aPrice ? '<br><span class="mut">A股' + esc(s.aCode) + ' 现价 ' + fmt(s._aPrice) + ' · 发行价 HKD' + fmt(s.ipoPrice) + '</span>' : '') + '</div>';
+    } else {
+      var need = s.toConnectPct, w = Math.min(100, Math.max(4, (s.raiseCap / (s._threshold || 100)) * 100));
+      var needCls = need <= 0 ? 'up' : (need > 200 ? 'down' : 'mut');
+      gate = '<div class="gate"><div class="gtitle">📊 入通市值门槛测算（≈' + (s._threshold || 100) + '亿）</div>' +
+        '<div class="mini" style="grid-template-columns:1fr 1fr;margin-top:4px">' +
+        '<div><span>发行市值</span><span>' + fmt(s.raiseCap) + '亿</span></div>' +
+        '<div><span>达标需涨</span><span class="' + needCls + '">' + (need <= 0 ? '已达标✅' : (need != null ? '+' + need + '%' : '—')) + '</span></div></div>' +
+        '<div class="bar"><i style="width:' + w.toFixed(0) + '%"></i></div>' +
+        '<div class="mut" style="font-size:11px">发行市值占门槛 ' + w.toFixed(0) + '%</div></div>';
+    }
+    var csTxt = s.cornerN == null ? '—' :
+      s.cornerN + '家 · ' + (s.cornerstonePct != null ? fmt(s.cornerstonePct, 1) + '%' : '比例—') +
+      '<br><span class="mut" style="font-weight:500">' + esc((s.corners || []).slice(0, 4).join('、')) + ((s.corners || []).length > 4 ? ' 等' : '') + '</span>';
+    var leader = s.leader ? '<div class="cs"><b>地位：</b>' + esc(s.leader) + '</div>' : '';
+    var adv = s.advice ? '<div class="adv"><span class="h">💡 综合建议</span>' + esc(s.advice) + '</div>' : '';
+    return '<div class="ipo-card">' +
+      '<div class="ipo-top"><div><div class="ipo-nm">' + esc(s.name) + '</div>' +
+      '<div class="ipo-cd">' + esc(s.code) + ' · ' + esc(s.industry || '') + '</div></div>' +
+      '<span class="tag acc">🎯 打新</span></div>' +
+      '<div class="ipo-price"><span class="now">招股中</span><span class="chg">发售价 ' + fmt(s.ipoPrice) + '</span></div>' +
+      '<div class="mini">' +
+      '<div><span>IPO 价</span><span>' + fmt(s.ipoPrice) + '</span></div>' +
+      '<div><span>上市日</span><span>' + esc(s.listDate || '—') + '</span></div>' +
+      '<div><span>基石</span><span style="text-align:left">' + csTxt + '</span></div>' +
+      '<div><span>保荐</span><span>' + esc(s.sponsor || '—') + '</span></div></div>' +
+      leader + gate + adv + deadlineInfo(s) +
+      (s.connectDate ? '<span class="conn">入通 ' + esc(s.connectDate) + '</span>' : '') +
+      '</div>';
+  }
+
+  fetch('hk-data.json?t=' + Date.now())
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      var stocks = (d.stocks || []).filter(function (s) { return s.board === 'ipo'; });
+      stocks.forEach(function (s) { s._threshold = d.threshold || 100; });
+      if (cntEl) cntEl.textContent = '更新 ' + (d.updated || '') + ' · ' + stocks.length + ' 只';
+      if (!stocks.length) { list.innerHTML = '<p class="note">暂无待上市新股</p>'; return; }
+      list.innerHTML = stocks.map(ipoCard).join('');
+      // AH 股拉 A 股行情算潜在溢价
+      return Promise.all(stocks.map(function (s) {
+        if (!s.isAH || !s.aCode) return Promise.resolve();
+        var num = s.aCode.replace(/[^\d]/g, '');
+        var sym = s.aCode.toUpperCase().indexOf('.SH') > -1 ? 'sh' + num : 'sz' + num;
+        return loadQuote(sym).then(function (q) {
+          if (q && q.price) { s._aPrice = q.price; s._ahPotential = (q.price * RATE / s.ipoPrice - 1) * 100; }
+        });
+      })).then(function () { list.innerHTML = stocks.map(ipoCard).join(''); });
+    })
+    .catch(function (e) { list.innerHTML = '<p class="note">数据加载失败：' + esc(e.message) + '</p>'; });
 })();
 </script>
 </body>
