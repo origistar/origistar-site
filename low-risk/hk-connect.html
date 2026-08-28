@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#070b16">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="origistar">
+<title>低风险 · 待入通 | origistar</title>
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="manifest" href="../manifest.json">
+<link rel="apple-touch-icon" href="../assets/icon-192.png">
+<style>
+  .conn-tbl{width:100%;border-collapse:collapse;font-size:12.5px}
+  .conn-tbl th{color:var(--muted);font-weight:600;font-size:11px;text-align:left;padding:8px 6px;border-bottom:1px solid var(--border)}
+  .conn-tbl td{padding:9px 6px;border-bottom:1px solid var(--border);vertical-align:middle;color:var(--ink)}
+  .conn-tbl tbody tr{cursor:pointer}
+  .conn-tbl tbody tr:active{background:var(--surface-2)}
+  .conn-tbl .num{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+  .conn-tbl .nm{font-weight:700}
+  .conn-tbl .sub{font-size:10.5px;color:var(--muted);font-weight:500}
+  .dotc{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;vertical-align:middle}
+  .cat-tx{font-size:12px}
+  .drow td{background:var(--surface-2);padding:4px 8px 12px}
+  .mini{display:grid;grid-template-columns:1fr 1fr;gap:6px 10px;font-size:11.5px;margin:6px 0 2px}
+  .mini>div{display:flex;justify-content:space-between;gap:6px}
+  .mini span:first-child{color:var(--muted)}
+  .mini span:last-child{color:var(--ink);font-weight:600;text-align:right}
+  .mini3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px 8px;font-size:11px;margin:8px 0 4px}
+  .mini3>div{display:flex;flex-direction:column;gap:1px}
+  .mini3 .mk{color:var(--muted);font-size:10px}
+  .mini3 .mv{color:var(--ink);font-weight:600}
+  .adv{margin-top:8px;background:var(--surface);border-radius:10px;padding:9px 10px;font-size:12px;line-height:1.6;color:var(--ink-soft)}
+  .adv .h{font-weight:700;color:var(--accent);font-size:11px;margin-bottom:3px;display:block}
+  .sc{display:inline-block;margin-top:7px;padding:3px 10px;border-radius:8px;font-size:12px;font-weight:700}
+  .sc.hi{background:rgba(248,113,113,.14);color:#f87171}
+  .sc.md{background:rgba(148,163,184,.14);color:#94a3b8}
+  .sc.lo{background:rgba(52,211,153,.14);color:#34d399}
+  .up{color:#f87171} .down{color:#34d399} .mut{color:var(--muted)}
+  .chips{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 4px}
+  .chips button{border:1px solid var(--border);background:transparent;color:var(--muted);font-size:12px;padding:5px 12px;border-radius:20px;font-weight:600;cursor:pointer}
+  .chips button.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+  .rank-tbl{width:100%;border-collapse:collapse;font-size:11.5px}
+  .rank-tbl th{color:var(--muted);font-weight:600;font-size:10.5px;text-align:left;padding:7px 4px;border-bottom:1px solid var(--border)}
+  .rank-tbl td{padding:7px 4px;border-bottom:1px solid var(--border);color:var(--ink)}
+  .rank-tbl .num{text-align:right;font-variant-numeric:tabular-nums;font-weight:600}
+</style>
+</head>
+<body>
+<script src="../assets/nav.js" data-system="low-risk" data-page="hk-connect"></script>
+
+<div class="wrap">
+  <div id="subnav-slot"></div>
+
+  <!-- Hero -->
+  <section class="hero" style="padding-top:14px">
+    <span class="eyebrow">低风险 / Low-Risk</span>
+    <h1 class="section-title">待入通</h1>
+    <p class="lead">已上市次新股追踪 · 等待纳入港股通的埋伏观察池。含牛 / 妖 / 平分类筛选、多维度评分、解禁日与评分双排序速查表。</p>
+  </section>
+
+  <!-- KPI -->
+  <section class="section">
+    <div class="grid c3">
+      <div class="card kpi">
+        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#8b5cf6,#a855f7)">观</span>观察标的</div>
+        <div class="val" id="kTotal">—</div>
+        <div class="meta">已上市次新</div>
+        <span class="tag flat">埋伏池</span>
+      </div>
+      <div class="card kpi">
+        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#f59e0b,#fbbf24)">通</span>集中入通日</div>
+        <div class="val" style="font-size:18px">2026-09-07</div>
+        <div class="meta">恒生综指半年度检讨</div>
+        <span class="tag acc">关键节点</span>
+      </div>
+      <div class="card kpi">
+        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#0ea5e9,#22d3ee)">类</span>牛 / 妖 / 平</div>
+        <div class="val" style="font-size:19px" id="kCat">—</div>
+        <div class="meta">分类分布</div>
+        <span class="tag flat">打新分层</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 观察列表 -->
+  <section class="section">
+    <div class="section-head"><h2>已上市次新</h2><span class="sub" id="listMeta">加载中…</span></div>
+    <div class="chips" id="filters">
+      <button class="on" data-c="all">全部</button>
+      <button data-c="bull">🐂 牛</button>
+      <button data-c="demon">👹 妖</button>
+      <button data-c="flat">😐 平</button>
+    </div>
+    <div class="card">
+      <div class="scroll-x">
+        <table class="conn-tbl" id="tbl">
+          <thead><tr><th>名称 / 代码</th><th>类</th><th>现价</th><th>上市以来</th><th>基石%</th><th>入通</th></tr></thead>
+          <tbody id="tbody"><tr><td colspan="6" class="mut">数据加载中…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+    <p class="note">点击任意行展开详情（地位 / 保荐 / 基石 / 建议 / 多维度评分 / 综合评分）。现价与上市以来涨幅为腾讯财经实时行情，红涨绿跌。</p>
+  </section>
+
+  <!-- 速查表：按解禁日 -->
+  <section class="section">
+    <div class="section-head"><h2>按解禁日排序</h2><span class="sub">埋伏节奏优先</span></div>
+    <div class="card">
+      <div class="scroll-x">
+        <table class="rank-tbl">
+          <thead><tr><th>代码</th><th>名称</th><th>最近解禁日</th><th>流通股</th><th>风险</th><th class="num">评分</th></tr></thead>
+          <tbody id="rankUnlock"></tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 速查表：按评分 -->
+  <section class="section">
+    <div class="section-head"><h2>按综合评分排序</h2><span class="sub">质量优先</span></div>
+    <div class="card">
+      <div class="scroll-x">
+        <table class="rank-tbl">
+          <thead><tr><th>代码</th><th>名称</th><th class="num">评分</th><th>最近解禁日</th><th>流通股</th><th>风险</th></tr></thead>
+          <tbody id="rankScore"></tbody>
+        </table>
+      </div>
+    </div>
+    <p class="note">解禁日多集中在 2026-10~12 月（00068 / 03277 / 03355 / 01879 等），届时注意砸盘风险。00600（8-10）、06938（7-08）已解禁，压力释放。小盘妖股类（云迹 / 溜溜梅 / 真健康）解禁最远（2027 年中），时间窗最从容。</p>
+  </section>
+</div>
+
+<footer class="foot">origistar · 待入通 · 本页为个人研究工具，非投资建议<br>数据源：Live Report / 港交所披露易 / 捷利交易宝 / 腾讯财经</footer>
+
+<script>
+(function () {
+  var RATE = 0.92, ALL = [], cur = 'all';
+  var tbody = document.getElementById('tbody');
+  var DOT = { bull: '#3b82f6', demon: '#a855f7', flat: '#94a3b8' };
+  var TX = { bull: '牛', demon: '妖', flat: '平' };
+  var NAMEC = { bull: '🐂 牛股', demon: '👹 妖股', flat: '😐 平盘' };
+
+  function fmt(n, d) { if (n == null || isNaN(n)) return '—'; return Number(n).toLocaleString('zh-CN', { minimumFractionDigits: d || 0, maximumFractionDigits: d || 0 }); }
+  function pct(n) { if (n == null || isNaN(n)) return '—'; return (n >= 0 ? '+' : '') + n.toFixed(1) + '%'; }
+  function esc(s) { return s == null ? '' : String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+
+  function loadQuote(sym) {
+    return new Promise(function (res) {
+      var s = document.createElement('script');
+      s.src = 'https://qt.gtimg.cn/q=' + sym;
+      s.onload = function () {
+        try {
+          var a = (window['v_' + sym] || '').split('~');
+          res(a && a[3] ? { price: +a[3], prev: +a[4] } : null);
+        } catch (e) { res(null); }
+      };
+      s.onerror = function () { res(null); };
+      document.head.appendChild(s);
+      setTimeout(function () { res(null); }, 4000);
+    });
+  }
+
+  function detailRow(s) {
+    var sc = s.score;
+    var cls = sc == null ? 'md' : (sc >= 70 ? 'hi' : sc < 55 ? 'lo' : 'md');
+    return '<tr class="drow" id="d_' + s.code + '" style="display:none"><td colspan="6">' +
+      '<div class="mini">' +
+      (s.leader ? '<div><span>地位</span><span>' + esc(s.leader) + '</span></div>' : '') +
+      '<div><span>保荐</span><span>' + esc(s.sponsor || '—') + '</span></div>' +
+      (s.cornerN ? '<div><span>基石</span><span>' + s.cornerN + '家·' + (s.cornerstonePct != null ? fmt(s.cornerstonePct, 0) + '%' : '') + ' ' + esc((s.corners || []).slice(0, 3).join('、')) + '</span></div>' : '') +
+      (s._ahPremium != null ? '<div><span>AH 溢价</span><span class="' + (s._ahPremium >= 0 ? 'up' : 'down') + '">' + pct(s._ahPremium) + '</span></div>' : '') +
+      '</div>' +
+      '<div class="mut" style="font-size:11px;margin:4px 0">行业：' + esc(s.industry || '—') + '</div>' +
+      (s.advice ? '<div class="adv"><span class="h">💡 建议</span>' + esc(s.advice) + '</div>' : '') +
+      '<div class="mini3">' +
+      '<div><span class="mk">发行市值</span><span class="mv">' + (s.raiseCap ? fmt(s.raiseCap, 0) + '亿' : '—') + '</span></div>' +
+      '<div><span class="mk">上市以来</span><span class="mv ' + (s._chgFromIpo == null ? 'mut' : (s._chgFromIpo >= 0 ? 'up' : 'down')) + '">' + (s._chgFromIpo != null ? pct(s._chgFromIpo) : '—') + '</span></div>' +
+      '<div><span class="mk">锁定期</span><span class="mv">' + esc(s.lockup || '—') + '</span></div>' +
+      '<div><span class="mk">解禁日</span><span class="mv">' + esc(s.unlockDate || '—') + '</span></div>' +
+      '<div><span class="mk">流通股</span><span class="mv">' + (s.floatShares != null ? fmt(s.floatShares, 2) + '亿' : '—') + '</span></div>' +
+      '<div><span class="mk">风险</span><span class="mv">' + esc(s.riskLevel || '—') + '</span></div>' +
+      '</div>' +
+      (sc != null ? '<span class="sc ' + cls + '">综合评分 <b>' + sc + '</b>/100</span>' : '') +
+      '</td></tr>';
+  }
+
+  function renderTable() {
+    var arr = ALL.filter(function (s) { return cur === 'all' || s.category === cur; });
+    var ord = { bull: 0, demon: 1, flat: 2 };
+    arr.sort(function (a, b) { return (ord[a.category] - ord[b.category]) || ((b.score || 0) - (a.score || 0)); });
+    var h = '';
+    arr.forEach(function (s) {
+      var chg = s._chgFromIpo, cc = chg == null ? 'mut' : (chg >= 0 ? 'up' : 'down');
+      h += '<tr onclick="document.getElementById(\'d_' + s.code + '\').style.display=document.getElementById(\'d_' + s.code + '\').style.display===\'none\'?\'table-row\':\'none\'">' +
+        '<td><span class="nm">' + esc(s.name) + '</span><br><span class="sub">' + esc(s.code) + '</span></td>' +
+        '<td class="cat-tx"><span class="dotc" style="background:' + (DOT[s.category] || '#94a3b8') + '"></span>' + (TX[s.category] || '—') + (s.risk ? ' ⚠️' : '') + '</td>' +
+        '<td class="num">' + (s._price != null ? fmt(s._price, 2) : '—') + '</td>' +
+        '<td class="num ' + cc + '">' + (chg == null ? '—' : pct(chg)) + '</td>' +
+        '<td class="num">' + (s.cornerstonePct != null ? fmt(s.cornerstonePct, 0) : '—') + '</td>' +
+        '<td style="font-size:10px;line-height:1.3">' + esc(s.connectDate || '—') + '</td></tr>' + detailRow(s);
+    });
+    tbody.innerHTML = h || '<tr><td colspan="6" class="mut">无匹配标的</td></tr>';
+  }
+
+  function rankRow(s, byScore) {
+    return '<tr><td>' + esc(s.code) + '</td><td>' + esc(s.name) + '</td>' +
+      (byScore ? '<td class="num">' + (s.score != null ? s.score : '—') + '</td>' : '') +
+      '<td style="font-size:10.5px">' + esc(s.unlockDate || '—') + '</td>' +
+      (!byScore ? '<td class="num">' + (s.floatShares != null ? fmt(s.floatShares, 2) : '—') + '</td>' : '') +
+      (byScore ? '<td class="num">' + (s.floatShares != null ? fmt(s.floatShares, 2) : '—') + '</td>' : '') +
+      '<td>' + esc(s.riskLevel || '—') + '</td>' +
+      (byScore ? '' : '<td class="num">' + (s.score != null ? s.score : '—') + '</td>') +
+      '</tr>';
+  }
+
+  function renderRanks() {
+    var withData = ALL.filter(function (s) { return s.unlockDate; });
+    var byUnlock = withData.slice().sort(function (a, b) { return String(a.unlockDate).localeCompare(String(b.unlockDate)); });
+    var byScore = withData.slice().sort(function (a, b) { return (b.score || 0) - (a.score || 0); });
+    document.getElementById('rankUnlock').innerHTML = byUnlock.map(function (s) { return rankRow(s, false); }).join('');
+    document.getElementById('rankScore').innerHTML = byScore.map(function (s) { return rankRow(s, true); }).join('');
+  }
+
+  function refreshLive() {
+    return Promise.all(ALL.map(function (s) {
+      return loadQuote('hk' + s.code.replace('.HK', '')).then(function (q) {
+        if (q && q.price) { s._price = q.price; if (s.ipoPrice) s._chgFromIpo = (q.price / s.ipoPrice - 1) * 100; }
+      });
+    })).then(renderTable);
+  }
+
+  document.getElementById('filters').addEventListener('click', function (e) {
+    var b = e.target.closest('button'); if (!b) return;
+    cur = b.dataset.c;
+    Array.prototype.forEach.call(this.querySelectorAll('button'), function (x) { x.classList.toggle('on', x === b); });
+    renderTable();
+  });
+
+  fetch('hk-data.json?t=' + Date.now())
+    .then(function (r) { return r.json(); })
+    .then(function (d) {
+      ALL = (d.stocks || []).filter(function (s) { return s.board === 'listed'; });
+      var c = { bull: 0, demon: 0, flat: 0 };
+      ALL.forEach(function (s) { if (c[s.category] != null) c[s.category]++; });
+      document.getElementById('kTotal').textContent = ALL.length;
+      document.getElementById('kCat').textContent = c.bull + ' / ' + c.demon + ' / ' + c.flat;
+      document.getElementById('listMeta').textContent = '更新 ' + (d.updated || '') + ' · ' + ALL.length + ' 只';
+      renderTable(); renderRanks(); return refreshLive();
+    })
+    .catch(function (e) { tbody.innerHTML = '<tr><td colspan="6" class="mut">数据加载失败：' + esc(e.message) + '</td></tr>'; });
+
+  setInterval(refreshLive, 60000);
+})();
+</script>
+</body>
+</html>
