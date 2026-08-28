@@ -16,6 +16,7 @@
     lowrisk: '<path d="M12 3a9 9 0 019 9M12 3v9l6 3"/><path d="M4 12a8 8 0 018-8"/>',
     strategy: '<circle cx="12" cy="12" r="9"/><path d="M15 9l-2 5-5 2 2-5z"/>',
     menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
+    study: '<path d="M4 19.5A2.5 2.5 0 016.5 17H20M4 19.5V5a2.5 2.5 0 012.5-2.5h11A2.5 2.5 0 0120 5v14.5M4 19.5A2.5 2.5 0 016.5 22H20v-2.5"/>',
     schd: '<path d="M4 19V5M4 19h16M8 15v-4M12 15V8M16 15v-6"/>',
     btc: '<circle cx="12" cy="12" r="9"/><path d="M9.5 8h4a2 2 0 010 4h-4zM9.5 12h4.5a2 2 0 010 4H9.5zM10 7v10M12.5 7v1M12.5 16v1"/>',
     history: '<path d="M3 12a9 9 0 109-9 9 9 0 00-7 3.5M4 4v4h4"/><path d="M12 8v4l3 2"/>',
@@ -49,18 +50,27 @@
     strategy: { name: '策略库', icon: 'strategy', desc: '因子 / 顶级投资者跟踪', pages: [
       { id: 'momentum', name: 'SPMO & MTUM', file: 'strategy/momentum.html', desc: '动量轮动', icon: 'momentum' },
       { id: 'superinvestors', name: '13F 持仓', file: 'strategy/superinvestors.html', desc: '顶级投资者对比', icon: 'whale' }
+    ]},
+    study: { name: '研习录', icon: 'study', desc: '读书纪要 · 研报重点 · 待定', pages: [
+      { id: 'index', name: '研习录', file: 'study/index.html', desc: '读书纪要 · 研报重点', icon: 'study' }
     ]}
   };
-  var ORDER = ['defensive', 'stable', 'aggressive', 'low-risk', 'strategy'];
+  var ORDER = ['defensive', 'stable', 'aggressive', 'low-risk', 'strategy', 'study'];
 
   // ---------- 顶部导航 ----------
   var sysNav = ORDER.map(function (k) {
     var s = S[k];
+    var active = (SYS === k) ? ' active' : '';
+    // 研习录不展开二级页面（内容太多，一本书一页），直接点进首页
+    if (k === 'study') {
+      var p0 = s.pages[0];
+      return '<a class="ni' + active + '" href="' + base + p0.file + '" style="text-decoration:none">' + s.name + '</a>';
+    }
     var drop = s.pages.map(function (p) {
       return '<a href="' + base + p.file + '"><span class="di">' + svg(p.icon) + '</span>' +
         '<span><span class="dt">' + p.name + '</span><br><span class="dd">' + p.desc + '</span></span></a>';
     }).join('');
-    return '<div class="ni' + (SYS === k ? ' active' : '') + '" tabindex="0">' + s.name +
+    return '<div class="ni' + active + '" tabindex="0">' + s.name +
       '<div class="drop">' + drop + '</div></div>';
   }).join('');
 
