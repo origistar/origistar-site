@@ -111,15 +111,52 @@
   document.getElementById('mask').addEventListener('click', closeDrawer);
 
   // ---------- 底部 Tab（移动端） ----------
+  // 多子页面的体系点击后弹出选择面板；单页面 / 研习录直接跳转
   var tabs = ORDER.map(function (k) {
-    var s = S[k]; var first = s.pages[0];
+    var s = S[k];
     var active = (SYS === k) ? ' active' : '';
-    return '<a class="' + active + '" href="' + base + first.file + '">' + svg(s.icon) + '<span>' + s.name + '</span></a>';
+    var label = svg(s.icon) + '<span>' + s.name + '</span>';
+    if (k === 'study' || s.pages.length <= 1) {
+      return '<a class="' + active + '" href="' + base + s.pages[0].file + '">' + label + '</a>';
+    }
+    return '<button type="button" class="' + active + '" data-sys="' + k + '" aria-haspopup="true">' + label + '</button>';
   }).join('');
   var btab = document.createElement('nav');
   btab.className = 'btab';
+  btab.id = 'btab';
   btab.innerHTML = tabs;
   document.body.appendChild(btab);
+
+  // 底部子页面选择面板
+  var picker = document.createElement('div');
+  picker.className = 'sys-picker';
+  picker.id = 'sysPicker';
+  picker.innerHTML = '<div class="picker-mask" id="pickerMask"></div>' +
+    '<div class="picker-sheet">' +
+    '<div class="picker-head"><b id="pickerTitle">选择页面</b><button id="pickerClose">✕</button></div>' +
+    '<div class="picker-list" id="pickerList"></div>' +
+    '</div>';
+  document.body.appendChild(picker);
+
+  function openPicker(sysKey) {
+    var s = S[sysKey]; if (!s) return;
+    document.getElementById('pickerTitle').textContent = s.name;
+    document.getElementById('pickerList').innerHTML = s.pages.map(function (p) {
+      return '<a href="' + base + p.file + '">' +
+        '<span class="pi">' + svg(p.icon) + '</span>' +
+        '<span class="pt">' + p.name + '</span>' +
+        '<span class="pd">' + p.desc + '</span>' +
+        '</a>';
+    }).join('');
+    picker.classList.add('show');
+  }
+  function closePicker() { picker.classList.remove('show'); }
+
+  btab.querySelectorAll('button[data-sys]').forEach(function (btn) {
+    btn.addEventListener('click', function () { openPicker(btn.getAttribute('data-sys')); });
+  });
+  document.getElementById('pickerMask').addEventListener('click', closePicker);
+  document.getElementById('pickerClose').addEventListener('click', closePicker);
 
   // ---------- 体系内 sub-nav 胶囊 ----------
   if (SYS !== 'home' && S[SYS]) {
