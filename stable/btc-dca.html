@@ -21,10 +21,11 @@
 
   <section class="hero" style="padding-top:14px">
     <span class="eyebrow">稳健仓 / Stable</span>
-    <h1 class="section-title">比特币 AHR999 定投</h1>
-    <p class="lead">独立仓、仅熊市定投。以 AHR999 为核心信号，周定投 ¥6,000、总预算约 ¥20万；BTC&lt;$50K 时第一档加速。不与其他资金池混用。</p>
+    <h1 class="section-title">比特币 <span class="grad">AHR999</span> 定投</h1>
+    <p class="lead">独立仓、仅熊市定投。以 AHR999 为核心信号，周定投 ¥6,000、总预算约 ¥20万；BTC&lt;$50K 时第一档加速。不与纳指定投、女儿仓位混用。</p>
   </section>
 
+  <!-- KPI 三卡 -->
   <section class="section">
     <div class="grid c3">
       <div class="card kpi">
@@ -48,9 +49,20 @@
     </div>
   </section>
 
+  <!-- 今日决策大卡 -->
   <section class="section">
+    <div class="bigcard">
+      <div class="lab">本周定投 · <span id="btcStage">常态区间</span></div>
+      <div class="amt">¥<span id="btcAmt">6,000</span><small> / 周</small></div>
+      <div class="calc" id="btcCalc">AHR999 1.12 ∈ 0.45–1.2 定投区间 → 正常周定投；BTC&lt;$50K 时第一档加速至 ¥9,000–12,000。</div>
+      <span class="stage flat" id="btcStageTag">按周执行</span>
+    </div>
+  </section>
+
+  <!-- AHR999 三档 -->
+  <section class="section">
+    <div class="section-head"><h2>AHR999 三档</h2><span class="sub">核心信号</span></div>
     <div class="card">
-      <h3 style="margin:0 0 8px">AHR999 三档</h3>
       <table class="tbl">
         <thead><tr><th>区间</th><th>含义</th><th>操作</th></tr></thead>
         <tbody>
@@ -60,6 +72,45 @@
         </tbody>
       </table>
       <p class="note" id="btcNote"></p>
+    </div>
+  </section>
+
+  <!-- 减半周期 -->
+  <section class="section">
+    <div class="section-head"><h2>四年减半周期</h2><span class="sub">周期定位</span></div>
+    <div class="rule warn">
+      <h3>减半后 12–18 个月常为周期高点</h3>
+      <p>
+        比特币每约 4 年减半一次，历史规律：减半后 12–18 个月见周期顶部，随后进入 1 年左右的熊市。<br>
+        定位当前周期所处阶段，用于判断「加速定投 / 减仓兑现」的窗口——熊市后半段（AHR999&lt;1.2 且价格低迷）是定投主战场。
+      </p>
+    </div>
+  </section>
+
+  <!-- MSTR mNAV 情绪代理 -->
+  <section class="section">
+    <div class="section-head"><h2>MSTR / mNAV</h2><span class="sub">华尔街情绪代理</span></div>
+    <div class="rule">
+      <h3>用 mNAV 读华尔街热度</h3>
+      <p>
+        MSTR（MicroStrategy）的 <b>mNAV = 市值 / 其 BTC 持仓净值</b>，是华尔街对 BTC 情绪的放大器：<br>
+        mNAV <b>&gt; 2</b> 过热（情绪亢奋、减仓信号）；<b>1–1.5</b> 温和；<b>&lt; 1</b> 折价（恐慌、定投良机）。<br>
+        与 AHR999 互补：AHR999 看链上成本，mNAV 看机构情绪。
+      </p>
+    </div>
+  </section>
+
+  <!-- 执行纪律 -->
+  <section class="section">
+    <div class="section-head"><h2>执行纪律</h2><span class="sub">独立池</span></div>
+    <div class="rule danger">
+      <h3>三不原则</h3>
+      <p>
+        ① <b>不与其他资金池混</b>——主仓纳指、女儿仓、BTC 仓完全独立；<br>
+        ② <b>不牛市定投</b>——AHR999&gt;1.2、价格高位时只持有不新增；<br>
+        ③ <b>不超预算</b>——总预算 ¥20万为硬上限，打满即停。<br>
+        加速触发：BTC &lt; $50K 时第一档加速，分 2–3 周阶梯加码，不一次性梭哈。
+      </p>
     </div>
   </section>
 </div>

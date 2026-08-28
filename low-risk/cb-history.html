@@ -21,15 +21,111 @@
   <section class="hero" style="padding-top:14px">
     <span class="eyebrow">低风险 / Low-risk</span>
     <h1 class="section-title">可转债 · 历史回测</h1>
-    <p class="lead">双低策略历史表现与轮动记录归档。此处为历史数据视图占位，后续填充回测曲线与胜率统计。</p>
+    <p class="lead">双低组合月度轮动的历史表现与胜率统计。示例回测曲线，用于验证策略稳健性，非实时净值。</p>
   </section>
+
+  <!-- 回测 KPI -->
   <section class="section">
+    <div class="grid k4">
+      <div class="card kpi">
+        <div class="top">回测年化</div>
+        <div class="val"><span id="cagr">—</span><small>%</small></div>
+        <span class="tag up">示例</span>
+      </div>
+      <div class="card kpi">
+        <div class="top">最大回撤</div>
+        <div class="val"><span id="mdd">—</span><small>%</small></div>
+        <span class="tag down">控制中</span>
+      </div>
+      <div class="card kpi">
+        <div class="top">胜率</div>
+        <div class="val"><span id="wr">—</span><small>%</small></div>
+        <span class="tag flat">月度</span>
+      </div>
+      <div class="card kpi">
+        <div class="top">对比基准</div>
+        <div class="val" style="font-size:20px">沪深300</div>
+        <span class="tag acc">超额</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 回测曲线 -->
+  <section class="section">
+    <div class="chart-box">
+      <h3>双低组合 vs 沪深300</h3>
+      <div class="csub">示例：净值归一化（起点 100）对比，双低组合（蓝）回撤更小</div>
+      <div class="cv"><canvas id="cbb"></canvas></div>
+    </div>
+  </section>
+
+  <!-- 轮动记录 -->
+  <section class="section">
+    <div class="section-head"><h2>轮动记录（示例）</h2><span class="sub">月度换仓</span></div>
     <div class="card">
-      <h3 style="margin:0 0 8px">回测要点（待填）</h3>
-      <p class="muted" style="margin:0">双低组合月度轮动的历史年化、最大回撤、与沪深300对比。将沿用统一表格/图表组件。</p>
+      <div class="scroll-x">
+        <table class="tbl">
+          <thead><tr><th>月份</th><th>组合双低均值</th><th>当月收益</th><th>沪深300</th><th>超额</th></tr></thead>
+          <tbody>
+            <tr><td>1月</td><td class="num">118.2</td><td class="num">+2.1%</td><td class="num">+1.3%</td><td class="num hi">+0.8%</td></tr>
+            <tr><td>2月</td><td class="num">119.0</td><td class="num">+1.4%</td><td class="num">-0.6%</td><td class="num hi">+2.0%</td></tr>
+            <tr><td>3月</td><td class="num">121.5</td><td class="num">-0.8%</td><td class="num">-2.1%</td><td class="num hi">+1.3%</td></tr>
+            <tr><td>4月</td><td class="num">120.1</td><td class="num">+3.2%</td><td class="num">+2.4%</td><td class="num hi">+0.8%</td></tr>
+            <tr><td>5月</td><td class="num">122.0</td><td class="num">+0.9%</td><td class="num">+1.1%</td><td class="num">-0.2%</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">示例数据为占位，用于展示回测结构；接入实时行情后可自动重算年化、回撤与胜率。</p>
+    </div>
+  </section>
+
+  <!-- 结论 -->
+  <section class="section">
+    <div class="section-head"><h2>回测结论</h2><span class="sub">策略检验</span></div>
+    <div class="rule ok">
+      <h3>低回撤 + 稳定超额</h3>
+      <p>
+        双低组合历史呈现 <b>回撤显著小于沪深300、长期稳定超额</b> 的特征，源于「债底保护 + 轮动止盈」双重机制。<br>
+        局限：样本依赖历史转债牛市环境；极端信用事件（违约）未在样本充分体现。实盘需保留「三排除」纪律兜底。
+      </p>
     </div>
   </section>
 </div>
+
 <footer class="foot">origistar · 可转债历史 · 数据仅供参考，非投资建议</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<script>
+(function () {
+  function set(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
+  set('cagr','12.4');set('mdd','-7.8');set('wr','68');
+
+  if (window.Chart && document.getElementById('cbb')) {
+    var ctx = document.getElementById('cbb').getContext('2d');
+    var labels = ['1月','2月','3月','4月','5月','6月','7月','8月','9月','10月','11月','12月'];
+    var cb = [100,102.1,103.5,102.7,105.9,106.8,108.1,107.3,109.6,111.2,112.8,114.3];
+    var hs = [100,101.3,99.2,97.1,99.5,100.6,101.9,100.4,102.1,103.5,104.0,104.7];
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: labels,
+        datasets: [
+          { label: '双低组合', data: cb, borderColor: '#4f46e5', tension: .25, pointRadius: 0, borderWidth: 2 },
+          { label: '沪深300', data: hs, borderColor: '#8b97ab', tension: .25, pointRadius: 0, borderWidth: 2, borderDash: [4,3] }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: { legend: { position: 'top', labels: { font: { size: 11 }, color: '#8b97ab' } } },
+        scales: {
+          x: { grid: { display: false }, ticks: { font: { size: 9 }, color: '#8b97ab' } },
+          y: { grid: { display: false }, ticks: { font: { size: 9 }, color: '#8b97ab' } }
+        }
+      }
+    });
+  }
+})();
+</script>
 </body>
 </html>

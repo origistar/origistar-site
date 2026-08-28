@@ -21,23 +21,75 @@
   <section class="hero" style="padding-top:14px">
     <span class="eyebrow">策略库 / Strategy</span>
     <h1 class="section-title">SPMO &amp; MTUM · 动量轮动</h1>
-    <p class="lead">跟踪美股动量因子 ETF：SPMO（标普500动量）与 MTUM（MSCI 动量）。用于观察因子轮动信号，作为稳健仓的补充视角。</p>
+    <p class="lead">跟踪美股动量因子 ETF：SPMO（标普500动量）与 MTUM（MSCI 动量）。用于观察因子轮动信号，作为稳健仓纳指定投的补充视角。</p>
   </section>
+
+  <!-- 信号 KPI -->
   <section class="section">
+    <div class="grid k4">
+      <div class="card kpi">
+        <div class="top">SPMO 信号</div>
+        <div class="val" style="font-size:20px">跟踪</div>
+        <span class="tag flat">标普500动量</span>
+      </div>
+      <div class="card kpi">
+        <div class="top">MTUM 信号</div>
+        <div class="val" style="font-size:20px">跟踪</div>
+        <span class="tag flat">MSCI动量</span>
+      </div>
+      <div class="card kpi">
+        <div class="top">相对强弱</div>
+        <div class="val" style="font-size:20px">vs QQQ</div>
+        <span class="tag acc">互为验证</span>
+      </div>
+      <div class="card kpi">
+        <div class="top">状态</div>
+        <div class="val" style="font-size:20px">观察</div>
+        <span class="tag flat">非持仓</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- SPMO / MTUM 对比 -->
+  <section class="section">
+    <div class="section-head"><h2>两只动量 ETF</h2><span class="sub">互为验证</span></div>
     <div class="grid c2">
       <div class="card">
         <h3 style="margin:0 0 8px">SPMO</h3>
-        <p class="muted" style="margin:0">标普500 动量加权，高动量与低波动兼考虑。相对 QQQ 的强弱用于判断风格切换。</p>
+        <p class="muted" style="margin:0">标普500 动量加权，高动量与低波动兼考虑。相对 QQQ 的强弱用于判断大盘风格是否偏向动量因子。</p>
       </div>
       <div class="card">
         <h3 style="margin:0 0 8px">MTUM</h3>
-        <p class="muted" style="margin:0">MSCI USA 动量因子。与 SPMO 互为验证，避免单一因子失效。</p>
+        <p class="muted" style="margin:0">MSCI USA 动量因子。与 SPMO 互为验证，避免单一因子在特定市况下失效。</p>
       </div>
     </div>
-    <p class="note" id="momNote"></p>
+  </section>
+
+  <!-- 动量轮动规则 -->
+  <section class="section">
+    <div class="section-head"><h2>动量轮动规则</h2><span class="sub">信号用法</span></div>
+    <div class="rule warn">
+      <h3>动量强 → 加配成长；动量弱 → 回归宽基</h3>
+      <p>
+        当 SPMO / MTUM 相对 QQQ、SPY 持续走强，说明市场风格偏向动量/成长，可作为 <b>稳健仓纳指定投的加配信号</b>；<br>
+        当动量因子走弱（如价值/防御占优），则维持宽基定投、不追因子。动量用于「校准仓位倾向」，不单独开仓。
+      </p>
+    </div>
+  </section>
+
+  <!-- 与稳健仓关系 -->
+  <section class="section">
+    <div class="section-head"><h2>与稳健仓的关系</h2><span class="sub">辅助视角</span></div>
+    <div class="rule ok">
+      <h3>主仓不动摇，动量只调倾向</h3>
+      <p>稳健仓以纳指100 长期定投为锚（v5.1），动量因子是「顺风/逆风」的辅助观测。不因动量信号偏离主定投纪律——动量偏弱时照样按 PE×VIX 矩阵定投，只是不额外加配成长因子。</p>
+      <p class="note" id="momNote"></p>
+    </div>
   </section>
 </div>
+
 <footer class="foot">origistar · 动量策略 · 数据仅供参考，非投资建议</footer>
+
 <script>
 (function(){var d=window.ORIGISTAR;if(!d)return;var e=document.getElementById('momNote');if(e)e.textContent='当前：'+d.strategy.momentum.label+' · '+d.strategy.momentum.signal+'（更新于 '+d.updated+'）';})();
 </script>

@@ -25,27 +25,54 @@
     <p class="lead">用「极度便宜 / 甜区 / 合理 / 偏贵」四档锚定，价格进入甜区即开始定投，进入极度便宜加倍。不看宏观噪音，只看价格相对锚点的便宜程度。</p>
   </section>
 
+  <!-- KPI 两卡 -->
   <section class="section">
     <div class="grid c2" id="defGrid">
       <div class="card kpi">
         <div class="top"><span class="ic" style="background:linear-gradient(135deg,#0ea5e9,#06b6d4)">S</span>SCHD（标普红利贵族 ETF）</div>
         <div class="val">$<span id="schdP">—</span></div>
-        <div class="meta">锚点：极度便宜 <b>$27</b> · 甜区 <b>$30</b> · 合理 <b>$32</b></div>
+        <div class="meta">甜区 <b>$30</b> · 极度便宜 <b>$27</b></div>
         <span class="tag flat" id="schdTag">—</span>
         <div class="note" id="schdBar"></div>
       </div>
       <div class="card kpi">
         <div class="top"><span class="ic" style="background:linear-gradient(135deg,#0ea5e9,#06b6d4)">B</span>BRK.B（伯克希尔 B 类）</div>
         <div class="val">$<span id="brkP">—</span></div>
-        <div class="meta">锚点：极度便宜 <b>$450</b> · 甜区 <b>$475</b> · 合理 <b>$500</b></div>
+        <div class="meta">甜区 <b>$475</b> · 极度便宜 <b>$450</b></div>
         <span class="tag flat" id="brkTag">—</span>
         <div class="note" id="brkBar"></div>
       </div>
     </div>
   </section>
 
+  <!-- 当前信号大卡 -->
   <section class="section">
-    <div class="section-head"><h2>四档锚定模型</h2></div>
+    <div class="bigcard">
+      <div class="lab">当前状态 · <span id="defStage">等待便宜价</span></div>
+      <div class="amt" id="defAmt">均高于合理价</div>
+      <div class="calc" id="defCalc">SCHD $35.10 / BRK.B $504.30 —— 均落在「偏贵」区，暂停新增，等待回落至甜区。</div>
+      <span class="stage down" id="defStageTag">持币观望</span>
+    </div>
+  </section>
+
+  <!-- 锚点监测矩阵 -->
+  <section class="section">
+    <div class="section-head"><h2>锚点监测矩阵</h2><span class="sub">价格 vs 四档</span></div>
+    <div class="card">
+      <div class="scroll-x">
+        <table class="matrix">
+          <tr><th>标的＼档位</th><th>极度便宜</th><th>甜区</th><th>合理</th><th>现价</th><th>状态</th></tr>
+          <tr><td class="lb">SCHD</td><td>$27.0</td><td>$30.0</td><td>$32.0</td><td class="hi">$35.10</td><td><span class="tag down">偏贵</span></td></tr>
+          <tr><td class="lb">BRK.B</td><td>$450</td><td>$475</td><td>$500</td><td class="hi">$504.30</td><td><span class="tag down">偏贵</span></td></tr>
+          <caption>现价均高于合理价，未触发定投；回落至甜区（≤$30 / ≤$475）开始，极度便宜（≤$27 / ≤$450）加倍。</caption>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 四档锚定模型 -->
+  <section class="section">
+    <div class="section-head"><h2>四档锚定模型</h2><span class="sub">操作映射</span></div>
     <div class="card">
       <table class="tbl">
         <thead><tr><th>档位</th><th>含义</th><th>操作</th></tr></thead>
@@ -56,6 +83,29 @@
           <tr><td><span class="dot r"></span> 偏贵</td><td>价格 &gt; 合理</td><td class="num">等待回落</td></tr>
         </tbody>
       </table>
+    </div>
+  </section>
+
+  <!-- 定投纪律 -->
+  <section class="section">
+    <div class="section-head"><h2>定投纪律</h2><span class="sub">三条铁律</span></div>
+    <div class="rule ok">
+      <h3>只买便宜，不追高</h3>
+      <p>
+        ① <b>价格 ≤ 甜区</b> → 启动定投，按基础份额买入；<br>
+        ② <b>价格 ≤ 极度便宜</b> → 份额加倍，越跌越买；<br>
+        ③ <b>价格 &gt; 合理</b> → 暂停新增，持有不动，不卖飞筹码。<br>
+        锚点随年度分红/拆细微调，一年复核一次，不因短期波动改锚。
+      </p>
+    </div>
+  </section>
+
+  <!-- 数据来源 -->
+  <section class="section">
+    <div class="section-head"><h2>数据来源</h2><span class="sub">可移植</span></div>
+    <div class="rule">
+      <h3>价格取自行情快照，缓存放本地</h3>
+      <p>现价由人工/定时脚本写入 <code>assets/data.js</code>，不依赖 GitHub Actions；本页为纯前端渲染，可整体搬至任意静态托管（含非 GitHub 云）。锚点价为长期经验值，非实时估值模型。</p>
       <p class="note" id="defNote"></p>
     </div>
   </section>

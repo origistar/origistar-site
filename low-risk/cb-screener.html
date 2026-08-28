@@ -21,23 +21,91 @@
   <section class="hero" style="padding-top:14px">
     <span class="eyebrow">低风险 / Low-risk</span>
     <h1 class="section-title">可转债 · 双低筛选</h1>
-    <p class="lead">以「价格低 + 溢价低」双低策略筛选转债，兼顾债底保护与股性弹性。下方为筛选结果示例结构。</p>
+    <p class="lead">以「价格低 + 溢价低」双低策略筛选转债，兼顾债底保护与股性弹性。下方为筛选结果示例，双低值越低越优。</p>
   </section>
 
+  <!-- KPI 四卡 -->
   <section class="section">
+    <div class="grid k4">
+      <div class="card kpi">
+        <div class="top">候选数</div>
+        <div class="val"><span id="cnt">—</span></div>
+        <span class="tag flat">双低池</span>
+      </div>
+      <div class="card kpi">
+        <div class="top">平均双低</div>
+        <div class="val"><span id="avg">—</span></div>
+        <span class="tag flat">池内均值</span>
+      </div>
+      <div class="card kpi">
+        <div class="top">最佳双低</div>
+        <div class="val"><span id="best">—</span></div>
+        <span class="tag up">优先</span>
+      </div>
+      <div class="card kpi">
+        <div class="top">信号</div>
+        <div class="val" style="font-size:20px">轮动中</div>
+        <span class="tag acc">月度</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- 筛选结果 -->
+  <section class="section">
+    <div class="section-head"><h2>双低筛选结果（示例）</h2><span class="sub">价格 + 溢价×100</span></div>
     <div class="card">
-      <table class="tbl">
-        <thead><tr><th>转债</th><th>价格</th><th>溢价率</th><th>双低值</th><th>评级</th><th>状态</th></tr></thead>
-        <tbody>
-          <tr><td>示例 A</td><td class="num">112.3</td><td class="num">8.5%</td><td class="num">120.8</td><td>AA</td><td><span class="dot g"></span> 关注</td></tr>
-          <tr><td>示例 B</td><td class="num">108.7</td><td class="num">12.1%</td><td class="num">120.8</td><td>AA-</td><td><span class="dot g"></span> 关注</td></tr>
-          <tr><td>示例 C</td><td class="num">125.0</td><td class="num">3.2%</td><td class="num">128.2</td><td>AAA</td><td><span class="dot y"></span> 持有</td></tr>
-        </tbody>
-      </table>
-      <p class="note">示例数据，待接入实时行情筛选。双低值 = 价格 + 溢价率×100，越低越优。</p>
+      <div class="scroll-x">
+        <table class="tbl">
+          <thead><tr><th>转债</th><th>价格</th><th>溢价率</th><th>双低值</th><th>评级</th><th>状态</th></tr></thead>
+          <tbody>
+            <tr><td>示例 A</td><td class="num">112.3</td><td class="num">8.5%</td><td class="num hi">120.8</td><td>AA</td><td><span class="dot g"></span> 关注</td></tr>
+            <tr><td>示例 B</td><td class="num">108.7</td><td class="num">12.1%</td><td class="num">120.8</td><td>AA-</td><td><span class="dot g"></span> 关注</td></tr>
+            <tr><td>示例 C</td><td class="num">105.4</td><td class="num">15.3%</td><td class="num hi">120.7</td><td>A+</td><td><span class="dot g"></span> 关注</td></tr>
+            <tr><td>示例 D</td><td class="num">125.0</td><td class="num">3.2%</td><td class="num">128.2</td><td>AAA</td><td><span class="dot y"></span> 持有</td></tr>
+            <tr><td>示例 E</td><td class="num">98.6</td><td class="num">25.1%</td><td class="num dim">123.7</td><td>AA</td><td><span class="dot r"></span> 观望</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="note">示例数据，待接入实时行情筛选。双低值 = 价格 + 溢价率×100，越低越优；同时需排除正股 ST、转债余额过小（流动性差）的标的。</p>
+    </div>
+  </section>
+
+  <!-- 双低公式 -->
+  <section class="section">
+    <div class="section-head"><h2>双低公式</h2><span class="sub">核心算法</span></div>
+    <div class="rule">
+      <h3>双低值 = 转债价格 + 转股溢价率 × 100</h3>
+      <p>
+        <b>价格低</b> → 债底保护厚，下跌空间有限（接近面值 100 时有纯债价值托底）；<br>
+        <b>溢价低</b> → 股性足，正股上涨时能跟涨。<br>
+        两者相乘式相加，天然选出「又便宜又跟涨」的标的。排序后取前 N 名构建组合。
+      </p>
+    </div>
+  </section>
+
+  <!-- 筛选纪律 -->
+  <section class="section">
+    <div class="section-head"><h2>筛选纪律</h2><span class="sub">三排除</span></div>
+    <div class="rule ok">
+      <h3>双低 ≠ 无脑买</h3>
+      <p>
+        ① 排除 <b>正股 ST / 退市风险</b>；<br>
+        ② 排除 <b>余额过小</b>（&lt; 1 亿，流动性差、易踩雷）；<br>
+        ③ 排除 <b>溢价率异常为负</b>（强赎预期，非双低逻辑）。<br>
+        月度轮动：每月按双低值重排，卖出掉出名单的、买入新晋的，单次换手控制成本。
+      </p>
     </div>
   </section>
 </div>
+
 <footer class="foot">origistar · 可转债筛选 · 数据仅供参考，非投资建议</footer>
+
+<script>
+(function(){
+  var d=window.ORIGISTAR;if(!d)return;
+  function set(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
+  set('cnt',5);set('avg','121.0');set('best','120.7');
+})();
+</script>
 </body>
 </html>

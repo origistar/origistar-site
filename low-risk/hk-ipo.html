@@ -24,6 +24,7 @@
     <p class="lead">聚焦小盘新 IPO：筹码集中、超额认购倍数极端、突破潜力。同步跟踪港股通纳入名单（2026年9月窗口的「先买后卖」套利）。</p>
   </section>
 
+  <!-- KPI 三卡 -->
   <section class="section">
     <div class="grid c3">
       <div class="card kpi">
@@ -41,19 +42,71 @@
       <div class="card kpi">
         <div class="top"><span class="ic" style="background:linear-gradient(135deg,#8b5cf6,#a855f7)">⚡</span>策略信号</div>
         <div class="val" style="font-size:20px">极端超额 = 关注</div>
-        <div class="meta">基石比例 / 锁定期 / 解禁</div>
+        <div class="meta">基石 / 锁定期 / 解禁</div>
         <span class="tag flat">多维评分</span>
       </div>
     </div>
   </section>
 
+  <!-- 评分维度 -->
   <section class="section">
+    <div class="section-head"><h2>评分维度</h2><span class="sub">八维对比</span></div>
     <div class="card">
-      <h3 style="margin:0 0 8px">评分维度</h3>
-      <p class="muted" style="margin:0">基石比例、锁定期、解禁日、流通股、超额认购倍数、行业景气、破发历史——多维对比评分表 + 历史回测支撑结论。详细数据页后续接入自动抓取（AASTOCKS IPO 列表）。</p>
+      <table class="tbl">
+        <thead><tr><th>维度</th><th>关注点</th><th>偏好</th></tr></thead>
+        <tbody>
+          <tr><td>超额认购倍数</td><td>公开发售超购</td><td class="num">极端值 &gt; 100×</td></tr>
+          <tr><td>基石比例</td><td>基石认购占比</td><td class="num">适中 30–60%</td></tr>
+          <tr><td>锁定期</td><td>基石禁售期</td><td class="num">越长越稳</td></tr>
+          <tr><td>解禁日</td><td>首波解禁时点</td><td class="num">避开窗口</td></tr>
+          <tr><td>流通股</td><td>自由流通盘</td><td class="num">小盘易拉</td></tr>
+          <tr><td>行业景气</td><td>赛道热度</td><td class="num">新经济优先</td></tr>
+          <tr><td>破发历史</td><td>保荐人往绩</td><td class="num">低破发</td></tr>
+          <tr><td>保荐人</td><td>承销实力</td><td class="num">头部券商</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 港股通纳入套利 -->
+  <section class="section">
+    <div class="section-head"><h2>港股通纳入套利</h2><span class="sub">先买后卖</span></div>
+    <div class="rule warn">
+      <h3>纳入前买入，纳入后卖出</h3>
+      <p>
+        港股通定期扩容（关注 <b>2026 年 9 月</b> 纳入窗口）。逻辑：纳入前 mainland 资金预期买入 → 价格提前反应，<b>纳入前布局、正式纳入后兑现</b>。<br>
+        重点筛选：结构简洁的小盘新 IPO（筹码集中、超额认购极端、突破潜力），避免大盘蓝筹（套利空间薄）。
+      </p>
+    </div>
+  </section>
+
+  <!-- 多维评分示例 -->
+  <section class="section">
+    <div class="section-head"><h2>多维评分表示例</h2><span class="sub">待填实时</span></div>
+    <div class="card">
+      <div class="scroll-x">
+        <table class="matrix">
+          <tr><th>标的＼指标</th><th>超购</th><th>基石%</th><th>锁定期</th><th>流通盘</th><th>综合</th></tr>
+          <tr><td class="lb">示例 A</td><td>312×</td><td>42%</td><td>6月</td><td>小</td><td class="hi">88</td></tr>
+          <tr><td class="lb">示例 B</td><td>96×</td><td>55%</td><td>12月</td><td>中</td><td>76</td></tr>
+          <tr><td class="lb">示例 C</td><td>18×</td><td>70%</td><td>3月</td><td>大</td><td class="dim">54</td></tr>
+          <caption>评分越高越优先关注；示例数据为占位，待接入 AASTOCKS IPO 列表自动抓取回填。</caption>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 历史回测 -->
+  <section class="section">
+    <div class="section-head"><h2>历史回测支撑</h2><span class="sub">结论依据</span></div>
+    <div class="rule ok">
+      <h3>用数据而非直觉</h3>
+      <p>小盘新 IPO 在极端超额认购 + 低流通盘组合下，上市初期超额收益显著；但破发率随市场情绪波动。回测用于确认评分权重，不保证单体胜率。每季复盘权重，剔除失效维度。</p>
+      <p class="note" id="ipoTgNote"></p>
     </div>
   </section>
 </div>
+
 <footer class="foot">origistar · 港股打新 · 数据仅供参考，非投资建议</footer>
 
 <script>
@@ -62,6 +115,7 @@
   function set(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
   function tag(id,t,c){var e=document.getElementById(id);e.textContent=t;e.className='tag '+c;}
   set('watch',d.hkIpo.watch);set('pipe',d.hkIpo.pipeline);tag('ipoTg',d.hkIpo.signal,d.hkIpo.signalType);
+  var n=document.getElementById('ipoTgNote');if(n)n.textContent='更新于 '+d.updated;
 })();
 </script>
 </body>
