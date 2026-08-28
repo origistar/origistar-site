@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>稳健仓 · 纳指定投历史 | origistar</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<script src="../assets/data.js"></script>
+<script src="../assets/nav.js" data-system="stable" data-page="ndx-history"></script>
+
+<div class="wrap">
+  <div id="subnav-slot"></div>
+  <section class="hero" style="padding-top:14px">
+    <span class="eyebrow">稳健仓 / Stable</span>
+    <h1 class="section-title">纳指定投 · 历史实盘</h1>
+    <p class="lead">定投流水、每周复盘与收益曲线。此处为历史数据归档视图（轻量跟踪，沿用 Excel 流水 + 高亮填充方案）。</p>
+  </section>
+
+  <section class="section">
+    <div class="card">
+      <h3 style="margin:0 0 10px">实盘记录（示例结构）</h3>
+      <table class="tbl">
+        <thead><tr><th>日期</th><th>操作</th><th>份数/乘数</th><th>金额</th><th>PE</th><th>DD</th></tr></thead>
+        <tbody>
+          <tr><td>每周</td><td>基础定投</td><td class="num">1×</td><td class="num">¥1,500</td><td>—</td><td>—</td></tr>
+          <tr><td>恐慌周</td><td>加码</td><td class="num">5×</td><td class="num">¥7,500</td><td>—</td><td>&lt;-15%</td></tr>
+          <tr><td>极端周</td><td>加码</td><td class="num">6×</td><td class="num">¥9,000</td><td>—</td><td>&lt;-25%</td></tr>
+        </tbody>
+      </table>
+      <p class="note">完整流水见本地交易记录表；本页用于跨设备查看汇总。可后续接入导出脚本自动回填。</p>
+    </div>
+  </section>
+</div>
+<footer class="foot">origistar · 纳指定投历史 · 数据仅供参考，非投资建议</footer>
+</body>
+</html>

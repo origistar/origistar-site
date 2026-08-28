@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>低风险 · 港股打新 | origistar</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<script src="../assets/data.js"></script>
+<script src="../assets/nav.js" data-system="low-risk" data-page="hk-ipo"></script>
+
+<div class="wrap">
+  <div id="subnav-slot"></div>
+  <section class="hero" style="padding-top:14px">
+    <span class="eyebrow">低风险 / Low-risk</span>
+    <h1 class="section-title">港股打新 · 次新入通追踪</h1>
+    <p class="lead">聚焦小盘新 IPO：筹码集中、超额认购倍数极端、突破潜力。同步跟踪港股通纳入名单（2026年9月窗口的「先买后卖」套利）。</p>
+  </section>
+
+  <section class="section">
+    <div class="grid c3">
+      <div class="card kpi">
+        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#8b5cf6,#a855f7)">👀</span>观察标的</div>
+        <div class="val"><span id="watch">—</span> <small>只</small></div>
+        <div class="meta">超额认购极端值筛选</div>
+        <span class="tag flat" id="ipoTg">—</span>
+      </div>
+      <div class="card kpi">
+        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#8b5cf6,#a855f7)">📋</span>纳入管线</div>
+        <div class="val"><span id="pipe">—</span> <small>条</small></div>
+        <div class="meta">港股通 2026-09 名单</div>
+        <span class="tag acc">跟踪中</span>
+      </div>
+      <div class="card kpi">
+        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#8b5cf6,#a855f7)">⚡</span>策略信号</div>
+        <div class="val" style="font-size:20px">极端超额 = 关注</div>
+        <div class="meta">基石比例 / 锁定期 / 解禁</div>
+        <span class="tag flat">多维评分</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="card">
+      <h3 style="margin:0 0 8px">评分维度</h3>
+      <p class="muted" style="margin:0">基石比例、锁定期、解禁日、流通股、超额认购倍数、行业景气、破发历史——多维对比评分表 + 历史回测支撑结论。详细数据页后续接入自动抓取（AASTOCKS IPO 列表）。</p>
+    </div>
+  </section>
+</div>
+<footer class="foot">origistar · 港股打新 · 数据仅供参考，非投资建议</footer>
+
+<script>
+(function(){
+  var d=window.ORIGISTAR;if(!d)return;
+  function set(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
+  function tag(id,t,c){var e=document.getElementById(id);e.textContent=t;e.className='tag '+c;}
+  set('watch',d.hkIpo.watch);set('pipe',d.hkIpo.pipeline);tag('ipoTg',d.hkIpo.signal,d.hkIpo.signalType);
+})();
+</script>
+</body>
+</html>

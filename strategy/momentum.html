@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>策略库 · SPMO & MTUM | origistar</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<script src="../assets/data.js"></script>
+<script src="../assets/nav.js" data-system="strategy" data-page="momentum"></script>
+
+<div class="wrap">
+  <div id="subnav-slot"></div>
+  <section class="hero" style="padding-top:14px">
+    <span class="eyebrow">策略库 / Strategy</span>
+    <h1 class="section-title">SPMO &amp; MTUM · 动量轮动</h1>
+    <p class="lead">跟踪美股动量因子 ETF：SPMO（标普500动量）与 MTUM（MSCI 动量）。用于观察因子轮动信号，作为稳健仓的补充视角。</p>
+  </section>
+  <section class="section">
+    <div class="grid c2">
+      <div class="card">
+        <h3 style="margin:0 0 8px">SPMO</h3>
+        <p class="muted" style="margin:0">标普500 动量加权，高动量与低波动兼考虑。相对 QQQ 的强弱用于判断风格切换。</p>
+      </div>
+      <div class="card">
+        <h3 style="margin:0 0 8px">MTUM</h3>
+        <p class="muted" style="margin:0">MSCI USA 动量因子。与 SPMO 互为验证，避免单一因子失效。</p>
+      </div>
+    </div>
+    <p class="note" id="momNote"></p>
+  </section>
+</div>
+<footer class="foot">origistar · 动量策略 · 数据仅供参考，非投资建议</footer>
+<script>
+(function(){var d=window.ORIGISTAR;if(!d)return;var e=document.getElementById('momNote');if(e)e.textContent='当前：'+d.strategy.momentum.label+' · '+d.strategy.momentum.signal+'（更新于 '+d.updated+'）';})();
+</script>
+</body>
+</html>

@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>稳健仓 · 纳指定投 | origistar</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<script src="../assets/data.js"></script>
+<script src="../assets/nav.js" data-system="stable" data-page="ndx-dca"></script>
+
+<div class="wrap">
+  <div id="subnav-slot"></div>
+
+  <section class="hero" style="padding-top:14px">
+    <span class="eyebrow">稳健仓 / Stable</span>
+    <h1 class="section-title">纳指100 定投决策 v5.1</h1>
+    <p class="lead">以长期 PE 估值 + 回撤网格为核心，每日 ¥1,500 基础定投，按恐慌程度（DD 倍数）阶梯加码。PE&gt;33 且浮盈&gt;50% 触发减仓。</p>
+  </section>
+
+  <section class="section">
+    <div class="grid c3">
+      <div class="card kpi">
+        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#4f46e5,#6366f1)">PE</span>纳指100 估值</div>
+        <div class="val"><span id="pe">—</span></div>
+        <div class="meta">标签：<b id="peL">—</b></div>
+        <span class="tag flat" id="peTag">—</span>
+      </div>
+      <div class="card kpi">
+        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#4f46e5,#6366f1)">↘</span>距高点回撤</div>
+        <div class="val"><span id="dd">—</span><small>%</small></div>
+        <div class="meta">决定加码倍数（4/5/6×）</div>
+        <span class="tag flat">网格依据</span>
+      </div>
+      <div class="card kpi">
+        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#4f46e5,#6366f1)">¥</span>今日定投</div>
+        <div class="val">¥<span id="dca">—</span></div>
+        <div class="meta">基础 ¥1,500 / 日</div>
+        <span class="tag acc">长期持有</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head"><h2>执行规则（精简版）</h2></div>
+    <div class="grid c2">
+      <div class="card">
+        <h3 style="margin:0 0 8px">基础定投</h3>
+        <p class="muted" style="margin:0">每日 ¥1,500，按 DD 倍数阶梯：常态 4×，恐慌 5×，极端 6×。3–5 年周期，主投纳指100 优先于标普500。</p>
+      </div>
+      <div class="card">
+        <h3 style="margin:0 0 8px">止盈 & 网格</h3>
+        <p class="muted" style="margin:0">止盈：PE&gt;33 且浮盈&gt;50%。事件网格：NDX 自52周高点回撤&gt;5% 且溢价率&lt;6% 时非对称加仓（买-2%/卖+3.5%）。</p>
+      </div>
+    </div>
+    <p class="note" id="ndxNote"></p>
+  </section>
+</div>
+
+<footer class="foot">origistar · 纳指定投 · 数据仅供参考，非投资建议</footer>
+
+<script>
+(function () {
+  var d = window.ORIGISTAR; if (!d) return;
+  function set(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
+  function tag(id,t,c){var e=document.getElementById(id);e.textContent=t;e.className='tag '+c;}
+  set('pe', d.ndx.pe); set('peL', d.ndx.peLabel); set('dd', d.ndx.dd); set('dca', d.ndx.dailyDCA.toLocaleString());
+  tag('peTag', d.ndx.signal, d.ndx.signalType);
+  document.getElementById('ndxNote').textContent = d.ndx.note + '（更新于 ' + d.updated + '）';
+})();
+</script>
+</body>
+</html>

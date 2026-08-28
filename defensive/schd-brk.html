@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>防守仓 · SCHD & BRK.B 便宜价监测 | origistar</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<script src="../assets/data.js"></script>
+<script src="../assets/nav.js" data-system="defensive" data-page="schd-brk"></script>
+
+<div class="wrap">
+  <div id="subnav-slot"></div>
+
+  <section class="hero" style="padding-top:14px">
+    <span class="eyebrow">防守仓 / Defensive</span>
+    <h1 class="section-title">SCHD &amp; 伯克希尔 · 锚定便宜价</h1>
+    <p class="lead">用「极度便宜 / 甜区 / 合理 / 偏贵」四档锚定，价格进入甜区即开始定投，进入极度便宜加倍。不看宏观噪音，只看价格相对锚点的便宜程度。</p>
+  </section>
+
+  <section class="section">
+    <div class="grid c2" id="defGrid">
+      <div class="card kpi">
+        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#0ea5e9,#06b6d4)">S</span>SCHD（标普红利贵族 ETF）</div>
+        <div class="val">$<span id="schdP">—</span></div>
+        <div class="meta">锚点：极度便宜 <b>$27</b> · 甜区 <b>$30</b> · 合理 <b>$32</b></div>
+        <span class="tag flat" id="schdTag">—</span>
+        <div class="note" id="schdBar"></div>
+      </div>
+      <div class="card kpi">
+        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#0ea5e9,#06b6d4)">B</span>BRK.B（伯克希尔 B 类）</div>
+        <div class="val">$<span id="brkP">—</span></div>
+        <div class="meta">锚点：极度便宜 <b>$450</b> · 甜区 <b>$475</b> · 合理 <b>$500</b></div>
+        <span class="tag flat" id="brkTag">—</span>
+        <div class="note" id="brkBar"></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="section-head"><h2>四档锚定模型</h2></div>
+    <div class="card">
+      <table class="tbl">
+        <thead><tr><th>档位</th><th>含义</th><th>操作</th></tr></thead>
+        <tbody>
+          <tr><td><span class="dot b"></span> 极度便宜</td><td>价格 ≤ 极度便宜锚</td><td class="num">加倍定投</td></tr>
+          <tr><td><span class="dot g"></span> 甜区</td><td>极度便宜 &lt; 价格 ≤ 甜区</td><td class="num">开始定投</td></tr>
+          <tr><td><span class="dot y"></span> 合理</td><td>甜区 &lt; 价格 ≤ 合理</td><td class="num">持有 / 停止新增</td></tr>
+          <tr><td><span class="dot r"></span> 偏贵</td><td>价格 &gt; 合理</td><td class="num">等待回落</td></tr>
+        </tbody>
+      </table>
+      <p class="note" id="defNote"></p>
+    </div>
+  </section>
+</div>
+
+<footer class="foot">origistar · 防守仓监测 · 数据仅供参考，非投资建议</footer>
+
+<script>
+(function () {
+  var d = window.ORIGISTAR; if (!d) return;
+  function zone(p, a){
+    if (p <= a.extreme) return ['极度便宜','up'];
+    if (p <= a.sweet)   return ['甜区','up'];
+    if (p <= a.fair)    return ['合理','flat'];
+    return ['偏贵','down'];
+  }
+  function tag(id, t, c){ var e=document.getElementById(id); e.textContent=t; e.className='tag '+c; }
+  var s = d.defensive.schd, b = d.defensive.brk;
+  document.getElementById('schdP').textContent = s.price.toFixed(2);
+  document.getElementById('brkP').textContent = b.price.toFixed(2);
+  var sz = zone(s.price, s), bz = zone(b.price, b);
+  tag('schdTag', sz[0], sz[1]); tag('brkTag', bz[0], bz[1]);
+  document.getElementById('schdBar').textContent = '当前处于「' + sz[0] + '」区间';
+  document.getElementById('brkBar').textContent = '当前处于「' + bz[0] + '」区间';
+  document.getElementById('defNote').textContent = d.defensive.note + '（更新于 ' + d.updated + '）';
+})();
+</script>
+</body>
+</html>

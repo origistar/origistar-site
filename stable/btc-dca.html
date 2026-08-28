@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>稳健仓 · 比特币定投 | origistar</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<script src="../assets/data.js"></script>
+<script src="../assets/nav.js" data-system="stable" data-page="btc-dca"></script>
+
+<div class="wrap">
+  <div id="subnav-slot"></div>
+
+  <section class="hero" style="padding-top:14px">
+    <span class="eyebrow">稳健仓 / Stable</span>
+    <h1 class="section-title">比特币 AHR999 定投</h1>
+    <p class="lead">独立仓、仅熊市定投。以 AHR999 为核心信号，周定投 ¥6,000、总预算约 ¥20万；BTC&lt;$50K 时第一档加速。不与其他资金池混用。</p>
+  </section>
+
+  <section class="section">
+    <div class="grid c3">
+      <div class="card kpi">
+        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">AHR</span>AHR999 指标</div>
+        <div class="val"><span id="ahr">—</span></div>
+        <div class="meta">区间：<b id="ahrL">—</b></div>
+        <span class="tag flat" id="ahrTag">—</span>
+      </div>
+      <div class="card kpi">
+        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">$</span>BTC 现价</div>
+        <div class="val">$<span id="price">—</span></div>
+        <div class="meta">第一档加速线 &lt; $50K</div>
+        <span class="tag flat">区间定投</span>
+      </div>
+      <div class="card kpi">
+        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">¥</span>周定投</div>
+        <div class="val">¥<span id="w">—</span></div>
+        <div class="meta">预算上限 ¥<span id="budget">—</span></div>
+        <span class="tag acc">仅熊市</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="card">
+      <h3 style="margin:0 0 8px">AHR999 三档</h3>
+      <table class="tbl">
+        <thead><tr><th>区间</th><th>含义</th><th>操作</th></tr></thead>
+        <tbody>
+          <tr><td>&lt; 0.45</td><td>极度低估</td><td class="num">重仓加速</td></tr>
+          <tr><td>0.45 – 1.2</td><td>定投区间</td><td class="num">正常周定投</td></tr>
+          <tr><td>&gt; 1.2</td><td>高估</td><td class="num">暂停 / 持有</td></tr>
+        </tbody>
+      </table>
+      <p class="note" id="btcNote"></p>
+    </div>
+  </section>
+</div>
+
+<footer class="foot">origistar · 比特币定投 · 数据仅供参考，非投资建议</footer>
+
+<script>
+(function () {
+  var d = window.ORIGISTAR; if (!d) return;
+  function set(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
+  function tag(id,t,c){var e=document.getElementById(id);e.textContent=t;e.className='tag '+c;}
+  set('ahr', d.btc.ahr999); set('ahrL', d.btc.ahr999Label); set('price', d.btc.price.toLocaleString());
+  set('w', d.btc.weeklyDCA.toLocaleString()); set('budget', d.btc.budget.toLocaleString());
+  tag('ahrTag', d.btc.signal, d.btc.signalType);
+  document.getElementById('btcNote').textContent = d.btc.note + '（更新于 ' + d.updated + '）';
+})();
+</script>
+</body>
+</html>

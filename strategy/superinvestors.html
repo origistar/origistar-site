@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>策略库 · 13F 持仓 | origistar</title>
+<link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+<script src="../assets/data.js"></script>
+<script src="../assets/nav.js" data-system="strategy" data-page="superinvestors"></script>
+
+<div class="wrap">
+  <div id="subnav-slot"></div>
+  <section class="hero" style="padding-top:14px">
+    <span class="eyebrow">策略库 / Strategy</span>
+    <h1 class="section-title">顶级投资者 13F 持仓对比</h1>
+    <p class="lead">跟踪巴菲特、陈天桥等顶级投资者的 13F 持仓变化，提炼共同重仓与新建仓方向，作为长期选股参考。</p>
+  </section>
+  <section class="section">
+    <div class="card">
+      <div class="grid c3">
+        <div class="kpi"><div class="top">跟踪人数</div><div class="val"><span id="n">—</span></div></div>
+        <div class="kpi"><div class="top">更新频率</div><div class="val" style="font-size:20px">季度</div></div>
+        <div class="kpi"><div class="top">信号</div><div class="val" style="font-size:20px">持续跟踪</div></div>
+      </div>
+      <p class="note" id="siNote"></p>
+    </div>
+  </section>
+</div>
+<footer class="foot">origistar · 13F 持仓 · 数据仅供参考，非投资建议</footer>
+<script>
+(function(){var d=window.ORIGISTAR;if(!d)return;function set(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}set('n',d.strategy.superinvestors.tracked);var e=document.getElementById('siNote');if(e)e.textContent=d.strategy.superinvestors.label+' · '+d.strategy.superinvestors.signal+'（更新于 '+d.updated+'）';})();
+</script>
+</body>
+</html>
