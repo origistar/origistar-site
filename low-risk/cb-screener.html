@@ -7,104 +7,207 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="origistar">
-<title>低风险 · 可转债 | origistar</title>
+<title>低风险 · 可转债筛选 | origistar</title>
 <link rel="stylesheet" href="../assets/style.css">
 <link rel="manifest" href="../manifest.json">
 <link rel="apple-touch-icon" href="../assets/icon-192.png">
 </head>
 <body>
-<script src="../assets/data.js"></script>
 <script src="../assets/nav.js" data-system="low-risk" data-page="cb-screener"></script>
 
 <div class="wrap">
   <div id="subnav-slot"></div>
+
+  <!-- Hero -->
   <section class="hero" style="padding-top:14px">
-    <span class="eyebrow">低风险 / Low-risk</span>
-    <h1 class="section-title">可转债 · 双低筛选</h1>
-    <p class="lead">以「价格低 + 溢价低」双低策略筛选转债，兼顾债底保护与股性弹性。下方为筛选结果示例，双低值越低越优。</p>
+    <span class="eyebrow">低风险 / Low-Risk</span>
+    <h1 class="section-title">可转债双低筛选 <span class="grad">20260826</span></h1>
+    <p class="lead">双低 + 安全债底 + 估值水位总开关。当前双低&lt;130 的合格标的不足 15 只，市场整体偏贵，双低策略暂时失效。</p>
   </section>
 
-  <!-- KPI 四卡 -->
+  <!-- 今日决策大卡 -->
   <section class="section">
-    <div class="grid k4">
+    <div class="bigcard">
+      <div class="lab">今日结论 · ⚠️ 空仓观望</div>
+      <div class="amt">空仓<small> / 不新建仓</small></div>
+      <div class="calc">估值高位 —— 双低已失效，空仓观望</div>
+      <span class="stage">等双低&lt;130 数量回到 15 只以上再出手</span>
+    </div>
+  </section>
+
+  <!-- KPI 六卡 -->
+  <section class="section">
+    <div class="grid c3">
       <div class="card kpi">
-        <div class="top">候选数</div>
-        <div class="val"><span id="cnt">—</span></div>
-        <span class="tag flat">双低池</span>
+        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#ec4899,#f43f5e)">数</span>可交易转债</div>
+        <div class="val">278</div>
+        <div class="meta">全市场样本</div>
+        <span class="tag flat">样本量</span>
       </div>
       <div class="card kpi">
-        <div class="top">平均双低</div>
-        <div class="val"><span id="avg">—</span></div>
-        <span class="tag flat">池内均值</span>
+        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#f59e0b,#fbbf24)">价</span>价格中位数</div>
+        <div class="val">137.08</div>
+        <div class="meta">越高越贵</div>
+        <span class="tag flat">估值水位</span>
       </div>
       <div class="card kpi">
-        <div class="top">最佳双低</div>
-        <div class="val"><span id="best">—</span></div>
-        <span class="tag up">优先</span>
+        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#8b5cf6,#a855f7)">双</span>双低值中位数</div>
+        <div class="val">209.48</div>
+        <div class="meta">越高越贵</div>
+        <span class="tag flat">双低水位</span>
       </div>
       <div class="card kpi">
-        <div class="top">信号</div>
-        <div class="val" style="font-size:20px">轮动中</div>
-        <span class="tag acc">月度</span>
+        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#0ea5e9,#22d3ee)">≤</span>双低&lt;130 数量</div>
+        <div class="val">4</div>
+        <div class="meta">阈值 15 只</div>
+        <span class="tag down">严重不足</span>
+      </div>
+      <div class="card kpi">
+        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#ef4444,#f97316)">赎</span>强赎关注区</div>
+        <div class="val">185</div>
+        <div class="meta">价格 ≥ 130 元</div>
+        <span class="tag flat">风险警示</span>
+      </div>
+      <div class="card kpi">
+        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#ef4444,#dc2626)">停</span>空仓信号</div>
+        <div class="val" style="font-size:20px">触发</div>
+        <div class="meta">双低策略失效</div>
+        <span class="tag down">不硬买</span>
       </div>
     </div>
   </section>
 
-  <!-- 筛选结果 -->
+  <!-- 今日结论与操作建议 -->
   <section class="section">
-    <div class="section-head"><h2>双低筛选结果（示例）</h2><span class="sub">价格 + 溢价×100</span></div>
+    <div class="section-head"><h2>今日结论与操作建议</h2><span class="sub">每日北京 22:00 更新</span></div>
+    <div class="rule danger">
+      <h3>操作建议：空仓观望，不新建仓</h3>
+      <p>当前双低&lt;130 的合格标的不足 15 只，说明市场整体偏贵。<b>等该数量回到 15 只以上再出手。</b></p>
+    </div>
+    <p class="note">本页基于「双低 + 安全债底 + 估值水位」的量化模型自动生成，每日北京 22:00 更新。<a href="cb-history.html">查看历史存档 →</a></p>
+  </section>
+
+  <!-- 估值水位趋势 -->
+  <section class="section">
+    <div class="chart-box">
+      <h3>估值水位趋势</h3>
+      <div class="csub">价格中位数（左）与双低&lt;130 标的数量（右，越多越便宜）</div>
+      <div class="cv"><canvas id="spark"></canvas></div>
+    </div>
+  </section>
+
+  <!-- 筛选规则与指标说明 -->
+  <section class="section">
+    <div class="section-head"><h2>筛选规则与指标说明</h2><span class="sub">策略定义</span></div>
+    <div class="rule ok">
+      <h3>一、两个核心区域</h3>
+      <p>
+        <b>安全双低候选</b>：评级 ≥ AA-、发行规模 2~30 亿、价格 ≤ 130 元，再按双低值由小到大排序。这是本策略的潜在买入观察池。<br>
+        <b>强赎关注区</b>：价格 ≥ 130 元的高价债集合。它们股性强、波动大、触发强赎概率高，<b>不是买入清单</b>，仅作风险警示。
+      </p>
+    </div>
+    <div class="card" style="margin-top:10px">
+      <div class="kv">
+        <div class="item"><div class="k">价格</div><div class="v">可转债的市场价格</div></div>
+        <div class="item"><div class="k">溢价率</div><div class="v">转股溢价率 = (债价/转股价值 - 1) × 100%，越低股性越强</div></div>
+        <div class="item"><div class="k">双低值</div><div class="v">价格 + 溢价率 × 100，越小越符合「债底安全 + 股性不差」</div></div>
+        <div class="item"><div class="k">评级</div><div class="v">发债主体信用评级，AAA 最安全，A 及以下风险上升</div></div>
+        <div class="item"><div class="k">规模(亿)</div><div class="v">实际发行规模；过小易被炒作，过大弹性弱</div></div>
+        <div class="item"><div class="k">债底 / 偏贵</div><div class="v">债底=剩余本息锚；价格超过「买入上限（债底×1.05）」标为偏贵</div></div>
+      </div>
+    </div>
+    <div class="rule warn" style="margin-top:10px">
+      <h3>三、空仓信号</h3>
+      <p>
+        当「双低值 &lt; 130」的安全候选少于 <b>15 只</b>时，触发<b>空仓观望</b>。<br>
+        含义：市场整体的债价和溢价率都很高，双低策略暂时失效，不硬买。
+      </p>
+    </div>
+  </section>
+
+  <!-- 安全双低候选 Top 20 -->
+  <section class="section">
+    <div class="section-head"><h2>安全双低候选 Top 20</h2><span class="sub">AA-及以上 · 规模2~30亿 · 价≤130</span></div>
+    <p class="note" style="margin:-4px 0 8px">入选条件：评级 ≥ AA-、规模 2~30 亿、价格 ≤ 130 元，按双低值由低到高排。「债底」为偏贵表示当前价已高于剩余本息锚的 105%，安全边际不足。</p>
     <div class="card">
       <div class="scroll-x">
-        <table class="tbl">
-          <thead><tr><th>转债</th><th>价格</th><th>溢价率</th><th>双低值</th><th>评级</th><th>状态</th></tr></thead>
-          <tbody>
-            <tr><td>示例 A</td><td class="num">112.3</td><td class="num">8.5%</td><td class="num hi">120.8</td><td>AA</td><td><span class="dot g"></span> 关注</td></tr>
-            <tr><td>示例 B</td><td class="num">108.7</td><td class="num">12.1%</td><td class="num">120.8</td><td>AA-</td><td><span class="dot g"></span> 关注</td></tr>
-            <tr><td>示例 C</td><td class="num">105.4</td><td class="num">15.3%</td><td class="num hi">120.7</td><td>A+</td><td><span class="dot g"></span> 关注</td></tr>
-            <tr><td>示例 D</td><td class="num">125.0</td><td class="num">3.2%</td><td class="num">128.2</td><td>AAA</td><td><span class="dot y"></span> 持有</td></tr>
-            <tr><td>示例 E</td><td class="num">98.6</td><td class="num">25.1%</td><td class="num dim">123.7</td><td>AA</td><td><span class="dot r"></span> 观望</td></tr>
-          </tbody>
+        <table class="matrix">
+          <tr><th>代码</th><th>名称</th><th>价格</th><th>双低值</th><th>溢价率</th><th>评级</th><th>规模(亿)</th><th>债底</th></tr>
+          <tr><td class="lb">113051</td><td>节能转债</td><td>124.08</td><td>144.9</td><td>20.8%</td><td>AAA</td><td>30.0</td><td>偏贵</td></tr>
+          <tr><td class="lb">113048</td><td>晶科转债</td><td>116.04</td><td>156.2</td><td>40.2%</td><td>AA</td><td>30.0</td><td>—</td></tr>
+          <tr><td class="lb">123114</td><td>三角转债</td><td>126.59</td><td>164.1</td><td>37.5%</td><td>AA-</td><td>9.0</td><td>偏贵</td></tr>
+          <tr><td class="lb">127034</td><td>绿茵转债</td><td>122.40</td><td>166.4</td><td>44.0%</td><td>AA-</td><td>7.1</td><td>偏贵</td></tr>
+          <tr><td class="lb">123119</td><td>康泰转2</td><td>124.40</td><td>169.0</td><td>44.6%</td><td>AA</td><td>20.0</td><td>偏贵</td></tr>
+          <tr><td class="lb">113070</td><td>渝水转债</td><td>127.09</td><td>170.9</td><td>43.9%</td><td>AAA</td><td>19.0</td><td>偏贵</td></tr>
+          <tr><td class="lb">113054</td><td>绿动转债</td><td>122.84</td><td>173.3</td><td>50.4%</td><td>AA+</td><td>23.6</td><td>偏贵</td></tr>
+          <tr><td class="lb">110087</td><td>天业转债</td><td>125.97</td><td>176.1</td><td>50.1%</td><td>AA+</td><td>30.0</td><td>偏贵</td></tr>
+          <tr><td class="lb">127046</td><td>百润转债</td><td>128.38</td><td>176.5</td><td>48.1%</td><td>AA</td><td>11.3</td><td>偏贵</td></tr>
+          <tr><td class="lb">113067</td><td>燃23转债</td><td>129.35</td><td>178.0</td><td>48.6%</td><td>AAA</td><td>30.0</td><td>偏贵</td></tr>
+          <tr><td class="lb">110093</td><td>神马转债</td><td>125.37</td><td>182.4</td><td>57.0%</td><td>AAA</td><td>30.0</td><td>偏贵</td></tr>
+          <tr><td class="lb">127054</td><td>双箭转债</td><td>127.14</td><td>183.8</td><td>56.6%</td><td>AA</td><td>5.1</td><td>偏贵</td></tr>
+          <tr><td class="lb">123133</td><td>佩蒂转债</td><td>128.81</td><td>185.2</td><td>56.4%</td><td>AA-</td><td>7.2</td><td>偏贵</td></tr>
+          <tr><td class="lb">127108</td><td>太能转债</td><td>125.34</td><td>186.1</td><td>60.7%</td><td>AA+</td><td>29.5</td><td>偏贵</td></tr>
+          <tr><td class="lb">110095</td><td>双良转债</td><td>118.43</td><td>186.7</td><td>68.3%</td><td>AA-</td><td>26.0</td><td>偏贵</td></tr>
+          <tr><td class="lb">110100</td><td>龙建转债</td><td>122.95</td><td>190.4</td><td>67.5%</td><td>AA</td><td>10.0</td><td>偏贵</td></tr>
+          <tr><td class="lb">113652</td><td>伟22转债</td><td>128.29</td><td>190.6</td><td>62.3%</td><td>AA</td><td>14.8</td><td>偏贵</td></tr>
+          <tr><td class="lb">123216</td><td>科顺转债</td><td>124.82</td><td>193.9</td><td>69.1%</td><td>AA-</td><td>22.0</td><td>偏贵</td></tr>
+          <tr><td class="lb">127102</td><td>浙建转债</td><td>122.54</td><td>194.0</td><td>71.4%</td><td>AA+</td><td>10.0</td><td>偏贵</td></tr>
+          <tr><td class="lb">110086</td><td>精工转债</td><td>124.78</td><td>194.5</td><td>69.7%</td><td>AA</td><td>20.0</td><td>偏贵</td></tr>
         </table>
       </div>
-      <p class="note">示例数据，待接入实时行情筛选。双低值 = 价格 + 溢价率×100，越低越优；同时需排除正股 ST、转债余额过小（流动性差）的标的。</p>
     </div>
   </section>
 
-  <!-- 双低公式 -->
+  <!-- 强赎关注区 Top 10 -->
   <section class="section">
-    <div class="section-head"><h2>双低公式</h2><span class="sub">核心算法</span></div>
-    <div class="rule">
-      <h3>双低值 = 转债价格 + 转股溢价率 × 100</h3>
-      <p>
-        <b>价格低</b> → 债底保护厚，下跌空间有限（接近面值 100 时有纯债价值托底）；<br>
-        <b>溢价低</b> → 股性足，正股上涨时能跟涨。<br>
-        两者相乘式相加，天然选出「又便宜又跟涨」的标的。排序后取前 N 名构建组合。
-      </p>
-    </div>
-  </section>
-
-  <!-- 筛选纪律 -->
-  <section class="section">
-    <div class="section-head"><h2>筛选纪律</h2><span class="sub">三排除</span></div>
-    <div class="rule ok">
-      <h3>双低 ≠ 无脑买</h3>
-      <p>
-        ① 排除 <b>正股 ST / 退市风险</b>；<br>
-        ② 排除 <b>余额过小</b>（&lt; 1 亿，流动性差、易踩雷）；<br>
-        ③ 排除 <b>溢价率异常为负</b>（强赎预期，非双低逻辑）。<br>
-        月度轮动：每月按双低值重排，卖出掉出名单的、买入新晋的，单次换手控制成本。
-      </p>
+    <div class="section-head"><h2>强赎关注区 Top 10</h2><span class="sub">价 ≥ 130 · 非买入清单</span></div>
+    <p class="note" style="margin:-4px 0 8px">⚠️ 这里是「高价高溢价的妖债/强赎博弈区」：价格远超 130、股性极强，正股回调时跌幅可能很大；<b>非买入清单</b>，仅作风险警示与观察。</p>
+    <div class="card">
+      <div class="scroll-x">
+        <table class="matrix">
+          <tr><th>代码</th><th>名称</th><th>价格</th><th>溢价率</th><th>双低值</th><th>评级</th></tr>
+          <tr><td class="lb">123118</td><td>惠城转债</td><td>866.59</td><td>32.1%</td><td>898.7</td><td>A+</td></tr>
+          <tr><td class="lb">123241</td><td>欧通转债</td><td>815.00</td><td>17.8%</td><td>832.8</td><td>AA-</td></tr>
+          <tr><td class="lb">118030</td><td>睿创转债</td><td>560.73</td><td>38.4%</td><td>599.2</td><td>AA</td></tr>
+          <tr><td class="lb">127037</td><td>银轮转债</td><td>535.60</td><td>35.0%</td><td>570.6</td><td>AA</td></tr>
+          <tr><td class="lb">127096</td><td>泰坦转债</td><td>515.40</td><td>32.6%</td><td>548.0</td><td>A</td></tr>
+          <tr><td class="lb">123176</td><td>精测转2</td><td>459.75</td><td>40.8%</td><td>500.6</td><td>AA-sti</td></tr>
+          <tr><td class="lb">118058</td><td>微导转债</td><td>454.21</td><td>34.2%</td><td>488.4</td><td>AAsti</td></tr>
+          <tr><td class="lb">123255</td><td>鼎龙转债</td><td>383.52</td><td>50.8%</td><td>434.3</td><td>AA</td></tr>
+          <tr><td class="lb">111012</td><td>福新转债</td><td>360.20</td><td>38.5%</td><td>398.7</td><td>A+</td></tr>
+          <tr><td class="lb">118064</td><td>联瑞转债</td><td>359.41</td><td>46.0%</td><td>405.4</td><td>AAsti</td></tr>
+        </table>
+      </div>
     </div>
   </section>
 </div>
 
-<footer class="foot">origistar · 可转债筛选 · 数据仅供参考，非投资建议</footer>
+<footer class="foot">数据来源：东方财富 · 仅为量化筛选，不构成投资建议<br>策略：双低+安全债底+评级/规模过滤+估值水位总开关 · 自用研究</footer>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
 <script>
-(function(){
-  var d=window.ORIGISTAR;if(!d)return;
-  function set(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
-  set('cnt',5);set('avg','121.0');set('best','120.7');
+(function () {
+  var labels = ['08-18','08-19','08-20','08-21','08-22','08-23','08-24','08-25','08-26'];
+  var price  = [136.88,135.66,135.6,135.74,135.74,135.74,135.17,136.68,137.08];
+  var cnt    = [4,4,4,4,4,4,4,4,4];
+  if (window.Chart && document.getElementById('spark')) {
+    new Chart(document.getElementById('spark').getContext('2d'), {
+      type: 'line',
+      data: { labels: labels, datasets: [
+        { label: '价格中位数', data: price, borderColor: '#ec4899', yAxisID: 'y', tension: .2, pointRadius: 2, borderWidth: 2 },
+        { label: '双低<130 数量', data: cnt, borderColor: '#0ea5e9', yAxisID: 'y1', tension: .2, pointRadius: 2, borderWidth: 2, borderDash: [4,3] }
+      ]},
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: { legend: { position: 'top', labels: { font: { size: 11 }, color: '#8b97ab' } } },
+        scales: {
+          y:  { type: 'linear', position: 'left', grid: { display: false }, ticks: { font: { size: 9 }, color: '#8b97ab' } },
+          y1: { type: 'linear', position: 'right', min: 0, grid: { display: false }, ticks: { font: { size: 9 }, color: '#8b97ab' } }
+        }
+      }
+    });
+  }
 })();
 </script>
 </body>
