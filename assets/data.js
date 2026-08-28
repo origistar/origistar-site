@@ -30,8 +30,8 @@ window.ORIGISTAR = {
     price: 96200,        // BTC 现价 $
     ahr999: 1.12,        // AHR999 指标
     ahr999Label: "定投区间",
-    weeklyDCA: 6000,     // 周定投基数 ¥（再乘 AHR999 档位）
-    weeklyBase: 6000,    // 同上，供首页计算使用
+    weeklyDCA: 3000,     // 周定投基数 ¥（再乘 AHR999 档位）
+    weeklyBase: 3000,    // 同上，供首页计算使用
     signal: "常态 · 仅熊市加速",
     signalType: "flat",
     note: "AHR999<1.2 视为可定投区间；BTC<$50K 第一档加速。"
