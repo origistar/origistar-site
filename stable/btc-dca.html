@@ -7,44 +7,68 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="origistar">
-<title>稳健仓 · 比特币定投 | origistar</title>
+<title>稳健仓 · 比特币 | origistar</title>
 <link rel="stylesheet" href="../assets/style.css">
 <link rel="manifest" href="../manifest.json">
 <link rel="apple-touch-icon" href="../assets/icon-192.png">
 </head>
 <body>
-<script src="../assets/data.js"></script>
 <script src="../assets/nav.js" data-system="stable" data-page="btc-dca"></script>
 
 <div class="wrap">
   <div id="subnav-slot"></div>
 
+  <!-- Hero -->
   <section class="hero" style="padding-top:14px">
     <span class="eyebrow">稳健仓 / Stable</span>
-    <h1 class="section-title">比特币 <span class="grad">AHR999</span> 定投</h1>
-    <p class="lead">独立仓、仅熊市定投。以 AHR999 为核心信号，周定投 ¥6,000、总预算约 ¥20万；BTC&lt;$50K 时第一档加速。不与纳指定投、女儿仓位混用。</p>
+    <h1 class="section-title">比特币 AHR999 定投决策</h1>
+    <p class="lead">更新：2026-08-28 14:58 · 数据源：yfinance · AHR999 自算。以 AHR999 为核心信号，仅熊市定投，MSTR / mNAV 作华尔街情绪代理。</p>
   </section>
 
-  <!-- KPI 三卡 -->
+  <!-- KPI 第一组 -->
   <section class="section">
     <div class="grid c3">
       <div class="card kpi">
-        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">AHR</span>AHR999 指标</div>
-        <div class="val"><span id="ahr">—</span></div>
-        <div class="meta">区间：<b id="ahrL">—</b></div>
-        <span class="tag flat" id="ahrTag">—</span>
+        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">₿</span>BTC 价格</div>
+        <div class="val" style="font-size:19px">$79,935</div>
+        <div class="meta">现货</div>
+        <span class="tag flat">当前价位</span>
       </div>
       <div class="card kpi">
-        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">$</span>BTC 现价</div>
-        <div class="val">$<span id="price">—</span></div>
-        <div class="meta">第一档加速线 &lt; $50K</div>
-        <span class="tag flat">区间定投</span>
+        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#0ea5e9,#22d3ee)">I</span>IBIT 每股</div>
+        <div class="val" style="font-size:19px">$45.29</div>
+        <div class="meta">定投标的</div>
+        <span class="tag flat">ETF</span>
       </div>
       <div class="card kpi">
-        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">¥</span>周定投</div>
-        <div class="val">¥<span id="w">—</span></div>
-        <div class="meta">预算上限 ¥<span id="budget">—</span></div>
-        <span class="tag acc">仅熊市</span>
+        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#ef4444,#f97316)">↘</span>回撤</div>
+        <div class="val" style="font-size:19px" >-36.7%</div>
+        <div class="meta">52 周高 $126,198</div>
+        <span class="tag down">深度回撤</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- KPI 第二组 -->
+  <section class="section">
+    <div class="grid c3">
+      <div class="card kpi">
+        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#8b5cf6,#a855f7)">MA</span>200 日定投均线</div>
+        <div class="val" style="font-size:19px">$69,223</div>
+        <div class="meta">价格 / 200MA = 1.15</div>
+        <span class="tag flat">估值锚</span>
+      </div>
+      <div class="card kpi">
+        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#ef4444,#dc2626)">M</span>MSTR</div>
+        <div class="val" style="font-size:17px">$137.40</div>
+        <div class="meta">52 周高 $365 · -62.4%</div>
+        <span class="tag down">情绪代理</span>
+      </div>
+      <div class="card kpi">
+        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#10b981,#14b8a6)">m</span>MSTR mNAV</div>
+        <div class="val" style="font-size:19px">1.18x</div>
+        <div class="meta">溢价 · 持有 578K BTC</div>
+        <span class="tag up">溢价</span>
       </div>
     </div>
   </section>
@@ -52,80 +76,128 @@
   <!-- 今日决策大卡 -->
   <section class="section">
     <div class="bigcard">
-      <div class="lab">本周定投 · <span id="btcStage">常态区间</span></div>
-      <div class="amt">¥<span id="btcAmt">6,000</span><small> / 周</small></div>
-      <div class="calc" id="btcCalc">AHR999 1.12 ∈ 0.45–1.2 定投区间 → 正常周定投；BTC&lt;$50K 时第一档加速至 ¥9,000–12,000。</div>
-      <span class="stage flat" id="btcStageTag">按周执行</span>
+      <div class="lab">今日定投 · 🟢 0.45-1.2</div>
+      <div class="amt">¥3,000<small> / 周</small></div>
+      <div class="calc">AHR999 = 0.5358 · 价格/200MA = 1.15</div>
+      <span class="stage">定投区间 · 正常定投</span>
     </div>
   </section>
 
-  <!-- AHR999 三档 -->
+  <!-- 定投规则 -->
   <section class="section">
-    <div class="section-head"><h2>AHR999 三档</h2><span class="sub">核心信号</span></div>
+    <div class="section-head"><h2>定投规则</h2><span class="sub">AHR999 分档</span></div>
     <div class="card">
-      <table class="tbl">
-        <thead><tr><th>区间</th><th>含义</th><th>操作</th></tr></thead>
-        <tbody>
-          <tr><td>&lt; 0.45</td><td>极度低估</td><td class="num">重仓加速</td></tr>
-          <tr><td>0.45 – 1.2</td><td>定投区间</td><td class="num">正常周定投</td></tr>
-          <tr><td>&gt; 1.2</td><td>高估</td><td class="num">暂停 / 持有</td></tr>
-        </tbody>
-      </table>
-      <p class="note" id="btcNote"></p>
+      <div class="scroll-x">
+        <table class="matrix">
+          <tr><th>条件</th><th>区间</th><th>周投金额</th><th>IBIT 股数</th><th>状态</th></tr>
+          <tr><td class="lb">BTC &lt; $50,000</td><td>应急加速</td><td class="hi">¥12,000</td><td>~37 股</td><td>未触发</td></tr>
+          <tr><td class="lb">0.5358（当前）</td><td>&lt; 0.45 抄底</td><td>¥6,000</td><td>~18 股</td><td class="dim">—</td></tr>
+          <tr><td class="lb">0.45 ~ 1.2</td><td class="hi">定投区间</td><td class="hi">¥3,000</td><td>~9 股</td><td class="hi">← 现在</td></tr>
+          <tr><td class="lb">&gt; 1.2</td><td>高估暂停</td><td class="dim">¥0</td><td class="dim">0</td><td class="dim">暂停</td></tr>
+        </table>
+      </div>
     </div>
   </section>
 
-  <!-- 减半周期 -->
+  <!-- 四年减半周期 -->
   <section class="section">
-    <div class="section-head"><h2>四年减半周期</h2><span class="sub">周期定位</span></div>
-    <div class="rule warn">
-      <h3>减半后 12–18 个月常为周期高点</h3>
+    <div class="chart-box">
+      <h3>四年减半周期 · 价格走势</h3>
+      <div class="csub">对数坐标 · 红点标记减半年（2012 / 2016 / 2020 / 2024）· 虚线为 2026 预测底部 $52,000</div>
+      <div class="cv"><canvas id="cycle"></canvas></div>
+    </div>
+  </section>
+
+  <!-- 减半周期表 -->
+  <section class="section">
+    <div class="section-head"><h2>四年减半周期 · 底部预判</h2><span class="sub">历史对照</span></div>
+    <div class="card">
+      <div class="scroll-x">
+        <table class="matrix">
+          <tr><th>周期</th><th>减半</th><th>牛市顶</th><th>顶→底</th><th>熊市底</th><th>回撤</th><th>减半→底</th></tr>
+          <tr>
+            <td class="lb"><b>2024（本轮）</b></td><td><b>24.04</b></td><td><b>$126,000</b> · 25.10</td>
+            <td>已过 10 月<br>剩 ~2 月</td><td><b>$45-65K</b><br>预测 26.09-10</td><td>~-50%</td><td><b>28/30 月</b><br>剩 1-2 月</td>
+          </tr>
+          <tr>
+            <td class="lb">2020</td><td>20.05</td><td>$69,000 · 21.11</td><td>12 个月</td>
+            <td>$15,500 · 22.11</td><td class="hi">-77%</td><td>30 个月</td>
+          </tr>
+          <tr>
+            <td class="lb">2016</td><td>16.07</td><td>$19,700 · 17.12</td><td>12 个月</td>
+            <td>$3,150 · 18.12</td><td class="hi">-84%</td><td>29 个月</td>
+          </tr>
+          <tr>
+            <td class="lb">2012</td><td>12.11</td><td>$1,150 · 13.12</td><td>13 个月</td>
+            <td>$150 · 15.01</td><td class="hi">-87%</td><td>25 个月</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="rule warn" style="margin-top:10px">
+      <h3>两条独立线索同时指向 2026 年 9-10 月</h3>
       <p>
-        比特币每约 4 年减半一次，历史规律：减半后 12–18 个月见周期顶部，随后进入 1 年左右的熊市。<br>
-        定位当前周期所处阶段，用于判断「加速定投 / 减仓兑现」的窗口——熊市后半段（AHR999&lt;1.2 且价格低迷）是定投主战场。
+        ① <b>顶→底</b>：历次牛市见顶后 12-13 个月触底，本轮顶在 25.10，+12 个月 = <b>26.10</b><br>
+        ② <b>减半→底</b>：历次减半后 25-30 个月触底，当前第 28 个月，历史最长 30 个月 = <b>26.10</b>
       </p>
     </div>
   </section>
 
-  <!-- MSTR mNAV 情绪代理 -->
+  <!-- 本周操作与退出条件 -->
   <section class="section">
-    <div class="section-head"><h2>MSTR / mNAV</h2><span class="sub">华尔街情绪代理</span></div>
-    <div class="rule">
-      <h3>用 mNAV 读华尔街热度</h3>
-      <p>
-        MSTR（MicroStrategy）的 <b>mNAV = 市值 / 其 BTC 持仓净值</b>，是华尔街对 BTC 情绪的放大器：<br>
-        mNAV <b>&gt; 2</b> 过热（情绪亢奋、减仓信号）；<b>1–1.5</b> 温和；<b>&lt; 1</b> 折价（恐慌、定投良机）。<br>
-        与 AHR999 互补：AHR999 看链上成本，mNAV 看机构情绪。
-      </p>
+    <div class="section-head"><h2>本周操作与退出条件</h2><span class="sub">执行纪律</span></div>
+    <div class="rule ok">
+      <h3>本周操作 · ¥3,000 / 周</h3>
+      <p>IBIT $45.29 × 9 股 · <b>正常定投</b></p>
     </div>
-  </section>
-
-  <!-- 执行纪律 -->
-  <section class="section">
-    <div class="section-head"><h2>执行纪律</h2><span class="sub">独立池</span></div>
-    <div class="rule danger">
-      <h3>三不原则</h3>
+    <div class="rule danger" style="margin-top:10px">
+      <h3>退出条件 · 投完即止</h3>
       <p>
-        ① <b>不与其他资金池混</b>——主仓纳指、女儿仓、BTC 仓完全独立；<br>
-        ② <b>不牛市定投</b>——AHR999&gt;1.2、价格高位时只持有不新增；<br>
-        ③ <b>不超预算</b>——总预算 ¥20万为硬上限，打满即停。<br>
-        加速触发：BTC &lt; $50K 时第一档加速，分 2–3 周阶梯加码，不一次性梭哈。
+        <b>AHR999 &gt; 2.0</b>：分 4 周清仓；<br>
+        止盈资金暂存，等 <b>AHR999 &lt; 1.2</b> 时重新启动。
       </p>
     </div>
   </section>
 </div>
 
-<footer class="foot">origistar · 比特币定投 · 数据仅供参考，非投资建议</footer>
+<footer class="foot">origistar · 比特币 AHR999 定投 · AHR999 自算 · yfinance 数据 · 仅供参考不构成投资建议</footer>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
 <script>
 (function () {
-  var d = window.ORIGISTAR; if (!d) return;
-  function set(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
-  function tag(id,t,c){var e=document.getElementById(id);e.textContent=t;e.className='tag '+c;}
-  set('ahr', d.btc.ahr999); set('ahrL', d.btc.ahr999Label); set('price', d.btc.price.toLocaleString());
-  set('w', d.btc.weeklyDCA.toLocaleString()); set('budget', d.btc.budget.toLocaleString());
-  tag('ahrTag', d.btc.signal, d.btc.signalType);
-  document.getElementById('btcNote').textContent = d.btc.note + '（更新于 ' + d.updated + '）';
+  var labels = ['2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026预测'];
+  var price = [5,13,1150,200,450,750,19700,3150,11000,29000,69000,15500,44000,70000,126000,79935];
+  // 减半年标记（当年价格点位）
+  var halving = [null,13,null,null,null,750,null,null,null,29000,null,null,null,70000,null,null];
+  // 2026 预测底部
+  var bottom = [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,52000];
+
+  if (window.Chart && document.getElementById('cycle')) {
+    new Chart(document.getElementById('cycle').getContext('2d'), {
+      type: 'line',
+      data: { labels: labels, datasets: [
+        { label: 'BTC 价格', data: price, borderColor: '#f59e0b', backgroundColor: 'rgba(245,158,11,.08)',
+          tension: .25, pointRadius: 2, borderWidth: 2, fill: true },
+        { label: '减半年 🔽', data: halving, borderColor: '#ef4444', backgroundColor: '#ef4444',
+          showLine: false, pointRadius: 5, pointStyle: 'triangle', pointHoverRadius: 7 },
+        { label: '2026 预测底部', data: bottom, borderColor: '#ef4444', borderDash: [5,4],
+          showLine: true, pointRadius: 4, borderWidth: 1.5 }
+      ]},
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+          legend: { position: 'top', labels: { font: { size: 10 }, color: '#8b97ab', boxWidth: 10 } },
+          tooltip: { callbacks: { label: function (c) { return c.dataset.label + ': $' + Number(c.parsed.y).toLocaleString(); } } }
+        },
+        scales: {
+          y: { type: 'logarithmic', min: 1, grid: { color: 'rgba(139,151,171,.10)' },
+               ticks: { font: { size: 9 }, color: '#8b97ab', callback: function (v) { return '$' + v; } } },
+          x: { grid: { display: false }, ticks: { font: { size: 9 }, color: '#8b97ab', maxRotation: 60, minRotation: 45 } }
+        }
+      }
+    });
+  }
 })();
 </script>
 </body>
