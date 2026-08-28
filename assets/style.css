@@ -125,7 +125,14 @@ img { max-width: 100%; }
 /* ---------------- 底部 Tab（移动端） ---------------- */
 .btab { position: fixed; left: 0; right: 0; bottom: 0; z-index: 45;
   height: calc(var(--tab-h) + env(safe-area-inset-bottom));
-  display: flex; background: color-mix(in srgb, var(--surface) 90%, transparent);
+  display: flex;
+  background:
+    linear-gradient(
+      to top,
+      var(--surface) 0%,
+      var(--surface) env(safe-area-inset-bottom),
+      color-mix(in srgb, var(--surface) 90%, transparent) env(safe-area-inset-bottom)
+    );
   backdrop-filter: saturate(180%) blur(14px); -webkit-backdrop-filter: saturate(180%) blur(14px);
   border-top: 1px solid var(--border); padding-bottom: env(safe-area-inset-bottom);
 }
