@@ -35,6 +35,7 @@
    且 body 短于视口时下方会露出 html 空白（系统黑）。html 根背景铺满视口，移动端深色一致。 */
 html {
   -webkit-text-size-adjust: 100%;
+  background-color: var(--bg-grad-2);
   background:
     radial-gradient(1200px 600px at 80% -10%, var(--bg-grad-1), transparent 60%),
     var(--bg-grad-2);
@@ -124,18 +125,15 @@ img { max-width: 100%; }
 
 /* ---------------- 底部 Tab（移动端） ---------------- */
 .btab { position: fixed; left: 0; right: 0; bottom: 0; z-index: 45;
-  height: calc(var(--tab-h) + env(safe-area-inset-bottom));
-  display: flex;
-  background:
-    linear-gradient(
-      to top,
-      var(--surface) 0%,
-      var(--surface) env(safe-area-inset-bottom),
-      color-mix(in srgb, var(--surface) 90%, transparent) env(safe-area-inset-bottom)
-    );
+  height: calc(var(--tab-h) + env(safe-area-inset-bottom, 34px));
+  display: flex; background: color-mix(in srgb, var(--surface) 92%, transparent);
   backdrop-filter: saturate(180%) blur(14px); -webkit-backdrop-filter: saturate(180%) blur(14px);
-  border-top: 1px solid var(--border); padding-bottom: env(safe-area-inset-bottom);
+  border-top: 1px solid var(--border); padding-bottom: env(safe-area-inset-bottom, 34px);
 }
+/* 安全区实色填充：独立于主背景，避免 gradient 内嵌 env() 在 iOS 26 失效导致整条透明 */
+.btab::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0;
+  height: env(safe-area-inset-bottom, 34px);
+  background: var(--surface); pointer-events: none; }
 .btab a, .btab button { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
   color: var(--muted); font-size: 10px; font-weight: 600; }
 .btab a svg, .btab button svg { width: 20px; height: 20px; }
