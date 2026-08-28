@@ -13,12 +13,14 @@
 <div class="wrap">
   <div id="subnav-slot"></div>
 
+  <!-- Hero -->
   <section class="hero" style="padding-top:14px">
     <span class="eyebrow">稳健仓 / Stable</span>
-    <h1 class="section-title">纳指100 定投决策 v5.1</h1>
+    <h1 class="section-title">纳指100 定投决策 <span class="grad">v5.1</span></h1>
     <p class="lead">以长期 PE 估值 + 回撤网格为核心，每日 ¥1,500 基础定投，按恐慌程度（DD 倍数）阶梯加码。PE&gt;33 且浮盈&gt;50% 触发减仓。</p>
   </section>
 
+  <!-- KPI 三卡 -->
   <section class="section">
     <div class="grid c3">
       <div class="card kpi">
@@ -28,46 +30,193 @@
         <span class="tag flat" id="peTag">—</span>
       </div>
       <div class="card kpi">
-        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#4f46e5,#6366f1)">↘</span>距高点回撤</div>
+        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#0ea5e9,#22d3ee)">VIX</span>恐慌指数</div>
+        <div class="val"><span id="vix">—</span></div>
+        <div class="meta">平稳区间 13–18</div>
+        <span class="tag flat">市场情绪</span>
+      </div>
+      <div class="card kpi">
+        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#f59e0b,#fbbf24)">↘</span>距 52 周高点</div>
         <div class="val"><span id="dd">—</span><small>%</small></div>
         <div class="meta">决定加码倍数（4/5/6×）</div>
         <span class="tag flat">网格依据</span>
       </div>
-      <div class="card kpi">
-        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#4f46e5,#6366f1)">¥</span>今日定投</div>
-        <div class="val">¥<span id="dca">—</span></div>
-        <div class="meta">基础 ¥1,500 / 日</div>
-        <span class="tag acc">长期持有</span>
+    </div>
+  </section>
+
+  <!-- 今日决策大卡 -->
+  <section class="section">
+    <div class="bigcard">
+      <div class="lab">今日定投 · <span id="stage">日常期</span></div>
+      <div class="amt">¥<span id="dca">—</span><small> / 日</small></div>
+      <div class="calc" id="calcLine">—</div>
+      <span class="stage" id="dcaStage">—</span>
+    </div>
+  </section>
+
+  <!-- 近90天趋势 -->
+  <section class="section">
+    <div class="chart-box">
+      <h3>近 90 天趋势</h3>
+      <div class="csub">纳指100 点位（左）与性价比评分（右，0–100）</div>
+      <div class="cv"><canvas id="trend"></canvas></div>
+    </div>
+  </section>
+
+  <!-- 关键参数 -->
+  <section class="section">
+    <div class="kv">
+      <div class="item"><div class="k">NDX 点位</div><div class="v" id="ndxPt">—</div></div>
+      <div class="item"><div class="k">指数 ROE</div><div class="v" id="roe">—<small>%</small></div></div>
+      <div class="item"><div class="k">513100 溢价率</div><div class="v" id="prem">—<small>%</small></div></div>
+      <div class="item"><div class="k">性价比评分</div><div class="v" id="score">—</div></div>
+    </div>
+  </section>
+
+  <!-- 溢价切换 -->
+  <section class="section">
+    <div class="section-head"><h2>溢价率切换</h2><span class="sub">场内 / 场外 套利</span></div>
+    <div class="rule warn">
+      <h3 id="premTitle">溢价率 11.5% &gt; 8%</h3>
+      <p id="premBody">分批次卖出场内持仓，切换回场外（需有场外额度）。&lt;5% 时反向：当日改买场内 ETF；&gt;8% 卖出换回场外，叠加恐慌 + 低溢价效果最佳。</p>
+    </div>
+  </section>
+
+  <!-- PE × VIX 基准矩阵 -->
+  <section class="section">
+    <div class="section-head"><h2>PE × VIX 基准矩阵</h2><span class="sub">份数 = 基数</span></div>
+    <div class="card">
+      <div class="scroll-x">
+        <table class="matrix">
+          <tr><th>PE ＼ VIX</th><th>贪婪 &lt;13</th><th>平稳 13–18</th><th>恐慌 18–30</th><th>极恐 &gt;30</th></tr>
+          <tr><td class="lb">PE &lt; 28</td><td>1.0</td><td>2.0</td><td>3.0</td><td>4.0</td></tr>
+          <tr><td class="lb">28 ~ 33</td><td>0.5</td><td class="hi">1.5</td><td>2.0</td><td>3.0</td></tr>
+          <tr><td class="lb">33 ~ 36</td><td>0.5</td><td>1.0</td><td>1.5</td><td>2.0</td></tr>
+          <tr><td class="lb">36 ~ 38</td><td class="dim">0.0</td><td>0.5</td><td>1.0</td><td>1.5</td></tr>
+          <tr><td class="lb">&gt; 38</td><td class="dim">0</td><td class="dim">0</td><td class="dim">0</td><td class="dim">0</td></tr>
+          <caption>当前 PE 30.75 / VIX 15.71 → 落在「28~33 × 平稳」格 = 1.5 份（高亮）。</caption>
+        </table>
       </div>
     </div>
   </section>
 
+  <!-- DD 回撤乘数 三阶段 -->
   <section class="section">
-    <div class="section-head"><h2>执行规则（精简版）</h2></div>
-    <div class="grid c2">
-      <div class="card">
-        <h3 style="margin:0 0 8px">基础定投</h3>
-        <p class="muted" style="margin:0">每日 ¥1,500，按 DD 倍数阶梯：常态 4×，恐慌 5×，极端 6×。3–5 年周期，主投纳指100 优先于标普500。</p>
-      </div>
-      <div class="card">
-        <h3 style="margin:0 0 8px">止盈 & 网格</h3>
-        <p class="muted" style="margin:0">止盈：PE&gt;33 且浮盈&gt;50%。事件网格：NDX 自52周高点回撤&gt;5% 且溢价率&lt;6% 时非对称加仓（买-2%/卖+3.5%）。</p>
+    <div class="section-head"><h2>DD 回撤乘数 · 三阶段</h2><span class="sub">加码力度</span></div>
+    <div class="card">
+      <div class="scroll-x">
+        <table class="matrix">
+          <tr><th>阶段 ＼ 回撤</th><th>&lt;6%</th><th>6–10%</th><th>10–15%</th><th>15–20%</th><th>20–25%</th><th>25–30%</th><th>&gt;30%</th></tr>
+          <tr><td class="lb">日常</td><td class="hi">×1.0</td><td>×1.5</td><td>×2.0</td><td>×3.0</td><td class="dim">暂停</td><td class="dim">暂停</td><td class="dim">暂停</td></tr>
+          <tr><td class="lb">熊市</td><td class="dim">—</td><td class="dim">—</td><td class="dim">—</td><td class="dim">—</td><td>×4.0</td><td>×5.0</td><td>×6.0</td></tr>
+          <caption>DD&lt;20%：日常池 · DD 20–30% 且 ≤1 月：反转窗口双池齐发 · DD&gt;30% 或 &gt;1 月：长熊期熊市池独立运作。</caption>
+        </table>
       </div>
     </div>
-    <p class="note" id="ndxNote"></p>
   </section>
+
+  <!-- 性价比评分 -->
+  <section class="section">
+    <div class="section-head"><h2>性价比评分</h2><span class="sub" id="scoreLabel">—</span></div>
+    <div class="rule">
+      <h3>当前 <b id="score2">—</b> 分</h3>
+      <p>PE 分位(50%)×35% · DD(<span id="dd2">—</span>%)×25% · VIX(<span id="vix2">—</span>)×20% · ROE(30%)×10% · 均线×10%<br>
+      区间：<b>71–100 极高</b> · <b>41–70 中等</b> · <b>10–40 偏低</b>。评分用于辅助判断加仓节奏，非唯一依据。</p>
+    </div>
+  </section>
+
+  <!-- 止盈规则 -->
+  <section class="section">
+    <div class="section-head"><h2>止盈规则</h2><span class="sub">减仓纪律</span></div>
+    <div class="rule danger">
+      <h3>触发即减，不犹豫</h3>
+      <p>
+        <b>PE&gt;38 且 VIX&lt;18</b> → 每周卖 3%，约 10 周减 30%；<br>
+        <b>PE&gt;38 且 VIX&lt;13</b> → 每周卖 6–8%，4–5 周清；<br>
+        <b>PE&gt;33 且浮盈&gt;50%</b> → 卖出 20%，分 2–3 次；<br>
+        PE 回落 &lt;38 立即停止；买回条件：<b>PE&lt;32 或 DD&gt;15%</b>。
+      </p>
+    </div>
+  </section>
+
+  <!-- 事件驱动网格 -->
+  <section class="section">
+    <div class="section-head"><h2>事件驱动网格</h2><span class="sub">独立池 ¥2–3万</span></div>
+    <div class="rule warn">
+      <h3>非对称加仓网格</h3>
+      <p>触发：<b>NDX 自 52 周高点回撤 &gt;5% 且 溢价率 &lt;6%</b>。非对称：买 <b>-2%</b> / 卖 <b>+3.5%</b>，单格 ¥2,000，独立于主定投池运作，不干扰日常 DCA 节奏。</p>
+    </div>
+  </section>
+
+  <!-- 渠道说明 -->
+  <section class="section">
+    <div class="section-head"><h2>执行渠道</h2><span class="sub">场外为主</span></div>
+    <div class="rule ok">
+      <h3>主资金走场外，场内仅备用</h3>
+      <p>
+        <b>场外主渠道：</b>建信纳斯达克100（539001）直销，0% 费率，单日限额 ¥10 万，每日定投首选；<br>
+        <b>场内备用：</b>QQQ / 513100 / 159941，仅当场外额度不足时切换；<br>
+        <b>溢价率套利：</b>&lt;5% 当日改买场内，&gt;8% 卖出换回场外（叠加恐慌 + 低溢价）。
+      </p>
+    </div>
+    <p class="note">女儿独立仓位（简化版）：每周 ¥1,000 × 20 年、纳指100 优先于标普500、目标 ¥300–500 万，与主仓资金池完全独立。</p>
+  </section>
+
+  <p class="note" id="ndxNote"></p>
 </div>
 
-<footer class="foot">origistar · 纳指定投 · 数据仅供参考，非投资建议</footer>
+<footer class="foot">origistar · 纳指定投 v5.1 · 数据仅供参考，非投资建议</footer>
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
 <script>
 (function () {
   var d = window.ORIGISTAR; if (!d) return;
-  function set(id,v){var e=document.getElementById(id);if(e)e.textContent=v;}
-  function tag(id,t,c){var e=document.getElementById(id);e.textContent=t;e.className='tag '+c;}
-  set('pe', d.ndx.pe); set('peL', d.ndx.peLabel); set('dd', d.ndx.dd); set('dca', d.ndx.dailyDCA.toLocaleString());
-  tag('peTag', d.ndx.signal, d.ndx.signalType);
-  document.getElementById('ndxNote').textContent = d.ndx.note + '（更新于 ' + d.updated + '）';
+  var n = d.ndx;
+  function set(id, v){ var e = document.getElementById(id); if (e) e.textContent = v; }
+  function tag(id, t, c){ var e = document.getElementById(id); if (e){ e.textContent = t; e.className = 'tag ' + c; } }
+
+  set('pe', n.pe); set('peL', n.peLabel);
+  tag('peTag', n.peLabel, 'acc');
+  set('vix', n.vix);
+  set('dd', n.dd);
+  set('dca', n.dailyDCA.toLocaleString());
+  set('stage', n.signal);
+  set('calcLine', '计算式：PE×VIX = 1.5 份 × DD×1.0 × ¥1,000 = ¥' + n.dailyDCA.toLocaleString());
+  set('dcaStage', n.signal);
+  set('ndxPt', n.ndx ? n.ndx.toLocaleString() : '—');
+  set('roe', n.roe);
+  set('prem', n.premium);
+  set('score', n.score);
+  set('score2', n.score);
+  set('scoreLabel', n.scoreLabel);
+  set('dd2', n.dd);
+  set('vix2', n.vix);
+  set('premTitle', '溢价率 ' + n.premium + '% > 8%');
+  set('ndxNote', n.note + '（更新于 ' + d.updated + '）');
+
+  // 趋势图
+  if (window.Chart && document.getElementById('trend')) {
+    var ctx = document.getElementById('trend').getContext('2d');
+    new Chart(ctx, {
+      type: 'line',
+      data: {
+        labels: n.chartLabels,
+        datasets: [
+          { label: 'NDX', data: n.chartNdx, borderColor: '#4f46e5', yAxisID: 'y', tension: .2, pointRadius: 0, borderWidth: 2 },
+          { label: '评分', data: n.chartScore, borderColor: '#f59e0b', yAxisID: 'y1', tension: .2, pointRadius: 0, borderWidth: 2, borderDash: [4,3] }
+        ]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: { legend: { position: 'top', labels: { font: { size: 11 }, color: '#64748b' } } },
+        scales: {
+          y:  { type: 'linear', position: 'left', grid: { display: false }, ticks: { font: { size: 9 }, color: '#94a3b8' } },
+          y1: { type: 'linear', position: 'right', min: 0, max: 100, grid: { display: false }, ticks: { font: { size: 9 }, color: '#94a3b8' } }
+        }
+      }
+    });
+  }
 })();
 </script>
 </body>
