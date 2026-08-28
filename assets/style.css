@@ -289,34 +289,18 @@ table.matrix caption { caption-side: bottom; text-align:left; color: var(--muted
 .kv .item .v { font-size:18px; font-weight:800; font-variant-numeric: tabular-nums; margin-top:3px; }
 .kv .item .v small { font-size:12px; color: var(--muted); font-weight:700; }
 
-/* ---------------- 底部子页面选择面板 ---------------- */
-.sys-picker { position: fixed; inset: 0; z-index: 70; display: flex; opacity: 0; pointer-events: none; transition: opacity .18s ease; }
-.sys-picker.show { opacity: 1; pointer-events: auto; }
-.sys-picker .picker-mask { position: absolute; inset: 0; background: rgba(5,10,20,.55); backdrop-filter: blur(2px); opacity: 0; transition: opacity .18s ease; }
-.sys-picker.show .picker-mask { opacity: 1; }
-.sys-picker .picker-sheet {
-  position: absolute; left: 50%; right: auto; bottom: 0;
-  width: calc(100% - 48px); max-width: 320px;
-  background: var(--surface); border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 10px 10px calc(10px + env(safe-area-inset-bottom));
-  box-shadow: var(--shadow-lg);
-  transform: translateX(-50%) translateY(120%);
-  transition: transform .28s cubic-bezier(0.16, 1, 0.3, 1);
-  margin-bottom: 18px;
-}
-.sys-picker.show .picker-sheet { transform: translateX(-50%) translateY(0); }
-.sys-picker .picker-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; padding: 0 6px; }
-.sys-picker .picker-head b { font-size: 13px; color: var(--muted); }
-.sys-picker .picker-head button { width: 26px; height: 26px; border-radius: 50%; border: 1px solid var(--border); background: transparent; color: var(--muted); font-size: 12px; }
-.sys-picker .picker-list { display: grid; gap: 4px; }
-.sys-picker .picker-list a { display: flex; align-items: center; gap: 9px; padding: 8px 10px; border-radius: 9px; background: var(--surface-2); border: 1px solid var(--border); transition: background .12s, transform .12s; }
-.sys-picker .picker-list a:active { background: var(--accent-soft); transform: scale(.985); }
-.sys-picker .picker-list .pi { width: 26px; height: 26px; border-radius: 7px; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; flex: none; }
-.sys-picker .picker-list .pi svg { width: 15px; height: 15px; }
-.sys-picker .picker-list .pt { font-weight: 600; font-size: 14px; color: var(--ink); }
+/* ---------------- 聚合页子页卡片 ---------------- */
+.syscard { display: flex; align-items: center; gap: 14px; padding: 16px; border: 1px solid var(--border);
+  border-radius: var(--radius); background: var(--surface); box-shadow: var(--shadow); transition: transform .15s, box-shadow .15s; }
+.syscard:active { transform: translateY(1px); box-shadow: var(--shadow-sm, var(--shadow)); }
+.syscard .sci { width: 46px; height: 46px; border-radius: 13px; display: grid; place-items: center; color: #fff; flex: none; }
+.syscard .sci svg { width: 24px; height: 24px; }
+.syscard .sct { flex: 1; display: flex; flex-direction: column; }
+.syscard .sct-t { font-weight: 800; font-size: 16px; }
+.syscard .sct-d { color: var(--muted); font-size: 13px; margin-top: 2px; }
+.syscard .arrow { color: var(--muted); font-size: 22px; line-height: 1; }
 
-/* 底部 Tab 按钮样式与链接统一 */
+/* 底部 Tab 按钮/链接通用（现在均为链接，保留以防旧结构） */
 .btab button { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
   color: var(--muted); font-size: 10px; font-weight: 600; background: transparent; border: none; padding: 0; cursor: pointer; }
 .btab button svg { width: 20px; height: 20px; }

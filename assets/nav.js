@@ -1,6 +1,7 @@
 /* origistar · 导航引擎（零依赖、可移植）
-   用法：<script src="assets/nav.js" data-system="stable" data-page="ndx-dca"></script>
-   会自动注入：顶部导航(桌面下拉) + 移动抽屉 + 底部 Tab + 体系内 sub-nav 胶囊 */
+   用法：<script src="assets/nav.js" data-system="stable" data-page="index|ndx-dca"></script>
+   会自动注入：顶部导航(桌面下拉) + 移动抽屉 + 底部 Tab + 体系内 sub-nav 胶囊 + 聚合页卡片
+   设计原则：底部 Tab = 一级目的地，点一下必定直接进该体系的聚合首页，不在 Tab 上弹选择层。 */
 (function () {
   var navScript = document.currentScript;
   var src = navScript ? navScript.getAttribute('src') : 'assets/nav.js';
@@ -28,50 +29,64 @@
   function svg(k, cls) {
     return '<svg class="' + (cls || '') + '" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' + (ICON[k] || ICON.home) + '</svg>';
   }
+  var GRAD = {
+    schd: 'linear-gradient(135deg,#0ea5e9,#06b6d4)', stable: 'linear-gradient(135deg,#4f46e5,#6366f1)',
+    btc: 'linear-gradient(135deg,#f59e0b,#ef4444)', history: 'linear-gradient(135deg,#10b981,#14b8a6)',
+    ipo: 'linear-gradient(135deg,#8b5cf6,#a855f7)', cb: 'linear-gradient(135deg,#ec4899,#f43f5e)',
+    momentum: 'linear-gradient(135deg,#0ea5e9,#22d3ee)', whale: 'linear-gradient(135deg,#14b8a6,#34d399)',
+    aggressive: 'linear-gradient(135deg,#ef4444,#f97316)', defensive: 'linear-gradient(135deg,#0ea5e9,#06b6d4)',
+    'low-risk': 'linear-gradient(135deg,#8b5cf6,#a855f7)', strategy: 'linear-gradient(135deg,#10b981,#14b8a6)',
+    study: 'linear-gradient(135deg,#64748b,#94a3b8)', lowrisk: 'linear-gradient(135deg,#8b5cf6,#a855f7)'
+  };
+  function grad(k){ return GRAD[k] || GRAD.stable; }
 
-  // 系统配置（点系统即进首个子页面；下拉/底部 Tab 直达真实页）
+  // 系统配置：index = 聚合首页；pages = 具体子页
   var S = {
-    defensive: { name: '防守仓', icon: 'defensive', desc: 'SCHD & 伯克希尔 便宜价定投', pages: [
+    defensive: { name: '防守仓', icon: 'defensive', desc: 'SCHD & 伯克希尔 便宜价定投', index: 'defensive/index.html', pages: [
       { id: 'schd-brk', name: 'SCHD & BRK.B', file: 'defensive/schd-brk.html', desc: '锚定便宜价监测', icon: 'schd' }
     ]},
-    stable: { name: '稳健仓', icon: 'stable', desc: '纳指100 / 比特币 长期定投', pages: [
+    stable: { name: '稳健仓', icon: 'stable', desc: '纳指100 / 比特币 长期定投', index: 'stable/index.html', pages: [
       { id: 'ndx-dca', name: '纳指定投', file: 'stable/ndx-dca.html', desc: 'PE/DD/网格决策 v5.1', icon: 'stable' },
       { id: 'btc-dca', name: '比特币', file: 'stable/btc-dca.html', desc: 'AHR999 熊市定投', icon: 'btc' },
       { id: 'ndx-history', name: '定投历史', file: 'stable/ndx-history.html', desc: '实盘记录与回测', icon: 'history' }
     ]},
-    aggressive: { name: '激进仓', icon: 'aggressive', desc: '高弹性个股 / 主题（待建）', pages: [
+    aggressive: { name: '激进仓', icon: 'aggressive', desc: '高弹性个股 / 主题（待建）', index: 'aggressive/index.html', pages: [
       { id: 'overview', name: '激进仓', file: 'aggressive/index.html', desc: '版式预留', icon: 'aggressive' }
     ]},
-    'low-risk': { name: '低风险', icon: 'lowrisk', desc: '港股打新 / 可转债', pages: [
+    'low-risk': { name: '低风险', icon: 'lowrisk', desc: '港股打新 / 可转债', index: 'low-risk/index.html', pages: [
       { id: 'hk-ipo', name: '港股打新', file: 'low-risk/hk-ipo.html', desc: '次新入通追踪', icon: 'ipo' },
       { id: 'cb-screener', name: '可转债', file: 'low-risk/cb-screener.html', desc: '双低筛选', icon: 'cb' },
       { id: 'cb-history', name: '可转债历史', file: 'low-risk/cb-history.html', desc: '历史回测', icon: 'history' }
     ]},
-    strategy: { name: '策略库', icon: 'strategy', desc: '因子 / 顶级投资者跟踪', pages: [
+    strategy: { name: '策略库', icon: 'strategy', desc: '因子 / 顶级投资者跟踪', index: 'strategy/index.html', pages: [
       { id: 'momentum', name: 'SPMO & MTUM', file: 'strategy/momentum.html', desc: '动量轮动', icon: 'momentum' },
       { id: 'superinvestors', name: '13F 持仓', file: 'strategy/superinvestors.html', desc: '顶级投资者对比', icon: 'whale' }
     ]},
-    study: { name: '研习录', icon: 'study', desc: '读书纪要 · 研报重点 · 待定', pages: [
+    study: { name: '研习录', icon: 'study', desc: '读书纪要 · 研报重点', index: 'study/index.html', pages: [
       { id: 'index', name: '研习录', file: 'study/index.html', desc: '读书纪要 · 研报重点', icon: 'study' }
     ]}
   };
   var ORDER = ['defensive', 'stable', 'aggressive', 'low-risk', 'strategy', 'study'];
 
+  // 去重：若聚合页本身已等于某子页，则不再单列
+  function subItems(k) {
+    var s = S[k];
+    var out = [{ id: 'index', name: '概览', file: s.index, icon: s.icon, overview: true }];
+    s.pages.forEach(function (p) { if (p.file !== s.index) out.push(p); });
+    return out;
+  }
+
   // ---------- 顶部导航 ----------
   var sysNav = ORDER.map(function (k) {
     var s = S[k];
     var active = (SYS === k) ? ' active' : '';
-    // 研习录不展开二级页面（内容太多，一本书一页），直接点进首页
-    if (k === 'study') {
-      var p0 = s.pages[0];
-      return '<a class="ni' + active + '" href="' + base + p0.file + '" style="text-decoration:none">' + s.name + '</a>';
-    }
     var drop = s.pages.map(function (p) {
       return '<a href="' + base + p.file + '"><span class="di">' + svg(p.icon) + '</span>' +
         '<span><span class="dt">' + p.name + '</span><br><span class="dd">' + p.desc + '</span></span></a>';
     }).join('');
-    return '<div class="ni' + active + '" tabindex="0">' + s.name +
-      '<div class="drop">' + drop + '</div></div>';
+    // 标签本身即为聚合首页链接，hover 展开子页
+    return '<a class="ni' + active + '" href="' + base + s.index + '">' + s.name +
+      '<div class="drop">' + drop + '</div></a>';
   }).join('');
 
   var nav = document.createElement('header');
@@ -79,7 +94,7 @@
   nav.innerHTML =
     '<a class="brand" href="' + base + 'index.html"><span class="logo">O</span><b>origistar</b></a>' +
     '<nav class="nav-sys">' +
-      '<a class="ni' + (SYS === 'home' ? ' active' : '') + '" href="' + base + 'index.html" style="text-decoration:none">首页</a>' +
+      '<a class="ni' + (SYS === 'home' ? ' active' : '') + '" href="' + base + 'index.html">首页</a>' +
       sysNav +
     '</nav>' +
     '<div class="nav-right">' +
@@ -98,9 +113,12 @@
     '<a href="' + base + 'index.html" style="margin-top:14px"><span class="di">' + svg('home') + '</span>首页</a>';
   ORDER.forEach(function (k) {
     var s = S[k];
-    dPanel += '<h4>' + s.name + '</h4>' + s.pages.map(function (p) {
-      return '<a href="' + base + p.file + '"><span class="di">' + svg(p.icon) + '</span>' + p.name + '</a>';
-    }).join('');
+    dPanel += '<h4>' + s.name + '</h4>';
+    dPanel += '<a href="' + base + s.index + '"><span class="di">' + svg(s.icon) + '</span>概览</a>';
+    s.pages.forEach(function (p) {
+      if (p.file !== s.index)
+        dPanel += '<a href="' + base + p.file + '"><span class="di">' + svg(p.icon) + '</span>' + p.name + '</a>';
+    });
   });
   drawer.innerHTML = '<div class="mask" id="mask"></div>' + dPanel + '</div>';
   document.body.appendChild(drawer);
@@ -110,16 +128,11 @@
   document.getElementById('closeBtn').addEventListener('click', closeDrawer);
   document.getElementById('mask').addEventListener('click', closeDrawer);
 
-  // ---------- 底部 Tab（移动端） ----------
-  // 多子页面的体系点击后弹出选择面板；单页面 / 研习录直接跳转
+  // ---------- 底部 Tab（移动端）：全部直接进聚合首页 ----------
   var tabs = ORDER.map(function (k) {
     var s = S[k];
     var active = (SYS === k) ? ' active' : '';
-    var label = svg(s.icon) + '<span>' + s.name + '</span>';
-    if (k === 'study' || s.pages.length <= 1) {
-      return '<a class="' + active + '" href="' + base + s.pages[0].file + '">' + label + '</a>';
-    }
-    return '<button type="button" class="' + active + '" data-sys="' + k + '" aria-haspopup="true">' + label + '</button>';
+    return '<a class="' + active + '" href="' + base + s.index + '">' + svg(s.icon) + '<span>' + s.name + '</span></a>';
   }).join('');
   var btab = document.createElement('nav');
   btab.className = 'btab';
@@ -127,46 +140,27 @@
   btab.innerHTML = tabs;
   document.body.appendChild(btab);
 
-  // 底部子页面选择面板
-  var picker = document.createElement('div');
-  picker.className = 'sys-picker';
-  picker.id = 'sysPicker';
-  picker.innerHTML = '<div class="picker-mask" id="pickerMask"></div>' +
-    '<div class="picker-sheet">' +
-    '<div class="picker-head"><b id="pickerTitle">选择页面</b><button id="pickerClose">✕</button></div>' +
-    '<div class="picker-list" id="pickerList"></div>' +
-    '</div>';
-  document.body.appendChild(picker);
-
-  function openPicker(sysKey) {
-    var s = S[sysKey]; if (!s) return;
-    document.getElementById('pickerTitle').textContent = s.name;
-    document.getElementById('pickerList').innerHTML = s.pages.map(function (p) {
-      return '<a href="' + base + p.file + '">' +
-        '<span class="pi">' + svg(p.icon) + '</span>' +
-        '<span class="pt">' + p.name + '</span>' +
-        '</a>';
-    }).join('');
-    picker.classList.add('show');
-  }
-  function closePicker() { picker.classList.remove('show'); }
-
-  btab.querySelectorAll('button[data-sys]').forEach(function (btn) {
-    btn.addEventListener('click', function () { openPicker(btn.getAttribute('data-sys')); });
-  });
-  document.getElementById('pickerMask').addEventListener('click', closePicker);
-  document.getElementById('pickerClose').addEventListener('click', closePicker);
-
   // ---------- 体系内 sub-nav 胶囊 ----------
   if (SYS !== 'home' && S[SYS]) {
     var slot = document.getElementById('subnav-slot');
     if (slot) {
       slot.className = 'subnav';
-      slot.innerHTML = S[SYS].pages.map(function (p) {
-        var act = (p.id === PAGE) ? ' active' : '';
+      slot.innerHTML = subItems(SYS).map(function (p) {
+        var act = ((PAGE === 'index' || PAGE === '') && p.overview) || (p.id === PAGE && !p.overview) ? ' active' : '';
         return '<a class="' + act + '" href="' + base + p.file + '">' + p.name + '</a>';
       }).join('');
     }
+  }
+
+  // ---------- 聚合页子页卡片 ----------
+  var cards = document.getElementById('sys-cards');
+  if (cards && SYS !== 'home' && S[SYS]) {
+      cards.innerHTML = S[SYS].pages.map(function (p) {
+      return '<a class="syscard" href="' + base + p.file + '">' +
+        '<span class="sci" style="background:' + grad(p.icon) + '">' + svg(p.icon) + '</span>' +
+        '<span class="sct"><span class="sct-t">' + p.name + '</span><span class="sct-d">' + p.desc + '</span></span>' +
+        '<span class="arrow">›</span></a>';
+    }).join('');
   }
 
   // ---------- 数据时间戳 ----------
