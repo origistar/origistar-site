@@ -51,7 +51,8 @@
   // 3) SCHD 定投（每周 × 甜区档位）
   var schd = d.defensive.schd;
   var schdT = zoneTier(schd.price, schd.extreme, schd.sweet, schd.fair);
-  var schdAmt = Math.round((schd.weeklyBase || 5000) * (schd.price <= schd.fair ? (schd.price <= schd.extreme ? 2 : (schd.price <= schd.sweet ? 1 : 0.5)) : 0));
+  var schdMult = schd.price <= schd.extreme ? 2 : (schd.price <= schd.sweet ? 1 : (schd.price <= schd.fair ? 0.5 : 0));
+  var schdAmt = Math.round((schd.weeklyBase || 5000) * schdMult);
   rows.push({
     name: 'SCHD 定投',
     val: schdAmt > 0 ? money(schdAmt) + '/周' : '等待',
