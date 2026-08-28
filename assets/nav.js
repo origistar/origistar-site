@@ -53,10 +53,11 @@
     aggressive: { name: '激进仓', icon: 'aggressive', desc: '高弹性个股 / 主题（待建）', index: 'aggressive/index.html', pages: [
       { id: 'overview', name: '激进仓', file: 'aggressive/index.html', desc: '版式预留', icon: 'aggressive' }
     ]},
-    'low-risk': { name: '低风险', icon: 'lowrisk', desc: '港股打新 / 可转债', index: 'low-risk/index.html', pages: [
-      { id: 'hk-ipo', name: '港股打新', file: 'low-risk/hk-ipo.html', desc: '次新入通追踪', icon: 'ipo' },
+    'low-risk': { name: '低风险', icon: 'lowrisk', desc: '港股打新 / 待入通 / 可转债', index: 'low-risk/index.html', pages: [
+      { id: 'hk-ipo', name: '港股打新', file: 'low-risk/hk-ipo.html', desc: '待上市新股追踪', icon: 'ipo' },
+      { id: 'hk-connect', name: '待入通', file: 'low-risk/hk-connect.html', desc: '次新入通埋伏', icon: 'ipo' },
       { id: 'cb-screener', name: '可转债', file: 'low-risk/cb-screener.html', desc: '双低筛选', icon: 'cb' },
-      { id: 'cb-history', name: '可转债历史', file: 'low-risk/cb-history.html', desc: '历史回测', icon: 'history' }
+      { id: 'cb-history', name: '可转债历史', file: 'low-risk/cb-history.html', desc: '估值水位存档', icon: 'history' }
     ]},
     strategy: { name: '策略库', icon: 'strategy', desc: '因子 / 顶级投资者跟踪', index: 'strategy/index.html', pages: [
       { id: 'momentum', name: 'SPMO & MTUM', file: 'strategy/momentum.html', desc: '动量轮动', icon: 'momentum' },
