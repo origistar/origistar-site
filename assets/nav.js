@@ -235,6 +235,16 @@
     }
   }
 
+  // ---------- 体系页子页入口网格（雪球式 icon grid） ----------
+  var sysGrid = document.getElementById('sys-icon-grid');
+  if (sysGrid && SYS !== 'home' && S[SYS]) {
+    sysGrid.innerHTML = S[SYS].pages.map(function (p) {
+      return '<a href="' + base + p.file + '">' +
+        '<span class="sg-icon" style="background:' + grad(p.icon) + '">' + svg(p.icon) + '</span>' +
+        '<span class="sg-name">' + p.name + '</span></a>';
+    }).join('');
+  }
+
   // ---------- 聚合页子页卡片 ----------
   var cards = document.getElementById('sys-cards');
   if (cards && SYS !== 'home' && S[SYS]) {
@@ -259,4 +269,7 @@
       document.getElementById('nav-updated').textContent = '更新于 ' + window.ORIGISTAR.updated;
     }
   } catch (e) {}
+
+  // 暴露给首页脚本，方便自动生成 icon grid 与跟踪列表（加页面时自动同步）
+  window.ORIGISTAR_NAV = { ORDER: ORDER, systems: S, base: base };
 })();

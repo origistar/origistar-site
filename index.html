@@ -18,133 +18,46 @@
 
 <div class="wrap">
 
-  <!-- Hero -->
-  <section class="hero">
-    <span class="badge">● 个人投资组合监测</span>
-    <h1>我的 <span class="grad">origistar</span> 投资体系</h1>
-    <p>防守 · 稳健 · 激进 · 低风险 · 策略——以长期定投为主，便宜价锚定为锚。重点指标每日可在首页一眼看清。</p>
+  <!-- 首页 Hero -->
+  <section class="home-hero">
+    <h1><span class="grad">origistar</span> 投资信号</h1>
+    <p class="lead">个人投资组合监测 · 防守 · 稳健 · 激进 · 低风险 · 策略 · 研习</p>
   </section>
 
-  <!-- 重点指标 -->
+  <!-- 体系入口（由 home.js 自动生成） -->
+  <section class="section" style="margin-top:18px">
+    <div id="home-icon-grid" class="icon-grid"></div>
+  </section>
+
+  <!-- 核心信号仪表盘 -->
+  <section class="section" style="margin-top:10px">
+    <div class="dash-card">
+      <div class="dash-head">
+        <span class="dash-title">今日信号</span>
+        <span class="dash-date" id="dash-date">更新中…</span>
+      </div>
+      <div class="gauge-row">
+        <div class="gauge" id="gauge-ndx" style="--pct:0.5; --gauge-color:var(--accent)">
+          <div class="g-inner"><div class="g-val">—</div><div class="g-label">纳指</div><div class="g-sub">—</div></div>
+        </div>
+        <div class="gauge" id="gauge-btc" style="--pct:0.5; --gauge-color:var(--accent)">
+          <div class="g-inner"><div class="g-val">—</div><div class="g-label">BTC</div><div class="g-sub">—</div></div>
+        </div>
+        <div class="gauge" id="gauge-def" style="--pct:0.5; --gauge-color:var(--accent)">
+          <div class="g-inner"><div class="g-val">—</div><div class="g-label">防守</div><div class="g-sub">—</div></div>
+        </div>
+      </div>
+      <div class="dash-text" id="dash-text"><h4>本周解析</h4><p>加载中…</p></div>
+      <a class="cta-btn" id="home-cta" href="stable/ndx-dca.html">去定投</a>
+    </div>
+  </section>
+
+  <!-- 跟踪标的 -->
   <section class="section">
-    <div class="section-head">
-      <h2>重点指标</h2>
-      <span class="sub" id="kpiUpdated">更新中…</span>
-    </div>
-    <div class="grid c2" id="kpiGrid">
-
-      <!-- 纳指定投 -->
-      <div class="card kpi">
-        <a class="kpi-link" href="stable/ndx-dca.html" aria-label="纳指定投"></a>
-        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#4f46e5,#6366f1)">📈</span>稳健仓 · 纳指定投</div>
-        <div class="val">PE <span id="ndxPe">—</span> <small>当前估值</small></div>
-        <div class="meta">回撤 <b id="ndxDd">—</b>% · 每日定投 <b>¥<span id="ndxDca">—</span></b></div>
-        <span class="tag flat" id="ndxTag">—</span>
-      </div>
-
-      <!-- 比特币 -->
-      <div class="card kpi">
-        <a class="kpi-link" href="stable/btc-dca.html" aria-label="比特币定投"></a>
-        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">₿</span>稳健仓 · 比特币</div>
-        <div class="val">AHR999 <span id="btcAhr">—</span></div>
-        <div class="meta">价格 <b>$<span id="btcPrice">—</span></b> · 周定投 <b>¥<span id="btcDca">—</span></b></div>
-        <span class="tag flat" id="btcTag">—</span>
-      </div>
-
-      <!-- 防守仓 -->
-      <div class="card kpi">
-        <a class="kpi-link" href="defensive/schd-brk.html" aria-label="防守仓"></a>
-        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#0ea5e9,#06b6d4)">🛡</span>防守仓 · 锚定便宜价</div>
-        <div class="val">SCHD <span id="schdP">—</span> <small>USD</small></div>
-        <div class="meta">BRK.B <b id="brkP">—</b> · 甜区 30 / 475</div>
-        <span class="tag down" id="defTag">—</span>
-      </div>
-
-      <!-- 港股打新 -->
-      <div class="card kpi">
-        <a class="kpi-link" href="low-risk/hk-ipo.html" aria-label="港股打新"></a>
-        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#8b5cf6,#a855f7)">🚀</span>低风险 · 港股打新</div>
-        <div class="val"><span id="ipoWatch">—</span> <small>只观察中</small></div>
-        <div class="meta">次新入通 · 极端超额认购追踪</div>
-        <span class="tag flat" id="ipoTg">—</span>
-      </div>
-
-    </div>
-    <p class="note">数值为最近一次人工核对，仅供个人跟踪参考，非投资建议。后续可接入定时脚本自动回写。</p>
+    <div class="list-head"><h2>跟踪标的</h2><a class="more" href="stable/ndx-dca.html">全部 ›</a></div>
+    <div id="home-track-list" class="track-list"></div>
   </section>
 
-  <hr class="divider">
-
-  <!-- 五大体系 -->
-  <section class="section">
-    <div class="section-head">
-      <h2>六大体系</h2>
-      <span class="sub">点体系直达内容页</span>
-    </div>
-    <div class="grid c2" id="sysGrid">
-
-      <a class="sysrow" href="defensive/index.html">
-        <span class="si" style="background:linear-gradient(135deg,#0ea5e9,#06b6d4)">🛡</span>
-        <div>
-          <div class="st">防守仓</div>
-          <div class="sd">SCHD & 伯克希尔 · 便宜价锚定定投</div>
-          <div class="chips"><span>SCHD & BRK.B 监测</span></div>
-        </div>
-        <span class="arrow">›</span>
-      </a>
-
-      <a class="sysrow" href="stable/index.html">
-        <span class="si" style="background:linear-gradient(135deg,#4f46e5,#6366f1)">📈</span>
-        <div>
-          <div class="st">稳健仓</div>
-          <div class="sd">纳指100 / 比特币 · 长期定投</div>
-          <div class="chips"><span>纳指定投</span><span>比特币</span><span>定投历史</span></div>
-        </div>
-        <span class="arrow">›</span>
-      </a>
-
-      <a class="sysrow" href="aggressive/index.html">
-        <span class="si" style="background:linear-gradient(135deg,#ef4444,#f97316)">🔥</span>
-        <div>
-          <div class="st">激进仓</div>
-          <div class="sd">高弹性个股 / 主题（版式预留）</div>
-          <div class="chips"><span>待建</span></div>
-        </div>
-        <span class="arrow">›</span>
-      </a>
-
-      <a class="sysrow" href="low-risk/index.html">
-        <span class="si" style="background:linear-gradient(135deg,#8b5cf6,#a855f7)">🚀</span>
-        <div>
-          <div class="st">低风险</div>
-          <div class="sd">港股打新 / 可转债</div>
-          <div class="chips"><span>港股打新</span><span>可转债</span><span>可转债历史</span></div>
-        </div>
-        <span class="arrow">›</span>
-      </a>
-
-      <a class="sysrow" href="strategy/index.html">
-        <span class="si" style="background:linear-gradient(135deg,#10b981,#14b8a6)">🧭</span>
-        <div>
-          <div class="st">策略库</div>
-          <div class="sd">因子 / 顶级投资者跟踪</div>
-          <div class="chips"><span>SPMO & MTUM</span><span>13F 持仓</span></div>
-        </div>
-        <span class="arrow">›</span>
-      </a>
-
-      <a class="sysrow" href="study/index.html">
-        <span class="si" style="background:linear-gradient(135deg,#64748b,#94a3b8)">📚</span>
-        <div>
-          <div class="st">研习录</div>
-          <div class="sd">读书纪要 / 研报重点 / 投资笔记</div>
-          <div class="chips"><span>待建</span></div>
-        </div>
-        <span class="arrow">›</span>
-      </a>
-
-    </div>
-  </section>
 </div>
 
 <footer class="foot">
@@ -152,25 +65,6 @@
   本站为纯静态站点，可部署于任意静态云 · 旧页面（QQQ / JJC 等）保留以备对照
 </footer>
 
-<script>
-(function () {
-  var d = window.ORIGISTAR; if (!d) return;
-  function set(id, v){ var e=document.getElementById(id); if(e) e.textContent=v; }
-  function tag(id, text, cls){ var e=document.getElementById(id); if(!e)return; e.textContent=text; e.className='tag '+cls; }
-
-  set('kpiUpdated', '更新于 ' + d.updated);
-  // 纳指
-  set('ndxPe', d.ndx.pe); set('ndxDd', d.ndx.dd); set('ndxDca', d.ndx.dailyDCA.toLocaleString());
-  tag('ndxTag', d.ndx.signal, d.ndx.signalType);
-  // 比特币
-  set('btcAhr', d.btc.ahr999); set('btcPrice', d.btc.price.toLocaleString()); set('btcDca', d.btc.weeklyDCA.toLocaleString());
-  tag('btcTag', d.btc.signal, d.btc.signalType);
-  // 防守
-  set('schdP', d.defensive.schd.price.toFixed(2)); set('brkP', d.defensive.brk.price.toFixed(2));
-  tag('defTag', 'SCHD/BRK 均' + d.defensive.schd.zone + ' · 等待', d.defensive.schd.zoneType);
-  // 港股打新
-  set('ipoWatch', d.hkIpo.watch); tag('ipoTg', d.hkIpo.signal, d.hkIpo.signalType);
-})();
-</script>
+<script src="assets/home.js"></script>
 </body>
 </html>

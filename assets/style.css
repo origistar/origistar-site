@@ -331,3 +331,95 @@ table.matrix caption { caption-side: bottom; text-align:left; color: var(--muted
 .btab button.active { color: var(--accent); }
 .btab button.active svg { filter: drop-shadow(0 2px 6px rgba(79,70,229,.4)); }
 
+/* ============================================================
+   雪球风格 · 首页 & 体系概览页组件（移动优先）
+   ============================================================ */
+
+/* 首页 Hero 更紧凑 */
+.home-hero { padding: 18px 0 10px; }
+.home-hero h1 { font-size: clamp(26px, 6vw, 40px); margin: 0 0 6px; letter-spacing: -.5px; }
+.home-hero .lead { font-size: 15px; color: var(--ink-soft); margin: 0; }
+
+/* 体系 icon 网格（首页） */
+.icon-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+@media (min-width: 560px) { .icon-grid { grid-template-columns: repeat(6, 1fr); gap: 12px; } }
+.icon-grid a { display: flex; flex-direction: column; align-items: center; gap: 8px;
+  padding: 14px 6px; border-radius: var(--radius-sm); background: var(--surface);
+  border: 1px solid var(--border); box-shadow: var(--shadow); transition: transform .12s, box-shadow .12s; }
+.icon-grid a:active { transform: scale(.97); }
+.icon-grid .ig-icon { width: 42px; height: 42px; border-radius: 12px; display: grid; place-items: center;
+  color: #fff; font-size: 20px; flex: none; }
+.icon-grid .ig-name { font-size: 13px; font-weight: 700; color: var(--ink); text-align: center; }
+
+/* 体系概览页内子页入口网格 */
+.sys-icon-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin: 14px 0 22px; }
+@media (min-width: 560px) { .sys-icon-grid { grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); max-width: 720px; } }
+.sys-icon-grid a { display: flex; flex-direction: column; align-items: center; gap: 8px;
+  padding: 14px 8px; border-radius: var(--radius-sm); background: var(--surface);
+  border: 1px solid var(--border); box-shadow: var(--shadow); transition: transform .12s; }
+.sys-icon-grid a:active { transform: scale(.97); }
+.sys-icon-grid .sg-icon { width: 40px; height: 40px; border-radius: 11px; display: grid; place-items: center;
+  color: #fff; flex: none; }
+.sys-icon-grid .sg-icon svg { width: 22px; height: 22px; }
+.sys-icon-grid .sg-name { font-size: 13px; font-weight: 700; color: var(--ink); text-align: center; }
+
+/* 信号仪表盘大卡（参考雪球三分法） */
+.dash-card { background: linear-gradient(180deg, #152046 0%, var(--surface) 100%);
+  border: 1px solid var(--border-strong); border-radius: var(--radius);
+  box-shadow: var(--shadow-lg); padding: 18px; margin: 16px 0 22px; }
+.dash-card .dash-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+.dash-card .dash-title { font-size: 17px; font-weight: 800; color: var(--ink); }
+.dash-card .dash-date { font-size: 12px; color: var(--muted); }
+
+.gauge-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
+.gauge { --pct: 0.5; --gauge-color: var(--accent); --gauge-bg: #2b3a55;
+  width: 100%; max-width: 110px; aspect-ratio: 2 / 1; margin: 0 auto;
+  border-radius: 999px 999px 0 0;
+  background: conic-gradient(from 180deg at 50% 100%, var(--gauge-color) 0deg,
+    var(--gauge-color) calc(var(--pct) * 180deg), var(--gauge-bg) calc(var(--pct) * 180deg), var(--gauge-bg) 180deg);
+  position: relative; }
+.gauge::after { content: ''; position: absolute; inset: 7px 7px 0 7px; background: var(--surface);
+  border-radius: 999px 999px 0 0; }
+.gauge .g-inner { position: absolute; left: 0; right: 0; bottom: 0; z-index: 1; text-align: center; padding-bottom: 5px; }
+.gauge .g-val { font-size: 22px; font-weight: 850; font-variant-numeric: tabular-nums; line-height: 1; }
+.gauge .g-label { font-size: 11px; color: var(--muted); margin-top: 4px; }
+.gauge .g-sub { font-size: 10px; color: var(--accent); font-weight: 700; }
+
+.dash-text { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 14px 16px; margin-bottom: 14px; }
+.dash-text h4 { font-size: 14px; margin: 0 0 6px; color: var(--accent); }
+.dash-text p { margin: 0; font-size: 14px; color: var(--ink-soft); line-height: 1.55; }
+
+.cta-btn { display: block; width: 100%; text-align: center; padding: 15px; border-radius: 12px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2)); color: #fff;
+  font-size: 16px; font-weight: 800; box-shadow: 0 8px 22px rgba(56, 189, 248, .25);
+  transition: transform .12s, box-shadow .12s; }
+.cta-btn:active { transform: translateY(1px); box-shadow: 0 4px 14px rgba(56, 189, 248, .2); }
+
+/* 跟踪标的卡片列表 */
+.track-list { display: grid; gap: 10px; }
+.track-card { display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: var(--radius-sm);
+  background: var(--surface); border: 1px solid var(--border); box-shadow: var(--shadow); transition: transform .12s; }
+.track-card:active { transform: scale(.99); }
+.track-card .t-icon { width: 42px; height: 42px; border-radius: 11px; display: grid; place-items: center; color: #fff;
+  font-size: 18px; flex: none; }
+.track-card .t-main { flex: 1; min-width: 0; }
+.track-card .t-name { font-size: 15px; font-weight: 800; }
+.track-card .t-desc { font-size: 12px; color: var(--muted); margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.track-card .t-tag { font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 999px; white-space: nowrap; }
+.track-card .t-tag.flat { color: var(--muted); background: var(--surface-2); }
+.track-card .t-tag.down { color: var(--down); background: color-mix(in srgb, var(--down) 12%, transparent); }
+.track-card .t-tag.up { color: var(--up); background: color-mix(in srgb, var(--up) 12%, transparent); }
+.track-card .t-tag.acc { color: var(--accent); background: var(--accent-soft); }
+.track-card .t-spark { width: 60px; height: 28px; flex: none; }
+
+/* 列表头部 */
+.list-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
+.list-head h2 { font-size: 18px; margin: 0; }
+.list-head .more { font-size: 13px; color: var(--muted); font-weight: 700; }
+
+/* 体系概览页内容区留足呼吸 */
+.sys-hero { padding: 14px 0 6px; }
+.sys-hero .eyebrow { font-size: 12px; }
+.sys-hero .section-title { font-size: 26px; margin: 4px 0 6px; }
+
