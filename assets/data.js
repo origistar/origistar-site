@@ -30,23 +30,32 @@ window.ORIGISTAR = {
     price: 96200,        // BTC 现价 $
     ahr999: 1.12,        // AHR999 指标
     ahr999Label: "定投区间",
-    weeklyDCA: 6000,     // 周定投 ¥
-    budget: 200000,      // 总预算 ¥
+    weeklyDCA: 6000,     // 周定投基数 ¥（再乘 AHR999 档位）
+    weeklyBase: 6000,    // 同上，供首页计算使用
     signal: "常态 · 仅熊市加速",
     signalType: "flat",
     note: "AHR999<1.2 视为可定投区间；BTC<$50K 第一档加速。"
   },
 
-  /* 防守仓 · 锚定便宜价 */
+  /* 防守仓 · 锚定便宜价（周定投基数 + 甜区乘数） */
   defensive: {
-    schd:  { price: 35.10, extreme: 27.0, sweet: 30.0, fair: 32.0, zone: "偏贵", zoneType: "down" },
-    brk:   { price: 504.30, extreme: 450.0, sweet: 475.0, fair: 500.0, zone: "偏贵", zoneType: "down" },
-    note: "价格 ≤ 甜区(甜) 进入定投；≤ 极度便宜 加倍。当前均高于合理价，等待。"
+    schd:  { price: 35.10, extreme: 27.0, sweet: 30.0, fair: 32.0, zone: "偏贵", zoneType: "down", weeklyBase: 5000 },
+    brk:   { price: 504.30, extreme: 450.0, sweet: 475.0, fair: 500.0, zone: "偏贵", zoneType: "down", weeklyBase: 5000 },
+    note: "价格 ≤ 甜区 进入定投；≤ 极度便宜 加倍；≤ 合理价 半档；> 合理价 停止等待。当前均高于合理价，等待。"
   },
 
-  /* 低风险 · 港股打新（示例占位） */
+  /* 低风险 · 港股打新 */
   hkIpo: {
-    watch: 3, pipeline: 5, signal: "观察 · 无极端超额认购", signalType: "flat"
+    watch: 3, pipeline: 5, signal: "观察 · 无极端超额认购", signalType: "flat",
+    latest: "梅卡曼德 09615",   // 当前打新/待上市标的（首页展示；也会尝试读 low-risk/hk-data.json 覆盖）
+    latestStatus: "申购中"
+  },
+
+  /* 低风险 · 可转债双低 */
+  cb: {
+    signal: "今日空仓",
+    detail: "双低筛选未触发",
+    type: "flat"
   },
 
   /* 策略库 */

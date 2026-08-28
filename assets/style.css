@@ -371,19 +371,21 @@ table.matrix caption { caption-side: bottom; text-align:left; color: var(--muted
 .dash-card .dash-title { font-size: 17px; font-weight: 800; color: var(--ink); }
 .dash-card .dash-date { font-size: 12px; color: var(--muted); }
 
-.gauge-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; margin-bottom: 16px; }
-.gauge { --pct: 0.5; --gauge-color: var(--accent); --gauge-bg: #2b3a55;
-  width: 100%; max-width: 110px; aspect-ratio: 2 / 1; margin: 0 auto;
-  border-radius: 999px 999px 0 0;
-  background: conic-gradient(from 180deg at 50% 100%, var(--gauge-color) 0deg,
-    var(--gauge-color) calc(var(--pct) * 180deg), var(--gauge-bg) calc(var(--pct) * 180deg), var(--gauge-bg) 180deg);
-  position: relative; }
-.gauge::after { content: ''; position: absolute; inset: 7px 7px 0 7px; background: var(--surface);
-  border-radius: 999px 999px 0 0; }
-.gauge .g-inner { position: absolute; left: 0; right: 0; bottom: 0; z-index: 1; text-align: center; padding-bottom: 5px; }
-.gauge .g-val { font-size: 22px; font-weight: 850; font-variant-numeric: tabular-nums; line-height: 1; }
-.gauge .g-label { font-size: 11px; color: var(--muted); margin-top: 4px; }
-.gauge .g-sub { font-size: 10px; color: var(--accent); font-weight: 700; }
+/* 今日信号清单（直截了当的数字/建议，不做仪表盘） */
+.signal-list { display: block; margin-bottom: 16px; }
+.signal-row { display: flex; align-items: center; gap: 12px; padding: 13px 2px;
+  border-bottom: 1px solid var(--border); }
+.signal-row:last-child { border-bottom: none; }
+.signal-row .s-main { flex: 1; min-width: 0; }
+.signal-row .s-name { font-size: 15px; font-weight: 700; color: var(--ink); }
+.signal-row .s-note { font-size: 12px; color: var(--muted); margin-top: 3px;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.signal-row .s-val { font-size: 18px; font-weight: 850; font-variant-numeric: tabular-nums;
+  text-align: right; max-width: 46%; line-height: 1.25; word-break: break-word; }
+.signal-row .s-val.up { color: var(--up); }
+.signal-row .s-val.down { color: var(--down); }
+.signal-row .s-val.acc { color: var(--accent-2); }
+.signal-row .s-val.flat { color: var(--ink); }
 
 .dash-text { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm);
   padding: 14px 16px; margin-bottom: 14px; }
