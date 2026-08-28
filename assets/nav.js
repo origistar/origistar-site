@@ -144,8 +144,7 @@
     document.getElementById('pickerList').innerHTML = s.pages.map(function (p) {
       return '<a href="' + base + p.file + '">' +
         '<span class="pi">' + svg(p.icon) + '</span>' +
-        '<span class="pt">' + p.name + '</span>' +
-        '<span class="pd">' + p.desc + '</span>' +
+        '<span class="pt">' + p.name + '<span class="pd">' + p.desc + '</span></span>' +
         '</a>';
     }).join('');
     picker.classList.add('show');
