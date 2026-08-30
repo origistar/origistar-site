@@ -177,6 +177,40 @@
     </div>
   </section>
 
+  <!-- 黄金 · 战略配置 -->
+  <section class="section">
+    <div class="mc-card" id="gold-card">
+      <div class="mc-head">
+        <div>
+          <div class="mc-ticker">黄金 · 战略配置</div>
+          <div class="mc-name">防守仓战略配置 10% · 黄金 ETF / 实物</div>
+        </div>
+        <span class="tag flat">战略</span>
+      </div>
+      <div class="mc-price-row">
+        <div class="mc-price" id="gold-price">待录入</div>
+        <span class="tag flat" id="gold-zone">—</span>
+      </div>
+      <div class="mc-mult-sub" id="gold-note">常规在 4000–4500 区间分批；低于 4000 加速、高于 4500 缓投。价格手动维护。</div>
+      <div class="mc-meta">
+        <div class="mc-row"><span>常规分批区</span><b id="gold-range">4000–4500</b></div>
+        <div class="mc-row"><span>战略占比</span><b>10%（防守仓内）</b></div>
+        <div class="mc-row"><span>数据状态</span><b>手动维护 · 更新于 <span id="gold-upd">—</span></b></div>
+      </div>
+    </div>
+    <script>
+    (function(){
+      var g = (window.ORIGISTAR && window.ORIGISTAR.gold);
+      if(!g) return;
+      if(g.price != null){ var p=document.getElementById('gold-price'); if(p) p.textContent = '$' + Number(g.price).toLocaleString(); }
+      if(g.zone){ var z=document.getElementById('gold-zone'); if(z) z.textContent = g.zone; }
+      if(g.note){ var n=document.getElementById('gold-note'); if(n) n.textContent = g.note; }
+      if(g.sweet && g.fair){ var r=document.getElementById('gold-range'); if(r) r.textContent = g.sweet + '–' + g.fair; }
+      var u=document.getElementById('gold-upd'); if(u) u.textContent = (window.ORIGISTAR.updated||'—');
+    })();
+    </script>
+  </section>
+
   <!-- 锚定逻辑 -->
   <section class="section">
     <div class="section-head"><h2>锚定逻辑</h2><span class="sub">透明可复核</span></div>
