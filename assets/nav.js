@@ -18,6 +18,7 @@
     strategy: '<circle cx="12" cy="12" r="9"/><path d="M15 9l-2 5-5 2 2-5z"/>',
     menu: '<path d="M4 7h16M4 12h16M4 17h16"/>',
     study: '<path d="M4 19.5A2.5 2.5 0 016.5 17H20M4 19.5V5a2.5 2.5 0 012.5-2.5h11A2.5 2.5 0 0120 5v14.5M4 19.5A2.5 2.5 0 016.5 22H20v-2.5"/>',
+    book: '<path d="M3 7a2 2 0 012-2h14a2 2 0 012 2v12a2 2 0 01-2 2H5a2 2 0 01-2-2V7z"/><path d="M3 7l9 4 9-4"/>',
     schd: '<path d="M4 19V5M4 19h16M8 15v-4M12 15V8M16 15v-6"/>',
     btc: '<circle cx="12" cy="12" r="9"/><path d="M9.5 8h4a2 2 0 010 4h-4zM9.5 12h4.5a2 2 0 010 4H9.5zM10 7v10M12.5 7v1M12.5 16v1"/>',
     history: '<path d="M3 12a9 9 0 109-9 9 9 0 00-7 3.5M4 4v4h4"/><path d="M12 8v4l3 2"/>',
@@ -36,7 +37,8 @@
     momentum: 'linear-gradient(135deg,#0ea5e9,#22d3ee)', whale: 'linear-gradient(135deg,#14b8a6,#34d399)',
     aggressive: 'linear-gradient(135deg,#ef4444,#f97316)', defensive: 'linear-gradient(135deg,#0ea5e9,#06b6d4)',
     'low-risk': 'linear-gradient(135deg,#8b5cf6,#a855f7)', strategy: 'linear-gradient(135deg,#10b981,#14b8a6)',
-    study: 'linear-gradient(135deg,#64748b,#94a3b8)', lowrisk: 'linear-gradient(135deg,#8b5cf6,#a855f7)'
+    study: 'linear-gradient(135deg,#64748b,#94a3b8)', lowrisk: 'linear-gradient(135deg,#8b5cf6,#a855f7)',
+    book: 'linear-gradient(135deg,#4f46e5,#8b5cf6)'
   };
   function grad(k){ return GRAD[k] || GRAD.stable; }
 
@@ -66,7 +68,9 @@
       { id: 'laolei', name: '老雷', file: 'strategy/laolei.html', desc: '全球配置 · 垄断选股', icon: 'strategy' }
     ]},
     study: { name: '研习录', icon: 'study', desc: '读书纪要 · 研报重点', index: 'study/index.html', pages: [
-      { id: 'index', name: '研习录', file: 'study/index.html', desc: '读书纪要 · 研报重点', icon: 'study' }
+      { id: 'index', name: '研习录', file: 'study/index.html', desc: '读书纪要 · 研报重点', icon: 'study' },
+      { id: 'ndx-clec', name: '纳指定投CLEC版', file: 'study/ndx-clec.html', desc: '只投纳指100的极简哲学', icon: 'book' },
+      { id: 'japan-recession', name: '以日为鉴', file: 'study/japan-recession.html', desc: '日本衰退四十年微观启示', icon: 'history' }
     ]}
   };
   var ORDER = ['defensive', 'stable', 'aggressive', 'low-risk', 'strategy', 'study'];
