@@ -173,6 +173,10 @@
     return '';
   }
 
+  // ---------- DOM 渲染：统一延迟到 DOM 解析完成 ----------
+  // 原因：本脚本常被放在 <body> 顶部，而 #sys-icon-grid / #overview-slot / #subnav-slot
+  // 等插槽位于脚本之后，同步执行时 getElementById 会拿到 null，导致整块内容空白。
+  function boot() {
   // ---------- 顶部导航 ----------
   var sysNav = ORDER.map(function (k) {
     var s = S[k];
@@ -284,6 +288,15 @@
     }
   } catch (e) {}
 
-  // 暴露给首页脚本，方便自动生成 icon grid 与跟踪列表（加页面时自动同步）
+  }
+
+  // 同步暴露给首页脚本（不依赖 DOM 渲染时机，home.js 在解析期即可取用）
   window.ORIGISTAR_NAV = { ORDER: ORDER, systems: S, base: base };
+
+  // 插槽可能在本脚本之后才解析，故等到 DOM 就绪再渲染
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', boot);
+  } else {
+    boot();
+  }
 })();
