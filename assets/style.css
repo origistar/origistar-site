@@ -205,7 +205,16 @@ img { max-width: 100%; }
   border: 1px solid var(--border); padding: 3px 9px; border-radius: 999px; }
 
 /* sub-nav 胶囊（体系内切换，少一步） */
-.subnav { display: flex; gap: 8px; overflow-x: auto; padding: 4px 0 12px; scrollbar-width: none; }
+.subnav {
+  position: sticky;
+  top: calc(var(--nav-h) + env(safe-area-inset-top));
+  z-index: 40;
+  display: flex; gap: 8px; overflow-x: auto;
+  margin-top: 10px;
+  padding: 8px 0 12px;
+  scrollbar-width: none;
+  background: linear-gradient(180deg, var(--bg) 70%, transparent);
+}
 .subnav::-webkit-scrollbar { display: none; }
 .subnav a { flex: none; padding: 8px 15px; border-radius: 999px; font-size: 13px; font-weight: 700;
   color: var(--ink-soft); background: var(--surface); border: 1px solid var(--border); white-space: nowrap; }
