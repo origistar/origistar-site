@@ -70,7 +70,9 @@
     study: { name: '研习录', icon: 'study', desc: '读书纪要 · 研报重点', index: 'study/index.html', pages: [
       { id: 'index', name: '研习录', file: 'study/index.html', desc: '读书纪要 · 研报重点', icon: 'study' },
       { id: 'ndx-clec', name: '纳指定投CLEC版', file: 'study/ndx-clec.html', desc: '只投纳指100的极简哲学', icon: 'book' },
-      { id: 'japan-recession', name: '以日为鉴', file: 'study/japan-recession.html', desc: '日本衰退四十年微观启示', icon: 'history' }
+      { id: 'japan-recession', name: '以日为鉴', file: 'study/japan-recession.html', desc: '日本衰退四十年微观启示', icon: 'history' },
+      { id: 'masayoshi-son', name: '孙正义传', file: 'study/masayoshi-son.html', desc: '打造300年企业帝国的野心', icon: 'book' },
+      { id: 'longtou-saidao', name: '龙头、价值与赛道', file: 'study/longtou-saidao.html', desc: 'A股龙头战法投资哲学', icon: 'book' }
     ]}
   };
   var ORDER = ['defensive', 'stable', 'aggressive', 'low-risk', 'strategy', 'study'];
@@ -279,6 +281,20 @@
         }
       }
     }
+  }
+
+  // ---------- 研习录子页：固定“回研习录”胶囊 ----------
+  if (SYS === 'study' && PAGE !== 'index' && PAGE !== '') {
+    var slot2 = document.getElementById('subnav-slot');
+    var wrap2 = document.querySelector('.wrap');
+    if (wrap2) {
+      var back = document.createElement('nav');
+      back.className = 'subnav';
+      back.innerHTML = '<a href="' + base + 'study/index.html">← 回研习录</a>';
+      if (wrap2.firstChild) wrap2.insertBefore(back, wrap2.firstChild);
+      else wrap2.appendChild(back);
+    }
+    if (slot2 && slot2.parentNode) slot2.parentNode.removeChild(slot2);
   }
 
   // ---------- 体系页子页入口网格（雪球式 icon grid） ----------
