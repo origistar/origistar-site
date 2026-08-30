@@ -42,16 +42,16 @@
 
   // 系统配置：index = 聚合首页；pages = 具体子页
   var S = {
-    defensive: { name: '防守仓', icon: 'defensive', desc: 'SCHD & 伯克希尔 便宜价定投', index: 'defensive/index.html', pages: [
-      { id: 'schd-brk', name: 'SCHD & BRK.B', file: 'defensive/schd-brk.html', desc: '锚定便宜价监测', icon: 'schd' }
+    defensive: { name: '防守仓', icon: 'defensive', desc: 'SCHD & 伯克希尔 + 黄金', index: 'defensive/schd-brk.html', pages: [
+      { id: 'schd-brk', name: 'SCHD & BRK.B + 黄金', file: 'defensive/schd-brk.html', desc: '便宜价定投 + 黄金提示', icon: 'schd' }
     ]},
     stable: { name: '稳健仓', icon: 'stable', desc: '纳指100 / 比特币 长期定投', index: 'stable/index.html', pages: [
       { id: 'ndx-dca', name: '纳指定投', file: 'stable/ndx-dca.html', desc: 'PE/DD/网格决策 v5.1', icon: 'stable' },
       { id: 'btc-dca', name: '比特币', file: 'stable/btc-dca.html', desc: 'AHR999 熊市定投', icon: 'btc' },
       { id: 'ndx-history', name: '定投历史', file: 'stable/ndx-history.html', desc: '实盘记录与回测', icon: 'history' }
     ]},
-    aggressive: { name: '激进仓', icon: 'aggressive', desc: '高弹性个股 / 主题（待建）', index: 'aggressive/index.html', pages: [
-      { id: 'overview', name: '激进仓', file: 'aggressive/index.html', desc: '版式预留', icon: 'aggressive' }
+    aggressive: { name: '进取仓', icon: 'aggressive', desc: '高弹性个股 / 主题（待建）', index: 'aggressive/index.html', pages: [
+      { id: 'overview', name: '进取仓', file: 'aggressive/index.html', desc: '版式预留', icon: 'aggressive' }
     ]},
     'low-risk': { name: '低风险', icon: 'lowrisk', desc: '港股打新 / 待入通 / 可转债', index: 'low-risk/index.html', pages: [
       { id: 'hk-ipo', name: '港股打新', file: 'low-risk/hk-ipo.html', desc: '待上市新股追踪', icon: 'ipo' },
@@ -59,9 +59,11 @@
       { id: 'cb-screener', name: '可转债', file: 'low-risk/cb-screener.html', desc: '双低筛选', icon: 'cb' },
       { id: 'cb-history', name: '可转债历史', file: 'low-risk/cb-history.html', desc: '估值水位存档', icon: 'history' }
     ]},
-    strategy: { name: '策略库', icon: 'strategy', desc: '因子 / 顶级投资者跟踪', index: 'strategy/index.html', pages: [
+    strategy: { name: '策略库', icon: 'strategy', desc: '因子 / 顶级投资者 / 独立站精华', index: 'strategy/index.html', pages: [
       { id: 'momentum', name: 'SPMO & MTUM', file: 'strategy/momentum.html', desc: '动量轮动', icon: 'momentum' },
-      { id: 'superinvestors', name: '13F 持仓', file: 'strategy/superinvestors.html', desc: '顶级投资者对比', icon: 'whale' }
+      { id: 'superinvestors', name: '13F 持仓', file: 'strategy/superinvestors.html', desc: '顶级投资者对比', icon: 'whale' },
+      { id: 'jinjiancheng', name: '金渐成（玑哥）', file: 'strategy/jinjiancheng.html', desc: '三仓体系 · 负成本打法', icon: 'strategy' },
+      { id: 'laolei', name: '老雷', file: 'strategy/laolei.html', desc: '全球配置 · 垄断选股', icon: 'strategy' }
     ]},
     study: { name: '研习录', icon: 'study', desc: '读书纪要 · 研报重点', index: 'study/index.html', pages: [
       { id: 'index', name: '研习录', file: 'study/index.html', desc: '读书纪要 · 研报重点', icon: 'study' }
@@ -124,15 +126,15 @@
         sigRow('等待便宜价', 'flat', '均未达甜区');
     }
     if (k === 'low-risk') {
-      var h = d.hkIpo;
+      var h = d.hkIpo, cb = d.cb || {};
       return sectionHead('重点概览') +
         kv([
           { k: '港股观察', v: (h.watch || 0) + ' 支' },
           { k: '申购管线', v: (h.pipeline || 0) + ' 支' },
-          { k: '可转债', v: '双低筛选', sub: '待建' },
-          { k: '信号', v: h.signal }
+          { k: '可转债', v: cb.signal || '双低筛选', sub: cb.detail || '' },
+          { k: '近期打新', v: h.latest || '—', sub: h.latestStatus || '' }
         ]) +
-        sigRow('观察 · 无极端超额', 'flat', '低风险投资窗口');
+        sigRow(h.signal, h.signalType || 'flat', '低风险投资窗口');
     }
     if (k === 'strategy') {
       var st = d.strategy;
@@ -140,13 +142,25 @@
         kv([
           { k: '动量', v: st.momentum.signal, sub: st.momentum.label },
           { k: '13F 跟踪', v: st.superinvestors.tracked + ' 位', sub: '超级投资者' },
-          { k: '更新', v: st.superinvestors.signal }
+          { k: '金渐成', v: st.jinjiancheng.signal, sub: st.jinjiancheng.label },
+          { k: '老雷', v: st.laolei.signal, sub: st.laolei.label }
         ]) +
-        sigRow('跟踪中', 'acc', '因子 + 顶级投资者');
+        sigRow('跟踪中', 'acc', '因子 + 顶级投资者 + 独立站精华');
     }
     if (k === 'aggressive') {
+      var ag = d.aggressive;
+      var holdCount = (ag.holdings || []).length;
+      var watchCount = (ag.watch || []).length;
+      var activeWarn = (ag.holdings || []).filter(function(h){ return h.userSellWarn != null || h.userBuyWarn != null; }).length +
+                       (ag.watch || []).filter(function(w){ return w.userBuyWarn != null; }).length;
       return sectionHead('重点概览') +
-        '<div class="rule warn"><h3>版式预留</h3><p>激进仓（高弹性个股 / 主题）尚在规划中，子页面将随策略落地逐步补充。此区未来承载仓位、标的与信号监控。</p></div>';
+        kv([
+          { k: '目标占比', v: ag.target + '%', sub: '上限 ' + ag.cap + '%' },
+          { k: '持仓标的', v: holdCount + ' 支', sub: '高弹性' },
+          { k: '观察池', v: watchCount + ' 支', sub: '待触发' },
+          { k: '已设预警', v: activeWarn + ' 条', sub: '用户预设' }
+        ]) +
+        sigRow('跟踪中', 'acc', '个股预警 + 趋势止盈');
     }
     if (k === 'study') {
       return sectionHead('重点概览') +
