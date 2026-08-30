@@ -250,7 +250,8 @@
   document.body.appendChild(btab);
 
   // ---------- 体系内 sub-nav 胶囊：统一顶头（置于 .wrap 最前，即 hero 之上） ----------
-  if (SYS !== 'home' && S[SYS]) {
+  // 研习录是书架，不显示子页胶囊；单页体系也不显示
+  if (SYS !== 'home' && SYS !== 'study' && S[SYS]) {
     var slot = document.getElementById('subnav-slot');
     if (slot) {
       var items = subItems(SYS);
