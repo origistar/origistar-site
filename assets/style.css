@@ -290,6 +290,14 @@ table.matrix caption { caption-side: bottom; text-align:left; color: var(--muted
 .rule.danger { border-left-color: var(--up); }
 .rule.ok { border-left-color: var(--down); }
 
+/* 可点击卡片（方法论 → 对应子页） */
+a.rule { display: block; color: inherit; text-decoration: none;
+  -webkit-tap-highlight-color: transparent; transition: transform .12s ease, border-color .12s; }
+a.rule:hover { border-left-color: var(--accent); }
+a.rule:active { transform: scale(.99); }
+a.rule h3 { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.rule .go { color: var(--muted); font-weight: 800; font-size: 17px; line-height: 1; flex: none; }
+
 /* 图表容器 */
 .chart-box { background: var(--surface); border:1px solid var(--border); border-radius: var(--radius); box-shadow: var(--shadow); padding: 16px; }
 .chart-box h3 { margin:0 0 4px; font-size:15px; }
