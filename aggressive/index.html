@@ -5,9 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#070b16">
 <meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="origistar">
-<title>激进仓 | origistar</title>
+<title>进取仓 | origistar</title>
 <link rel="stylesheet" href="../assets/style.css">
 <link rel="manifest" href="../manifest.json">
 <link rel="apple-touch-icon" href="../assets/icon-192.png">
@@ -18,34 +18,135 @@
 
 <div class="wrap">
   <section class="sys-hero">
-    <span class="eyebrow">激进仓 / Aggressive</span>
-    <h1 class="section-title">激进仓总览</h1>
-    <p class="lead">高弹性个股 / 主题仓。版式预留，待后续建立具体标的与仓位跟踪体系。</p>
+    <span class="eyebrow">进取仓 / Aggressive</span>
+    <h1 class="section-title">进取仓总览</h1>
+    <p class="lead">高弹性个股 / 主题仓。本页不含成本与仓位比重，只展示标的、用户预警价与 AI 趋势预警价。</p>
   </section>
 
-  <div id="subnav-slot"></div>
-  <div id="sys-icon-grid" class="sys-icon-grid"></div>
-  <div id="overview-slot"></div>
-
+  <!-- 更新与口径 -->
   <section class="section">
-    <div class="section-head"><h2>规划中</h2><span class="sub">版式预留</span></div>
-    <div class="rule warn"><h3>未来承载</h3><p>激进仓将承载 <b>高弹性个股 / 主题</b> 的仓位、标的与信号监控。当前为版式预留，子页面随策略落地逐步补充。</p></div>
-    <div class="section-head" style="margin-top:18px"><h2>仓位框架（待填）</h2></div>
-    <table class="tbl">
-      <thead><tr><th>标的</th><th>计划仓位</th><th>建仓区间</th><th>信号</th><th>状态</th></tr></thead>
-      <tbody><tr><td>—</td><td class="num">—</td><td class="num">—</td><td>—</td><td class="num">待建</td></tr></tbody>
+    <div class="dash-text">
+      <h4>更新频率：每日 2 次</h4>
+      <p>早盘一次、收盘后一次。最新价与 ATR% 手动维护或接入行情；AI 预警价按当前口径自动计算：</p>
+      <p><b>持仓：</b>最新价 × (1 − 3×ATR%) = 趋势止盈价；<b>观察仓：</b>最新价 × (1 − 2×ATR%) = 建议买入价。</p>
+      <p class="note">个股波动差异极大，不设置统一百分比模板；ATR% 按个股独立校准。</p>
+    </div>
+  </section>
+
+  <!-- 持仓标的 -->
+  <section class="section">
+    <div class="section-head"><h2>持仓标的</h2><span class="sub">用户预警价 + AI 趋势止盈价</span></div>
+    <div class="table-wrap">
+      <table class="tbl tbl-compact" id="tbl-holdings">
+        <thead><tr>
+          <th>标的</th><th>状态</th><th>最新价</th><th>用户买入预警</th><th>用户卖出预警</th><th>AI 趋势止盈</th><th>备注</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 观察仓 -->
+  <section class="section">
+    <div class="section-head"><h2>观察仓</h2><span class="sub">用户买入预警 + AI 建议买入价</span></div>
+    <div class="table-wrap">
+      <table class="tbl tbl-compact" id="tbl-watch">
+        <thead><tr>
+          <th>标的</th><th>状态</th><th>最新价</th><th>用户买入预警</th><th>AI 建议买入</th><th>备注</th>
+        </tr></thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </section>
+
+  <!-- 趋势止盈规则 -->
+  <section class="section">
+    <div class="section-head"><h2>趋势止盈规则</h2><span class="sub">5 层规则 · 个股独立校准</span></div>
+    <div class="rule warn"><h3>为什么不分仓模板</h3><p>美股大盘股（如英伟达）与港股小盘金矿股（灵宝、龙资源）波动天差地别，同一 ATR 分位信号含义完全不同。故采用「分层定性 + 个股独立校准」，而非统一百分比阈值。</p></div>
+    <table class="tbl" style="margin-top:12px">
+      <thead><tr><th>层级</th><th>触发条件</th><th>动作</th></tr></thead>
+      <tbody id="a-rules"></tbody>
     </table>
   </section>
 
+  <!-- 决策留痕 -->
   <section class="section">
-    <div class="section-head"><h2>子页面</h2><span class="sub">点进去看详情</span></div>
-    <div id="sys-cards" class="grid c2"></div>
-    <p class="note">激进仓页面尚在规划中，子页面将随策略落地逐步补充。</p>
+    <div class="section-head"><h2>决策留痕</h2><span class="sub">每笔建仓必填</span></div>
+    <div class="rule ok"><h3>建仓五问</h3><p id="a-decision"></p></div>
+    <p class="note">季度末回看：逻辑是否兑现、是否触发止盈/止损、是否该加/减。与系统「半年校验」联动。</p>
   </section>
 </div>
 
-<footer class="foot">
-  origistar · 个人投资组合监测 · 所有数据仅供参考，非投资建议
-</footer>
+<footer class="foot">origistar · 进取仓总览 · 数据仅供参考，非投资建议</footer>
+
+<script>
+(function(){
+  var a = (window.ORIGISTAR && window.ORIGISTAR.aggressive); if(!a) return;
+
+  function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function price(item, n){
+    if(n==null || isNaN(n)) return '—';
+    var fixed = (n < 10) ? 2 : ((n < 100) ? 2 : 2);
+    return esc(item.currency || '') + n.toFixed(fixed);
+  }
+  function warnPrice(item, type){
+    // type: 'holdings' -> 趋势止盈价 (最新价 × (1-3×ATR%))
+    // type: 'watch'    -> 建议买入价 (最新价 × (1-2×ATR%))
+    if(item.status==='停牌' || item.lastPrice==null || item.atrPct==null) return { txt:'—', cls:'flat' };
+    var mult = (type==='holdings') ? 3 : 2;
+    var p = item.lastPrice * (1 - mult * item.atrPct);
+    var fixed = (p < 10) ? 2 : 2;
+    return { txt: esc(item.currency||'') + p.toFixed(fixed), cls:'acc' };
+  }
+  function statusCls(st){
+    if(st==='停牌') return 'flat';
+    if(st==='持有') return 'up';
+    return 'acc';
+  }
+
+  // 持仓表
+  var hBody = document.querySelector('#tbl-holdings tbody');
+  if(hBody){
+    hBody.innerHTML = (a.holdings||[]).map(function(h){
+      var ai = warnPrice(h, 'holdings');
+      return '<tr>' +
+        '<td><b>' + esc(h.name) + '</b><br><small class="muted">' + esc(h.code||'') + ' · ' + esc(h.market||'') + '</small></td>' +
+        '<td><span class="tag ' + statusCls(h.status) + '">' + esc(h.status) + '</span></td>' +
+        '<td class="num">' + price(h, h.lastPrice) + '</td>' +
+        '<td class="num">' + (h.userBuyWarn==null ? '待设' : price(h, h.userBuyWarn)) + '</td>' +
+        '<td class="num">' + (h.userSellWarn==null ? '待设' : price(h, h.userSellWarn)) + '</td>' +
+        '<td class="num"><span class="tag ' + ai.cls + '">' + ai.txt + '</span></td>' +
+        '<td>' + esc(h.note||'') + '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  // 观察仓表
+  var wBody = document.querySelector('#tbl-watch tbody');
+  if(wBody){
+    wBody.innerHTML = (a.watch||[]).map(function(w){
+      var ai = warnPrice(w, 'watch');
+      return '<tr>' +
+        '<td><b>' + esc(w.name) + '</b><br><small class="muted">' + esc(w.code||'') + ' · ' + esc(w.market||'') + '</small></td>' +
+        '<td><span class="tag ' + statusCls(w.status) + '">' + esc(w.status) + '</span></td>' +
+        '<td class="num">' + price(w, w.lastPrice) + '</td>' +
+        '<td class="num">' + (w.userBuyWarn==null ? '待设' : price(w, w.userBuyWarn)) + '</td>' +
+        '<td class="num"><span class="tag ' + ai.cls + '">' + ai.txt + '</span></td>' +
+        '<td>' + esc(w.note||'') + '</td>' +
+      '</tr>';
+    }).join('');
+  }
+
+  // 规则表
+  var rEl = document.getElementById('a-rules');
+  if(rEl) rEl.innerHTML = (a.stopRules||[]).map(function(r){
+    return '<tr><td class="num">' + esc(r.layer) + '</td><td>' + esc(r.cond) + '</td><td><b>' + esc(r.action) + '</b></td></tr>';
+  }).join('');
+
+  // 决策留痕
+  var dEl = document.getElementById('a-decision');
+  if(dEl) dEl.innerHTML = esc((a.decisionLog && a.decisionLog.fields || []).join(' · '));
+})();
+</script>
 </body>
 </html>
