@@ -212,10 +212,17 @@ img { max-width: 100%; }
 .subnav a.active { color: #fff; background: linear-gradient(135deg, var(--accent), var(--accent-2)); border-color: transparent; }
 
 /* 表格 */
+.table-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 table.tbl { width: 100%; border-collapse: collapse; font-size: 14px; }
 table.tbl th, table.tbl td { text-align: left; padding: 11px 10px; border-bottom: 1px solid var(--border); }
 table.tbl th { color: var(--muted); font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
 table.tbl td.num { font-variant-numeric: tabular-nums; font-weight: 700; }
+table.tbl-compact th, table.tbl-compact td { padding: 9px 7px; font-size: 13px; white-space: nowrap; }
+table.tbl-compact td:first-child { white-space: normal; min-width: 90px; }
+table.tbl-compact small.muted { color: var(--muted); font-size: 11px; }
+@media (min-width: 720px) {
+  table.tbl-compact th, table.tbl-compact td { padding: 11px 10px; font-size: 14px; }
+}
 
 /* 通用文字 */
 .eyebrow { color: var(--accent); font-weight: 800; font-size: 13px; letter-spacing: .14em; text-transform: uppercase; }
@@ -370,6 +377,7 @@ table.matrix caption { caption-side: bottom; text-align:left; color: var(--muted
 .dash-card .dash-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
 .dash-card .dash-title { font-size: 17px; font-weight: 800; color: var(--ink); }
 .dash-card .dash-date { font-size: 12px; color: var(--muted); }
+.dash-card .dash-more { font-size: 13px; font-weight: 700; color: var(--accent); }
 
 /* 今日信号清单（直截了当的数字/建议，不做仪表盘） */
 .signal-list { display: block; margin-bottom: 16px; }
@@ -383,6 +391,17 @@ table.matrix caption { caption-side: bottom; text-align:left; color: var(--muted
 .signal-row .s-val { font-size: 18px; font-weight: 850; font-variant-numeric: tabular-nums;
   text-align: right; max-width: 46%; line-height: 1.25; word-break: break-word;
   color: var(--ink); }
+
+/* 进取仓首页预警条 */
+.alert-list { display: block; }
+.alert-row { display: flex; align-items: center; gap: 10px; padding: 11px 2px;
+  border-bottom: 1px solid var(--border); font-size: 14px; }
+.alert-row:last-child { border-bottom: none; }
+.alert-row .a-name { font-weight: 800; min-width: 66px; }
+.alert-row .a-tag { font-size: 11px; font-weight: 700; padding: 2px 8px; border-radius: 999px; flex: none; }
+.alert-row .a-warn { margin-left: auto; text-align: right; font-variant-numeric: tabular-nums; }
+.alert-row .a-warn small { display: block; font-size: 11px; color: var(--muted); }
+.alert-row .muted { color: var(--muted); font-size: 12px; }
 
 .dash-text { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm);
   padding: 14px 16px; margin-bottom: 14px; }
@@ -421,4 +440,26 @@ table.matrix caption { caption-side: bottom; text-align:left; color: var(--muted
 .sys-hero { padding: 14px 0 6px; }
 .sys-hero .eyebrow { font-size: 12px; }
 .sys-hero .section-title { font-size: 26px; margin: 4px 0 6px; }
+
+/* 通用标签（独立于 KPI 也可用） */
+.tag { display: inline-flex; align-items: center; gap: 5px; font-size: 12px; font-weight: 700; padding: 4px 10px; border-radius: 999px; }
+
+/* 首页 · 系统配置追踪（3:3:4） */
+.cfg-bar-wrap { margin: 4px 0 10px; }
+.cfg-legend { display: flex; flex-wrap: wrap; gap: 12px; font-size: 12px; color: var(--ink-soft); margin-bottom: 12px; }
+.cfg-legend i { display: inline-block; width: 10px; height: 10px; border-radius: 3px; margin-right: 5px; vertical-align: middle; }
+.cfg-row { display: grid; grid-template-columns: 60px 1fr 92px auto; align-items: center; gap: 10px; padding: 9px 0; border-bottom: 1px solid var(--border); }
+.cfg-row:last-of-type { border-bottom: none; }
+.cfg-name { font-size: 13px; font-weight: 700; }
+.cfg-bar { height: 8px; border-radius: 999px; background: var(--surface-2); overflow: hidden; }
+.cfg-fill { height: 100%; border-radius: 999px; }
+.cfg-num { text-align: right; font-variant-numeric: tabular-nums; }
+.cfg-cur { font-weight: 800; font-size: 14px; }
+.cfg-tgt { display: block; font-size: 11px; color: var(--muted); }
+.cfg-dev { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 999px; white-space: nowrap; }
+.cfg-note { font-size: 12px; color: var(--muted); margin-top: 12px; line-height: 1.6; }
+.cfg-detail { margin-top: 10px; font-size: 13px; color: var(--ink-soft); }
+.cfg-detail summary { cursor: pointer; font-weight: 700; color: var(--accent); }
+.cfg-detail ul { margin: 8px 0 0; padding-left: 18px; }
+.cfg-detail li { margin: 4px 0; font-size: 13px; color: var(--ink-soft); }
 
