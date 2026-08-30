@@ -47,21 +47,21 @@
     defensive: { name: '防守仓', icon: 'defensive', desc: 'SCHD & 伯克希尔 + 黄金', index: 'defensive/schd-brk.html', pages: [
       { id: 'schd-brk', name: 'SCHD & BRK.B + 黄金', file: 'defensive/schd-brk.html', desc: '便宜价定投 + 黄金提示', icon: 'schd' }
     ]},
-    stable: { name: '稳健仓', icon: 'stable', desc: '纳指100 / 比特币 长期定投', index: 'stable/index.html', pages: [
+    stable: { name: '稳健仓', icon: 'stable', desc: '纳指100 / 比特币 长期定投', index: 'stable/ndx-dca.html', pages: [
       { id: 'ndx-dca', name: '纳指定投', file: 'stable/ndx-dca.html', desc: 'PE/DD/网格决策 v5.1', icon: 'stable' },
-      { id: 'btc-dca', name: '比特币', file: 'stable/btc-dca.html', desc: 'AHR999 熊市定投', icon: 'btc' },
-      { id: 'ndx-history', name: '定投历史', file: 'stable/ndx-history.html', desc: '实盘记录与回测', icon: 'history' }
+      { id: 'ndx-history', name: '定投历史', file: 'stable/ndx-history.html', desc: '实盘记录与回测', icon: 'history' },
+      { id: 'btc-dca', name: '比特币', file: 'stable/btc-dca.html', desc: 'AHR999 熊市定投', icon: 'btc' }
     ]},
     aggressive: { name: '进取仓', icon: 'aggressive', desc: '高弹性个股 / 主题（待建）', index: 'aggressive/index.html', pages: [
       { id: 'overview', name: '进取仓', file: 'aggressive/index.html', desc: '版式预留', icon: 'aggressive' }
     ]},
-    'low-risk': { name: '低风险', icon: 'lowrisk', desc: '港股打新 / 待入通 / 可转债', index: 'low-risk/index.html', pages: [
-      { id: 'hk-ipo', name: '港股打新', file: 'low-risk/hk-ipo.html', desc: '待上市新股追踪', icon: 'ipo' },
-      { id: 'hk-connect', name: '待入通', file: 'low-risk/hk-connect.html', desc: '次新入通埋伏', icon: 'ipo' },
+    'low-risk': { name: '低风险', icon: 'lowrisk', desc: '可转债 / 港股打新 / 待入通', index: 'low-risk/cb-screener.html', pages: [
       { id: 'cb-screener', name: '可转债', file: 'low-risk/cb-screener.html', desc: '双低筛选', icon: 'cb' },
-      { id: 'cb-history', name: '可转债历史', file: 'low-risk/cb-history.html', desc: '估值水位存档', icon: 'history' }
+      { id: 'cb-history', name: '可转债历史', file: 'low-risk/cb-history.html', desc: '估值水位存档', icon: 'history' },
+      { id: 'hk-ipo', name: '港股打新', file: 'low-risk/hk-ipo.html', desc: '待上市新股追踪', icon: 'ipo' },
+      { id: 'hk-connect', name: '待入通', file: 'low-risk/hk-connect.html', desc: '次新入通埋伏', icon: 'ipo' }
     ]},
-    strategy: { name: '策略库', icon: 'strategy', desc: '因子 / 顶级投资者 / 独立站精华', index: 'strategy/index.html', pages: [
+    strategy: { name: '策略库', icon: 'strategy', desc: '因子 / 顶级投资者 / 独立站精华', index: 'strategy/momentum.html', pages: [
       { id: 'momentum', name: 'SPMO & MTUM', file: 'strategy/momentum.html', desc: '动量轮动', icon: 'momentum' },
       { id: 'superinvestors', name: '13F 持仓', file: 'strategy/superinvestors.html', desc: '顶级投资者对比', icon: 'whale' },
       { id: 'jinjiancheng', name: '金渐成（玑哥）', file: 'strategy/jinjiancheng.html', desc: '三仓体系 · 负成本打法', icon: 'strategy' },
@@ -75,9 +75,11 @@
   };
   var ORDER = ['defensive', 'stable', 'aggressive', 'low-risk', 'strategy', 'study'];
 
-  // 去重：若聚合页本身已等于某子页，则不再单列
+  // 体系入口(index)若已等于某个子页，则该子页即默认落地页，胶囊直接列出全部子页，不再插入"概览"
   function subItems(k) {
     var s = S[k];
+    var hit = s.pages.some(function (p) { return p.file === s.index; });
+    if (hit) return s.pages.slice();
     var out = [{ id: 'index', name: '概览', file: s.index, icon: s.icon, overview: true }];
     s.pages.forEach(function (p) { if (p.file !== s.index) out.push(p); });
     return out;
@@ -219,10 +221,12 @@
   ORDER.forEach(function (k) {
     var s = S[k];
     dPanel += '<h4>' + s.name + '</h4>';
-    dPanel += '<a href="' + base + s.index + '"><span class="di">' + svg(s.icon) + '</span>概览</a>';
+    var hit = s.pages.some(function (p) { return p.file === s.index; });
+    if (!hit) {
+      dPanel += '<a href="' + base + s.index + '"><span class="di">' + svg(s.icon) + '</span>概览</a>';
+    }
     s.pages.forEach(function (p) {
-      if (p.file !== s.index)
-        dPanel += '<a href="' + base + p.file + '"><span class="di">' + svg(p.icon) + '</span>' + p.name + '</a>';
+      dPanel += '<a href="' + base + p.file + '"><span class="di">' + svg(p.icon) + '</span>' + p.name + '</a>';
     });
   });
   drawer.innerHTML = '<div class="mask" id="mask"></div>' + dPanel + '</div>';
@@ -245,15 +249,34 @@
   btab.innerHTML = tabs;
   document.body.appendChild(btab);
 
-  // ---------- 体系内 sub-nav 胶囊 ----------
+  // ---------- 体系内 sub-nav 胶囊：统一顶头（置于 .wrap 最前，即 hero 之上） ----------
   if (SYS !== 'home' && S[SYS]) {
     var slot = document.getElementById('subnav-slot');
     if (slot) {
-      slot.className = 'subnav';
-      slot.innerHTML = subItems(SYS).map(function (p) {
-        var act = ((PAGE === 'index' || PAGE === '') && p.overview) || (p.id === PAGE && !p.overview) ? ' active' : '';
-        return '<a class="' + act + '" href="' + base + p.file + '">' + p.name + '</a>';
-      }).join('');
+      var items = subItems(SYS);
+      // 只有 1 个子页的体系不显示胶囊（与页面标题重复，属无效信息）
+      if (items.length <= 1) {
+        if (slot.parentNode) slot.parentNode.removeChild(slot);
+      } else {
+        var hasOverview = items.some(function (p) { return p.overview; });
+        var html = items.map(function (p, i) {
+          var act = (p.id === PAGE) ||
+                    (!hasOverview && (PAGE === 'index' || PAGE === '') && i === 0) ||
+                    (hasOverview && (PAGE === 'index' || PAGE === '') && p.overview) ? ' active' : '';
+          return '<a class="' + act + '" href="' + base + p.file + '">' + p.name + '</a>';
+        }).join('');
+        var sub = document.createElement('nav');
+        sub.className = 'subnav';
+        sub.innerHTML = html;
+        var wrap = document.querySelector('.wrap');
+        if (wrap) {
+          if (wrap.firstChild) wrap.insertBefore(sub, wrap.firstChild);
+          else wrap.appendChild(sub);
+          if (slot.parentNode) slot.parentNode.removeChild(slot);
+        } else if (slot.parentNode) {
+          slot.parentNode.replaceChild(sub, slot);
+        }
+      }
     }
   }
 
