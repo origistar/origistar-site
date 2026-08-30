@@ -2,7 +2,7 @@
    更新方式：本地改此文件，或后续用任意云函数/定时脚本回写。
    当前为最近一次人工核对值（示意），页面会显示“更新于”日期。 */
 window.ORIGISTAR = {
-  updated: "2026-08-28",
+  updated: "2026-08-30",
 
   /* 稳健仓 · 纳指定投 (v5.1) */
   ndx: {
@@ -44,6 +44,53 @@ window.ORIGISTAR = {
     note: "价格 ≤ 甜区 进入定投；≤ 极度便宜 加倍；≤ 合理价 半档；> 合理价 停止等待。当前均高于合理价，等待。"
   },
 
+  /* 防守仓 · 黄金（战略配置价格提示，手动维护） */
+  gold: {
+    price: null,         // 伦敦金现 $/oz，手动填或接实时
+    sweet: 4000,         // 常规分批建仓区下沿
+    fair: 4500,          // 常规分批建仓区上沿
+    zone: "待录入价格",
+    note: "防守仓战略配置 10%（黄金 ETF / 实物）。常规在 4000–4500 区间分批，低于 4000 加速、高于 4500 缓投。价格手动维护。"
+  },
+
+  /* 进取仓 · 高弹性个股 / 主题（不含成本/仓位比重） */
+  aggressive: {
+    target: 40,          // 占系统目标权重 %
+    cap: 45,             // 上限 %
+    updateFreq: "每日 2 次",
+    // 持仓标的：用户预设买入/卖出预警价 + 最新价 + ATR%，AI 按趋势规则动态算预警价
+    holdings: [
+      { name: "DRAM", code: "", market: "美股", currency: "$", status: "持有", lastPrice: 95.00, atrPct: 0.05, userBuyWarn: null, userSellWarn: 80, note: "半导体周期复苏主线" },
+      { name: "灵宝黄金", code: "03330.HK", market: "港股", currency: "HK$", status: "持有", lastPrice: 6.50, atrPct: 0.08, userBuyWarn: null, userSellWarn: null, note: "金价上行受益，ATR 较高" },
+      { name: "龙资源", code: "01712.HK", market: "港股", currency: "HK$", status: "停牌", lastPrice: null, atrPct: null, userBuyWarn: null, userSellWarn: null, note: "停牌中，等待复牌" },
+      { name: "潼关黄金", code: "00340.HK", market: "港股", currency: "HK$", status: "持有", lastPrice: 1.20, atrPct: 0.07, userBuyWarn: null, userSellWarn: null, note: "金矿股，波动大" }
+    ],
+    // 观察仓：以买入预警为主；AI 给出建议买入价
+    watch: [
+      { name: "罕王黄金", code: "03788.HK", market: "港股", currency: "HK$", status: "观察", lastPrice: 2.00, atrPct: 0.08, userBuyWarn: null, note: "黄金延伸观察" },
+      { name: "博通", code: "AVGO", market: "美股", currency: "$", status: "观察", lastPrice: 180.00, atrPct: 0.04, userBuyWarn: null, note: "AI 定制芯片龙头" },
+      { name: "思格新能", code: "", market: "港股", currency: "HK$", status: "观察", lastPrice: null, atrPct: null, userBuyWarn: null, note: "9月入通预期" },
+      { name: "长光辰芯", code: "", market: "A股", currency: "¥", status: "观察", lastPrice: null, atrPct: null, userBuyWarn: null, note: "9月入通预期·科创板" }
+    ],
+    // 5 层趋势止盈规则（分层定性 + 个股独立校准）
+    stopRules: [
+      { layer: "① 预警", cond: "收盘价连续 2 日跌破 MA20，或回撤 ≥ 2×ATR", action: "进入观察，不操作" },
+      { layer: "② 波动落袋", cond: "ATR 分位 > 75%，或单日涨幅 > 2×ATR", action: "减 1/3 仓位" },
+      { layer: "③ 趋势破坏", cond: "收盘价跌破 MA50 且周线 < MA10", action: "再减 1/2" },
+      { layer: "④ 清仓", cond: "自高点回落 ≥ 3×ATR", action: "清仓" },
+      { layer: "⑤ 负成本", cond: "盈利 ≥ 1R 后，止损上移至成本", action: "锁定零成本" }
+    ],
+    // AI 预警价计算口径（脚本里按此公式生成）
+    aiFormula: {
+      holdings: "最新价 × (1 - 3×ATR%) = 趋势止盈价",
+      watch: "最新价 × (1 - 2×ATR%) = 建议买入价"
+    },
+    decisionLog: {
+      fields: ["买入理由", "预期催化剂", "证伪条件", "计划持有期", "季度回看"],
+      note: "每笔建仓填写以上五项；季度末回看：逻辑是否兑现、是否触发止盈/止损、是否该加/减。"
+    }
+  },
+
   /* 低风险 · 港股打新 */
   hkIpo: {
     watch: 3, pipeline: 5, signal: "观察 · 无极端超额认购", signalType: "flat",
@@ -61,6 +108,34 @@ window.ORIGISTAR = {
   /* 策略库 */
   strategy: {
     momentum: { label: "SPMO / MTUM 动量", signal: "跟踪中", signalType: "acc" },
-    superinvestors: { label: "13F 顶级投资者", tracked: 8, signal: "季度更新", signalType: "acc" }
+    superinvestors: { label: "13F 顶级投资者", tracked: 8, signal: "季度更新", signalType: "acc" },
+    jinjiancheng: { label: "金渐成（玑哥）", signal: "三仓体系 · 负成本", signalType: "acc" },
+    laolei: { label: "老雷", signal: "全球配置 · 垄断", signalType: "acc" }
+  },
+
+  /* 系统配置追踪（3:3:4） */
+  config: {
+    updated: "2026-08-30",
+    target: { defensive: 30, stable: 30, aggressive: 40 },
+    cap:    { defensive: 35, stable: 35, aggressive: 45 },
+    current: { defensive: null, stable: null, aggressive: null },  // 待录入实际权重
+    cashOutside: true,    // 现金仓在体系外，不计入
+    rebalance: {
+      stages: [
+        "① 现金流再平衡：每月新增资金按目标权重注入缺口账户",
+        "② 阈值再平衡（5/25 规则）：单一账户偏离目标 > 5% 且相对幅度 > 25% 时触发",
+        "③ Glide path：临近用钱期（如退休）逐步降低进取仓占比"
+      ],
+      halfYearCheck: [
+        "各仓实际占比 vs 目标 30 / 30 / 40",
+        "进取仓是否超过上限 45%",
+        "个股集中度（单一标的占进取仓）是否 > 40%",
+        "现金仓是否充足（覆盖 1–2 年支出）",
+        "黄金战略配置是否达 10%",
+        "止盈 / 止损纪律执行情况",
+        "是否有新逻辑需要调仓",
+        "再平衡记录与决策留痕完整性"
+      ]
+    }
   }
 };
