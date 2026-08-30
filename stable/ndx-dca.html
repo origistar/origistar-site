@@ -81,7 +81,7 @@
 
   <!-- 溢价切换 -->
   <section class="section">
-    <div class="section-head"><h2>溢价率切换</h2><span class="sub">场内 / 场外 套利</span></div>
+    <div class="section-head"><h2 id="sec-prem">溢价率切换</h2><span class="sub">场内 / 场外 套利</span></div>
     <div class="rule warn">
       <h3 id="premTitle">溢价率 11.5% &gt; 8%</h3>
       <p id="premBody">分批次卖出场内持仓，切换回场外（需有场外额度）。&lt;5% 时反向：当日改买场内 ETF；&gt;8% 卖出换回场外，叠加恐慌 + 低溢价效果最佳。</p>
@@ -90,7 +90,7 @@
 
   <!-- PE × VIX 基准矩阵 -->
   <section class="section">
-    <div class="section-head"><h2>PE × VIX 基准矩阵</h2><span class="sub">份数 = 基数</span></div>
+    <div class="section-head"><h2 id="sec-matrix">PE × VIX 基准矩阵</h2><span class="sub">份数 = 基数</span></div>
     <div class="card">
       <div class="scroll-x">
         <table class="matrix">
@@ -108,7 +108,7 @@
 
   <!-- DD 回撤乘数 三阶段 -->
   <section class="section">
-    <div class="section-head"><h2>DD 回撤乘数 · 三阶段</h2><span class="sub">加码力度</span></div>
+    <div class="section-head"><h2 id="sec-dd">DD 回撤乘数 · 三阶段</h2><span class="sub">加码力度</span></div>
     <div class="card">
       <div class="scroll-x">
         <table class="matrix">
@@ -133,7 +133,7 @@
 
   <!-- 止盈规则 -->
   <section class="section">
-    <div class="section-head"><h2>止盈规则</h2><span class="sub">减仓纪律</span></div>
+    <div class="section-head"><h2 id="sec-stop">止盈规则</h2><span class="sub">减仓纪律</span></div>
     <div class="rule danger">
       <h3>触发即减，不犹豫</h3>
       <p>
@@ -147,7 +147,7 @@
 
   <!-- 事件驱动网格 -->
   <section class="section">
-    <div class="section-head"><h2>事件驱动网格</h2><span class="sub">独立池 ¥2–3万</span></div>
+    <div class="section-head"><h2 id="sec-grid">事件驱动网格</h2><span class="sub">独立池 ¥2–3万</span></div>
     <div class="rule warn">
       <h3>非对称加仓网格</h3>
       <p>触发：<b>NDX 自 52 周高点回撤 &gt;5% 且 溢价率 &lt;6%</b>。非对称：买 <b>-2%</b> / 卖 <b>+3.5%</b>，单格 ¥2,000，独立于主定投池运作，不干扰日常 DCA 节奏。</p>
@@ -173,7 +173,7 @@
 
 <footer class="foot">origistar · 纳指定投 v5.1 · 数据仅供参考，非投资建议</footer>
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+<script src="../assets/chart.umd.js"></script>
 <script>
 (function () {
   var d = window.ORIGISTAR; if (!d) return;
