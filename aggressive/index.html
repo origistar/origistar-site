@@ -50,11 +50,11 @@
 
   <!-- 观察仓 -->
   <section class="section">
-    <div class="section-head"><h2>观察仓</h2><span class="sub">用户买入预警 + 回踩买点（价格参考，非买入建议）</span></div>
+    <div class="section-head"><h2>观察仓</h2><span class="sub">仓位档位 + 买一价/买二价 + 回踩买点（价格参考，非买入建议）</span></div>
     <div class="table-wrap">
       <table class="tbl tbl-compact" id="tbl-watch">
         <thead><tr>
-          <th>标的</th><th>状态</th><th>最新价</th><th>用户买入预警</th><th>回踩买点</th><th>距买点</th><th>备注</th>
+          <th>标的</th><th>仓位</th><th>最新价</th><th>买一价</th><th>买二价</th><th>回踩买点</th><th>备注</th>
         </tr></thead>
         <tbody></tbody>
       </table>
@@ -156,17 +156,14 @@
       var price = (lv && lv.price!=null) ? lv.price : w.lastPrice;
       var buy = (lv && lv.buyPoint!=null) ? lv.buyPoint
               : (w.lastPrice!=null && w.atrPct!=null ? w.lastPrice*(1-2*w.atrPct) : null);
-      var dist = (price!=null && buy!=null && buy>0) ? ((price-buy)/buy*100) : null;
-      var distCls = (dist!=null && dist<=5) ? 'up' : (dist!=null && dist<=15) ? 'acc' : 'flat';
-      var distTxt = dist==null ? '—' : (dist>=0 ? ('+'+dist.toFixed(1)+'%') : dist.toFixed(1)+'%');
       var codeShow = (lv && lv.yahooSymbol) ? lv.yahooSymbol : (w.code || '');
       return '<tr>' +
         '<td><b>' + esc(w.name) + '</b><br><small class="muted">' + esc(codeShow) + ' · ' + esc(w.market||'') + '</small></td>' +
-        '<td><span class="tag ' + statusCls(w.status) + '">' + esc(w.status) + '</span></td>' +
+        '<td><span class="tag ' + weightCls(w.weight) + '">' + esc(w.weight||'—') + '</span></td>' +
         '<td class="num">' + priceFmt(w.currency, price) + '</td>' +
         '<td class="num">' + (w.userBuyWarn==null ? '待设' : priceFmt(w.currency, w.userBuyWarn)) + '</td>' +
+        '<td class="num">' + (w.userBuyWarn2==null ? '待设' : priceFmt(w.currency, w.userBuyWarn2)) + '</td>' +
         '<td class="num"><span class="tag acc">' + priceFmt(w.currency, buy) + '</span></td>' +
-        '<td class="num"><span class="tag ' + distCls + '">' + distTxt + '</span></td>' +
         '<td>' + esc(w.note||'') + '</td>' +
       '</tr>';
     }).join('');

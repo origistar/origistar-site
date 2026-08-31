@@ -67,10 +67,16 @@ window.ORIGISTAR = {
     ],
     // 观察仓：以用户买入预警为主；回踩买点 = 最新价 × (1 − 2×ATR%)，仅作价格参考，非买入建议
     watch: [
-      { name: "罕王黄金", code: "03788.HK", market: "港股", currency: "HK$", status: "观察", lastPrice: 3.415, atrPct: 0.063, userBuyWarn: null, note: "黄金延伸观察" },
-      { name: "博通", code: "AVGO", market: "美股", currency: "$", status: "观察", lastPrice: 368.79, atrPct: 0.040, userBuyWarn: null, note: "AI 定制芯片龙头" },
-      { name: "思格新能", code: "", market: "港股", currency: "HK$", status: "观察", lastPrice: null, atrPct: null, userBuyWarn: null, note: "9月入通预期" },
-      { name: "长光辰芯", code: "", market: "A股", currency: "¥", status: "观察", lastPrice: null, atrPct: null, userBuyWarn: null, note: "9月入通预期·科创板" }
+      { name: "英伟达", code: "NVDA", market: "美股", currency: "$", status: "观察", weight: "重", lastPrice: null, atrPct: null, userBuyWarn: 200, userBuyWarn2: 190, note: "AI 算力垄断，最看多；买一先底仓，买二加" },
+      { name: "台积电", code: "TSM", market: "美股", currency: "$", status: "观察", weight: "重", lastPrice: null, atrPct: null, userBuyWarn: 360, userBuyWarn2: 330, note: "先进制程 70% 市占，信仰；补纳指空白" },
+      { name: "礼来", code: "LLY", market: "美股", currency: "$", status: "观察", weight: "重", lastPrice: null, atrPct: null, userBuyWarn: 1100, userBuyWarn2: 1000, note: "GLP-1 垄断，玑哥\"矛\"；补纳指空白（玑哥补锚）" },
+      { name: "微软", code: "MSFT", market: "美股", currency: "$", status: "观察", weight: "中", lastPrice: null, atrPct: null, userBuyWarn: 400, userBuyWarn2: 360, note: "压舱石，深折让等回调" },
+      { name: "谷歌", code: "GOOGL", market: "美股", currency: "$", status: "观察", weight: "中", lastPrice: null, atrPct: null, userBuyWarn: 330, userBuyWarn2: 300, note: "搜索垄断+Gemini，压舱石（玑哥补锚）" },
+      { name: "亚马逊", code: "AMZN", market: "美股", currency: "$", status: "观察", weight: "中", lastPrice: null, atrPct: null, userBuyWarn: 200, userBuyWarn2: 175, note: "云+电商压舱石，买二为玑哥建议深档" },
+      { name: "ARM", code: "ARM", market: "美股", currency: "$", status: "观察", weight: "中", lastPrice: null, atrPct: null, userBuyWarn: 230, userBuyWarn2: 210, note: "CPU 架构近垄断；买二为玑哥建议深档" },
+      { name: "博通", code: "AVGO", market: "美股", currency: "$", status: "观察", weight: "轻", lastPrice: null, atrPct: null, userBuyWarn: 300, userBuyWarn2: 270, note: "备胎≤2.5%，300 以内才捞，270 再加" },
+      { name: "英特尔", code: "INTC", market: "美股", currency: "$", status: "观察", weight: "轻", lastPrice: null, atrPct: null, userBuyWarn: 70, userBuyWarn2: 50, note: "美国半导体主权彩票≤2%，买二为玑哥建议深档" },
+      { name: "罕王黄金", code: "03788.HK", market: "港股", currency: "HK$", status: "观察", weight: "中", lastPrice: 3.415, atrPct: 0.063, userBuyWarn: 3.2, userBuyWarn2: 2.65, note: "2028-2030 年目标投产-达产 5-8 吨黄金，预计利润 15-30 亿+（按 4000 美金金价），3-5 年 150-300 亿市值，2-5 倍空间。核心管理层都有持股、紫金矿业入股（2026.1 月配售进入，每股 3.8 港元）。紫金矿业是成长-成熟期，罕王则是半风投型持股。" }
     ],
     // 5 层趋势止盈规则（分层定性 + 个股独立校准）
     stopRules: [
