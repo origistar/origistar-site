@@ -205,14 +205,13 @@ function buildItem(cfg, prev, live) {
     name: cfg.name, code: cfg.code || '', market: cfg.market, currency: cfg.currency,
     status: cfg.status, weight: cfg.weight || null,
     presetSell: cfg.userSellWarn != null ? cfg.userSellWarn : null,
-    entry: cfg.entry != null ? cfg.entry : null,
   };
+  const ySym = (live && live.sym) || null;
   // 无代码 / 停牌 / 拉取失败 -> 静态降级
   if (!cfg.code || cfg.status === '停牌') {
     return {
-      ...base, price: cfg.lastPrice, ma20: null, ma50: null, atr: null, atrPct: cfg.atrPct,
+      ...base, yahooSymbol: ySym, price: cfg.lastPrice, ma20: null, ma50: null, atr: null, atrPct: cfg.atrPct,
       stage: 0, stageLabel: cfg.status === '停牌' ? '停牌·不评' : '静态(代码待补)',
-      zeroCost: null, zeroCostNote: cfg.entry != null ? '成本已录入' : '成本待录入',
       trendStop: cfg.lastPrice != null && cfg.atrPct != null ? cfg.lastPrice * (1 - 3 * cfg.atrPct) : null,
       dataSource: cfg.code ? (cfg.status === '停牌' ? '停牌' : '静态') : '静态(代码待补)',
       note: cfg.note || '', error: cfg.code ? '停牌标的，沿用静态价' : '代码缺失，沿用静态价'
@@ -222,48 +221,39 @@ function buildItem(cfg, prev, live) {
   if (!cm.ok) {
     // 沿用上一次成功数据
     if (prev && prev.price != null) {
-      return { ...base, ...prev, dataSource: '沿用上次(' + (prev.dataSource || '?') + ')', error: cm.error, note: (cfg.note || '') + ' ｜ 本次拉取失败，沿用上次' };
+      return { ...base, yahooSymbol: ySym, ...prev, dataSource: '沿用上次(' + (prev.dataSource || '?') + ')', error: cm.error, note: (cfg.note || '') + ' ｜ 本次拉取失败，沿用上次' };
     }
     return {
-      ...base, price: cfg.lastPrice, atrPct: cfg.atrPct, stage: 0, stageLabel: '静态(拉取失败)',
-      zeroCost: null, zeroCostNote: '成本待录入',
+      ...base, yahooSymbol: ySym, price: cfg.lastPrice, atrPct: cfg.atrPct, stage: 0, stageLabel: '静态(拉取失败)',
       trendStop: cfg.lastPrice != null && cfg.atrPct != null ? cfg.lastPrice * (1 - 3 * cfg.atrPct) : null,
       dataSource: '静态(拉取失败)', error: cm.error, note: cfg.note || ''
     };
   }
   const m = cm.m;
-  // ⑤ 负成本
-  let zeroCost = null, zcNote = '成本待录入';
-  if (cfg.entry != null && cfg.entry > 0) {
-    const profitPct = (m.price - cfg.entry) / cfg.entry;
-    const R = 2 * m.atrPct;
-    if (profitPct >= R) { zeroCost = true; zcNote = '盈利≥1R，止损可上移至成本'; }
-    else { zeroCost = false; zcNote = `盈利 ${(profitPct * 100).toFixed(1)}%，距1R(${(R * 100).toFixed(1)}%)尚差`; }
-  }
   return {
-    ...base,
+    ...base, yahooSymbol: ySym,
     price: m.price, ma20: m.ma20, ma50: m.ma50, ma10w: m.ma10w, atr: m.atr, atrPct: m.atrPct,
     peak: m.peak, ddPk: m.ddPk, ddPkAtr: m.ddPkAtr, consec: m.consec, dailyRet: m.dailyRet, atrPctPercentile: m.atrPctPercentile,
     stage: m.stage, stageLabel: STAGE_LABEL[m.stage],
-    zeroCost, zeroCostNote: zcNote,
     trendStop: m.price * (1 - 3 * m.atrPct),
     dataSource: live.source || '?', error: null, note: cfg.note || ''
   };
 }
 
 function buildWatchItem(cfg, prev, live) {
-  const base = { name: cfg.name, code: cfg.code || '', market: cfg.market, currency: cfg.currency, status: cfg.status, weight: null, presetSell: null, entry: null };
+  const base = { name: cfg.name, code: cfg.code || '', market: cfg.market, currency: cfg.currency, status: cfg.status, weight: null, presetSell: null };
+  const ySym = (live && live.sym) || null;
   if (!cfg.code) {
-    return { ...base, price: cfg.lastPrice, atrPct: cfg.atrPct, buyPoint: null, stage: 0, stageLabel: '静态(代码待补)', dataSource: '静态(代码待补)', note: cfg.note || '', error: '代码缺失' };
+    return { ...base, yahooSymbol: null, price: cfg.lastPrice, atrPct: cfg.atrPct, buyPoint: null, stage: 0, stageLabel: '静态(代码待补)', dataSource: '静态(代码待补)', note: cfg.note || '', error: '代码缺失' };
   }
   const cm = computeMetrics(live, cfg);
   if (!cm.ok) {
-    if (prev && prev.price != null) return { ...base, ...prev, dataSource: '沿用上次(' + (prev.dataSource || '?') + ')', error: cm.error };
-    return { ...base, price: cfg.lastPrice, atrPct: cfg.atrPct, buyPoint: cfg.lastPrice != null && cfg.atrPct != null ? cfg.lastPrice * (1 - 2 * cfg.atrPct) : null, stage: 0, stageLabel: '静态(拉取失败)', dataSource: '静态(拉取失败)', error: cm.error };
+    if (prev && prev.price != null) return { ...base, yahooSymbol: ySym, ...prev, dataSource: '沿用上次(' + (prev.dataSource || '?') + ')', error: cm.error };
+    return { ...base, yahooSymbol: ySym, price: cfg.lastPrice, atrPct: cfg.atrPct, buyPoint: cfg.lastPrice != null && cfg.atrPct != null ? cfg.lastPrice * (1 - 2 * cfg.atrPct) : null, stage: 0, stageLabel: '静态(拉取失败)', dataSource: '静态(拉取失败)', error: cm.error };
   }
   const m = cm.m;
   // 观察仓为买侧，不参与 5 阶段卖出判定；仅给回踩买点与距买点
-  return { ...base, price: m.price, atrPct: m.atrPct, buyPoint: m.price * (1 - 2 * m.atrPct), stage: 0, stageLabel: '—', dataSource: live.source || '?', error: null, note: cfg.note || '' };
+  return { ...base, yahooSymbol: ySym, price: m.price, atrPct: m.atrPct, buyPoint: m.price * (1 - 2 * m.atrPct), stage: 0, stageLabel: '—', dataSource: live.source || '?', error: null, note: cfg.note || '' };
 }
 
 // ---------- 主流程 ----------

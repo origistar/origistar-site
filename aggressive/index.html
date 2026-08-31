@@ -28,8 +28,9 @@
     <div class="dash-text">
       <h4>更新频率：每日 3 次（08:30 / 16:30 / 23:00 北京时间，全站统一）</h4>
       <p>每日 3 次（08:30 盘前 / 16:30 收盘后 / 23:00 美股盘中，全站统一）。最新价与 ATR% 由行情接口自动拉取；趋势止盈价按当前口径自动计算：</p>
-      <p><b>持仓趋势止盈价：</b>最新价 × (1 − 3×ATR%) = 第④层清仓线（仅最底线，阶段判断见下方规则表）；<b>观察仓回踩买点：</b>最新价 × (1 − 2×ATR%)。</p>
+      <p><b>持仓趋势止盈价（= 第④层清仓线）：</b>最新价 × (1 − 3×ATR%)。它只对应 5 阶段里「④ 清仓」那一档的触发价；前面 ①~③ 是「预警/减仓」信号，不对应单一价格。<b>观察仓回踩买点：</b>最新价 × (1 − 2×ATR%)。</p>
       <p class="note">个股波动差异极大，不设置统一百分比模板；ATR% 按个股独立校准。</p>
+      <p class="note">港股代码按 Yahoo 规则显示：去掉一个前导零（例 03330.HK → 3330.HK、01712.HK → 1712.HK、00340.HK → 0340.HK），全网统一。</p>
       <p id="a-live-meta" class="note"></p>
     </div>
   </section>
@@ -40,7 +41,7 @@
     <div class="table-wrap">
       <table class="tbl tbl-compact" id="tbl-holdings">
         <thead><tr>
-          <th>标的</th><th>状态</th><th>仓位</th><th>最新价</th><th>预设卖出价</th><th>趋势止盈价</th><th>5 阶段</th><th>备注</th>
+          <th>标的</th><th>状态</th><th>仓位</th><th>最新价</th><th>预设卖出价</th><th title="第④层清仓线 = 最新价 × (1−3×ATR%)">趋势止盈价（④）</th><th>5 阶段</th><th>备注</th>
         </tr></thead>
         <tbody></tbody>
       </table>
@@ -121,12 +122,8 @@
   function renderStage(lv){
     if(!lv) return '<span class="tag flat">—</span>';
     var sc = stageClass(lv.stage);
-    var zc = '';
-    if(lv.zeroCost===true) zc = '<div class="mini"><span class="tag up">⑤负成本可达</span></div>';
-    else if(lv.zeroCost===false) zc = '<div class="mini">' + esc(lv.zeroCostNote || '') + '</div>';
-    else zc = '<div class="mini"><span class="tag flat">成本待录入</span></div>';
     return '<span class="tag ' + sc + '">' + esc(lv.stageLabel) + '</span>' +
-           '<div class="mini">' + esc(stageReason(lv)) + '</div>' + zc;
+           '<div class="mini">' + esc(stageReason(lv)) + '</div>';
   }
 
   // 持仓表
@@ -137,12 +134,12 @@
       var price = (lv && lv.price!=null) ? lv.price : h.lastPrice;
       var trendStop = (lv && lv.trendStop!=null) ? lv.trendStop
                     : (h.lastPrice!=null && h.atrPct!=null ? h.lastPrice*(1-3*h.atrPct) : null);
-      var priceTag = (lv && lv.price!=null) ? ('<small class="muted">' + esc(lv.dataSource) + '</small>') : '';
+      var codeShow = (lv && lv.yahooSymbol) ? lv.yahooSymbol : (h.code || '');
       return '<tr>' +
-        '<td><b>' + esc(h.name) + '</b><br><small class="muted">' + esc(h.code||'') + ' · ' + esc(h.market||'') + '</small></td>' +
+        '<td><b>' + esc(h.name) + '</b><br><small class="muted">' + esc(codeShow) + ' · ' + esc(h.market||'') + '</small></td>' +
         '<td><span class="tag ' + statusCls(h.status) + '">' + esc(h.status) + '</span></td>' +
         '<td><span class="tag ' + weightCls(h.weight) + '">' + esc(h.weight||'—') + '</span></td>' +
-        '<td class="num">' + priceFmt(h.currency, price) + priceTag + '</td>' +
+        '<td class="num">' + priceFmt(h.currency, price) + '</td>' +
         '<td class="num">' + (h.userSellWarn==null ? '待设' : priceFmt(h.currency, h.userSellWarn)) + '</td>' +
         '<td class="num"><span class="tag acc">' + priceFmt(h.currency, trendStop) + '</span></td>' +
         '<td>' + renderStage(lv) + '</td>' +
@@ -162,11 +159,11 @@
       var dist = (price!=null && buy!=null && buy>0) ? ((price-buy)/buy*100) : null;
       var distCls = (dist!=null && dist<=5) ? 'up' : (dist!=null && dist<=15) ? 'acc' : 'flat';
       var distTxt = dist==null ? '—' : (dist>=0 ? ('+'+dist.toFixed(1)+'%') : dist.toFixed(1)+'%');
-      var priceTag = (lv && lv.price!=null) ? ('<small class="muted">' + esc(lv.dataSource) + '</small>') : '';
+      var codeShow = (lv && lv.yahooSymbol) ? lv.yahooSymbol : (w.code || '');
       return '<tr>' +
-        '<td><b>' + esc(w.name) + '</b><br><small class="muted">' + esc(w.code||'') + ' · ' + esc(w.market||'') + '</small></td>' +
+        '<td><b>' + esc(w.name) + '</b><br><small class="muted">' + esc(codeShow) + ' · ' + esc(w.market||'') + '</small></td>' +
         '<td><span class="tag ' + statusCls(w.status) + '">' + esc(w.status) + '</span></td>' +
-        '<td class="num">' + priceFmt(w.currency, price) + priceTag + '</td>' +
+        '<td class="num">' + priceFmt(w.currency, price) + '</td>' +
         '<td class="num">' + (w.userBuyWarn==null ? '待设' : priceFmt(w.currency, w.userBuyWarn)) + '</td>' +
         '<td class="num"><span class="tag acc">' + priceFmt(w.currency, buy) + '</span></td>' +
         '<td class="num"><span class="tag ' + distCls + '">' + distTxt + '</span></td>' +
