@@ -165,7 +165,15 @@
 <script>
 (function () {
   var d = window.ORIGISTAR; if (!d) return;
-  var n = Object.assign({}, d.ndx, (window.MARKET_LIVE && window.MARKET_LIVE.ndx) || {});
+  var L = window.MARKET_LIVE;
+  var n = Object.assign({}, d.ndx, (L && L.ndx) || {});
+  // 溢价率：优先用自动计算的 513100 修正溢价率（经指数+汇率修正），回落 data.js 人工值
+  var etf513 = (L && L.etf && L.etf.list) ? L.etf.list.filter(function(x){ return x.code === '513100'; })[0] : null;
+  if (etf513 && etf513.premium != null) {
+    n.premium = etf513.premium;
+    n.premiumBasis = etf513.basis;
+    n.premiumNavDate = etf513.navDate;
+  }
   function set(id, v){ var e = document.getElementById(id); if (e) e.textContent = v; }
   function tag(id, t, c){ var e = document.getElementById(id); if (e){ e.textContent = t; e.className = 'tag ' + c; } }
 
@@ -180,13 +188,20 @@
   set('ndxPt', n.ndx ? n.ndx.toLocaleString() : '—');
   set('roe', n.roe);
   set('prem', n.premium);
+  // 溢价率卡片标题随实际值动态判定，避免写死 ">8%"
+  if (n.premium != null) {
+    var p = +n.premium;
+    set('premTitle', p < 5 ? ('溢价率 ' + p + '% < 5%') : (p > 8 ? ('溢价率 ' + p + '% > 8%') : ('溢价率 ' + p + '% · 5%~8% 区间')));
+    if (n.premiumBasis) {
+      var pe = document.getElementById('prem');
+      if (pe) pe.title = n.premiumBasis + '（净值日 ' + (n.premiumNavDate || '—') + '，QDII 净值 T+2~T+3 滞后，已做指数与汇率修正）';
+    }
+  }
   set('score', n.score);
   set('score2', n.score);
   set('scoreLabel', n.scoreLabel);
   set('dd2', n.dd);
   set('vix2', n.vix);
-  set('premTitle', '溢价率 ' + n.premium + '% > 8%');
-
   // 趋势图
   if (window.Chart && document.getElementById('trend')) {
     var ctx = document.getElementById('trend').getContext('2d');
