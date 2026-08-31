@@ -161,10 +161,11 @@
 <footer class="foot">origistar · 纳指定投 v5.1 · 数据仅供参考，非投资建议</footer>
 
 <script src="../assets/chart.umd.js"></script>
+<script src="../assets/market-live.js"></script>
 <script>
 (function () {
   var d = window.ORIGISTAR; if (!d) return;
-  var n = d.ndx;
+  var n = Object.assign({}, d.ndx, (window.MARKET_LIVE && window.MARKET_LIVE.ndx) || {});
   function set(id, v){ var e = document.getElementById(id); if (e) e.textContent = v; }
   function tag(id, t, c){ var e = document.getElementById(id); if (e){ e.textContent = t; e.className = 'tag ' + c; } }
 

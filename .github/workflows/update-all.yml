@@ -1,0 +1,80 @@
+name: 全站数据自动更新
+
+on:
+  schedule:
+    # 北京时间 08:30 / 16:30 / 23:00  =  UTC 00:30 / 08:30 / 15:00
+    - cron: "30 0,8,15 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-all
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: 拉取仓库
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+
+      - name: 配置 Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      # 每个数据源独立执行；任一失败不阻塞其余（continue-on-error）
+      - name: 进取仓行情（Yahoo + 东财兜底）
+        id: aggressive
+        continue-on-error: true
+        run: node scripts/fetch-aggressive.mjs
+
+      - name: 防守仓行情（SCHD / BRK.B / 黄金）
+        id: defensive
+        continue-on-error: true
+        run: node scripts/fetch-defensive.mjs
+
+      - name: 大盘与 BTC（NDX / VIX / BTC / AHR999 / MSTR）
+        id: market
+        continue-on-error: true
+        run: node scripts/fetch-market.mjs
+
+      - name: 港股打新与待入通（腾讯 gtimg）
+        id: hk
+        continue-on-error: true
+        run: node scripts/fetch-hk.mjs
+
+      - name: 汇总各数据源结果
+        run: |
+          echo "进取仓: ${{ steps.aggressive.outcome }}"
+          echo "防守仓: ${{ steps.defensive.outcome }}"
+          echo "大盘BTC: ${{ steps.market.outcome }}"
+          echo "港股:   ${{ steps.hk.outcome }}"
+
+      # 单一提交 + 单一 push，彻底避免多工作流并发推送冲突
+      - name: 提交并推送（带 rebase 重试）
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A assets/aggressive-live.js assets/defensive-live.js assets/market-live.js low-risk/hk-data.json
+          if git diff --cached --quiet; then
+            echo "无变化，跳过提交"
+            exit 0
+          fi
+          git commit -m "chore: 全站数据自动更新 $(TZ=Asia/Shanghai date +'%Y-%m-%d %H:%M')"
+          for i in 1 2 3 4 5; do
+            if git push; then
+              echo "推送成功（第 $i 次尝试）"
+              exit 0
+            fi
+            echo "推送失败，拉取远端后重试..."
+            git pull --rebase --autostash origin main || true
+            sleep 5
+          done
+          echo "::error::连续 5 次推送失败"
+          exit 1

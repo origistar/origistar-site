@@ -29,7 +29,7 @@
     <div class="grid c3">
       <div class="card kpi">
         <div class="top"><span class="ic" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">₿</span>BTC 价格</div>
-        <div class="val" style="font-size:19px">$79,935</div>
+        <div class="val" style="font-size:19px" id="btcPrice">$79,935</div>
         <div class="meta">现货</div>
         <span class="tag flat">当前价位</span>
       </div>
@@ -41,7 +41,7 @@
       </div>
       <div class="card kpi">
         <div class="top"><span class="ic" style="background:linear-gradient(135deg,#ef4444,#f97316)">↘</span>回撤</div>
-        <div class="val" style="font-size:19px" >-36.7%</div>
+        <div class="val" style="font-size:19px" id="btcDd">-36.7%</div>
         <div class="meta">52 周高 $126,198</div>
         <span class="tag down">深度回撤</span>
       </div>
@@ -54,12 +54,12 @@
       <div class="card kpi">
         <div class="top"><span class="ic" style="background:linear-gradient(135deg,#8b5cf6,#a855f7)">MA</span>200 日定投均线</div>
         <div class="val" style="font-size:19px">$69,223</div>
-        <div class="meta">价格 / 200MA = 1.15</div>
+        <div class="meta" id="btcP200">价格 / 200MA = 1.15</div>
         <span class="tag flat">估值锚</span>
       </div>
       <div class="card kpi">
         <div class="top"><span class="ic" style="background:linear-gradient(135deg,#ef4444,#dc2626)">M</span>MSTR</div>
-        <div class="val" style="font-size:17px">$137.40</div>
+        <div class="val" style="font-size:17px" id="mstrPrice">$137.40</div>
         <div class="meta">52 周高 $365 · -62.4%</div>
         <span class="tag down">情绪代理</span>
       </div>
@@ -77,7 +77,7 @@
     <div class="bigcard">
       <div class="lab">今日定投 · 🟢 0.45-1.2</div>
       <div class="amt">¥3,000<small> / 周</small></div>
-      <div class="calc">AHR999 = 0.5358 · 价格/200MA = 1.15</div>
+      <div class="calc" id="btcCalc">AHR999 = 0.5358 · 价格/200MA = 1.15</div>
       <span class="stage">定投区间 · 正常定投</span>
     </div>
   </section>
@@ -162,6 +162,7 @@
 <footer class="foot">origistar · 比特币 AHR999 定投 · AHR999 自算 · yfinance 数据 · 仅供参考不构成投资建议</footer>
 
 <script src="../assets/chart.umd.js"></script>
+<script src="../assets/market-live.js"></script>
 <script>
 (function () {
   var labels = ['2011','2012','2013','2014','2015','2016','2017','2018','2019','2020','2021','2022','2023','2024','2025','2026预测'];
@@ -196,6 +197,21 @@
         }
       }
     });
+  }
+})();
+</script>
+<script>
+// 比特币行情覆盖：market-live.js（Yahoo 自动拉取，每日 3 次）回填关键数字
+(function () {
+  var b = window.MARKET_LIVE && window.MARKET_LIVE.btc; if (!b) return;
+  function set(id, v) { var e = document.getElementById(id); if (e && v != null) e.textContent = v; }
+  if (b.price != null) set('btcPrice', '$' + b.price.toLocaleString('en-US'));
+  if (b.dd52w != null) set('btcDd', '-' + b.dd52w.toFixed(1) + '%');
+  if (b.p200ma != null) set('btcP200', '价格 / 200MA = ' + b.p200ma.toFixed(3));
+  if (b.mstr != null) set('mstrPrice', '$' + b.mstr.toLocaleString('en-US'));
+  if (b.ahr999 != null) {
+    var calc = document.getElementById('btcCalc');
+    if (calc) calc.textContent = 'AHR999 = ' + b.ahr999.toFixed(4) + ' · 价格/200MA = ' + (b.p200ma != null ? b.p200ma.toFixed(3) : '—');
   }
 })();
 </script>

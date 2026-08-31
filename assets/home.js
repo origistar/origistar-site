@@ -3,6 +3,11 @@
 (function () {
   var d = window.ORIGISTAR;
   if (!d) return;
+  // 行情快照覆盖（market-live.js，Yahoo 自动拉取）：仅覆盖存在的字段，其余回落 data.js
+  if (window.MARKET_LIVE) {
+    if (d.ndx) Object.assign(d.ndx, window.MARKET_LIVE.ndx || {});
+    if (d.btc) Object.assign(d.btc, window.MARKET_LIVE.btc || {});
+  }
   var base = (window.ORIGISTAR_NAV && window.ORIGISTAR_NAV.base) || '';
 
   // ---------- 通用 ----------
