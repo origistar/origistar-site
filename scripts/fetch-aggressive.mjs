@@ -235,7 +235,7 @@ function buildItem(cfg, prev, live) {
     price: m.price, ma20: m.ma20, ma50: m.ma50, ma10w: m.ma10w, atr: m.atr, atrPct: m.atrPct,
     peak: m.peak, ddPk: m.ddPk, ddPkAtr: m.ddPkAtr, consec: m.consec, dailyRet: m.dailyRet, atrPctPercentile: m.atrPctPercentile,
     stage: m.stage, stageLabel: STAGE_LABEL[m.stage],
-    trendStop: m.price * (1 - 3 * m.atrPct),
+    trendStop: m.peak * (1 - 3 * m.atrPct),  // ratchet：锚区间最高点(52周高)，只随新高上行、不随当前价下行（显示值=规则值）
     dataSource: live.source || '?', error: null, note: cfg.note || ''
   };
 }
