@@ -7,7 +7,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="origistar">
-<title>防守仓 · SCHD & BRK.B | origistar</title>
+<title>防守仓定投 | origistar</title>
 <link rel="stylesheet" href="../assets/style.css">
 <link rel="manifest" href="../manifest.json">
 <link rel="apple-touch-icon" href="../assets/icon-192.png">
@@ -36,6 +36,42 @@
   .mc-row b{color:var(--ink);text-align:right;font-weight:600}
   .legend{display:flex;flex-wrap:wrap;gap:10px;margin:2px 0 12px;font-size:11.5px;color:var(--ink-soft)}
   .legend i{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:5px;vertical-align:middle}
+  /* 页面级紧凑化（移动端优先） */
+  .section{margin:20px 0}
+  .section-title{font-size:22px;margin-bottom:4px}
+  .lead{font-size:13px;color:var(--ink-soft);margin-top:4px}
+  .grid.k4{gap:10px}
+  .grid.k4 .kpi{padding:10px 10px 8px}
+  .grid.k4 .kpi .ic{width:24px;height:24px;border-radius:7px;font-size:11px}
+  .grid.k4 .kpi .top{gap:6px;font-size:11px}
+  .grid.k4 .kpi .val{font-size:20px;margin:7px 0 1px}
+  .grid.k4 .kpi .val small{font-size:13px}
+  .grid.k4 .kpi .meta{font-size:11px}
+  .grid.k4 .kpi .tag{margin-top:6px;font-size:10px;padding:2px 7px}
+  .mc-card{padding:12px 12px 10px;border-radius:12px;margin-bottom:10px}
+  .mc-head{margin-bottom:8px}
+  .mc-ticker{font-size:18px}
+  .mc-name{font-size:11px}
+  .mc-price-row{margin-bottom:6px}
+  .mc-price{font-size:22px}
+  .mc-mult-row{padding:8px 10px;margin-bottom:8px}
+  .mc-mult{font-size:18px}
+  .mc-mult-sub{font-size:10px}
+  .mc-axis{height:26px;margin-top:4px}
+  .mc-axis span{font-size:9px}
+  .mc-row{padding:4px 0;font-size:11px}
+  .legend{font-size:10px;gap:8px;margin:2px 0 8px}
+  @media (min-width:720px){
+    .section{margin:28px 0}
+    .section-title{font-size:24px}
+    .lead{font-size:14px}
+    .grid.k4 .kpi{padding:14px 12px 12px}
+    .grid.k4 .kpi .val{font-size:24px}
+    .mc-card{padding:16px;border-radius:16px;margin-bottom:12px}
+    .mc-ticker{font-size:20px}
+    .mc-price{font-size:26px}
+    .mc-mult{font-size:22px}
+  }
 </style>
 </head>
 <body>
@@ -45,10 +81,9 @@
   <div id="subnav-slot"></div>
 
   <!-- Hero -->
-  <section class="hero" style="padding-top:14px">
-    <h1 class="section-title">保守仓定投参考</h1>
-    <p class="lead">SCHD · BRK.B · 价低多投 / 价高少投 · 动态锚定。用「实时便宜度指标 + 定投系数」替代瞎定投：SCHD 看股息率（历史中位数锚），BRK.B 看市净率（巴菲特 P/B 框架锚）。价格越低 → 指标越便宜 → 本周定投系数越大。</p>
-    <p class="note" style="margin-top:8px">最后更新：2026-08-28 10:55 北京时间 · 所有锚定价由分红 / 账面价值动态推导，不写死任何美元价，可长期使用。</p>
+  <section class="hero" style="padding-top:10px">
+    <h1 class="section-title">防守仓定投</h1>
+    <p class="lead">SCHD红利 + BRK.B + 黄金ETF</p>
   </section>
 
   <!-- KPI -->
@@ -181,16 +216,16 @@
     <div class="mc-card" id="gold-card">
       <div class="mc-head">
         <div>
-          <div class="mc-ticker">黄金 · 战略配置</div>
-          <div class="mc-name">防守仓战略配置 10% · 黄金 ETF / 实物</div>
+          <div class="mc-ticker">黄金ETF</div>
+          <div class="mc-name">约 $4100/oz 开第一批 · 每跌约 5% 加一批</div>
         </div>
         <span class="tag flat">战略</span>
       </div>
       <div class="mc-price-row">
-        <div class="mc-price" id="gold-price">待录入</div>
+        <div class="mc-price" id="gold-price">纽约黄金现货价格</div>
         <span class="tag flat" id="gold-zone">—</span>
       </div>
-      <div class="mc-mult-sub" id="gold-note">常规在 4000–4500 区间分批；低于 4000 加速、高于 4500 缓投。价格手动维护。</div>
+      <div class="mc-mult-sub" id="gold-note">纽约黄金现货价格；约 $4100/oz 开第一批，每跌约 5% 加一批（越跌越买），高于 $4500 暂停。</div>
       <div class="mc-meta">
         <div class="mc-row"><span>常规分批区</span><b id="gold-range">4000–4500</b></div>
         <div class="mc-row"><span>战略占比</span><b>10%（防守仓内）</b></div>
@@ -228,10 +263,9 @@
         便宜度 = 当前指标 ÷ 合理指标（SCHD = 股息率比；BRK.B = 1.40 ÷ P/B）。
       </p>
     </div>
-    <p class="note">数据来源：CNBC（优先）→ Nasdaq（兜底）。锚定为客观便宜度参考，非投资建议；分红 / BVPS 每季度复核一次即可。当前为静态快照，数值随手动更新同步。</p>
   </section>
 </div>
 
-<footer class="foot">origistar · 保守仓定投参考 · 动态锚定自动重算，所有数据仅供参考，非投资建议</footer>
+<footer class="foot">origistar · 防守仓定投 · 动态锚定自动重算，所有数据仅供参考，非投资建议</footer>
 </body>
 </html>
