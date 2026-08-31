@@ -21,7 +21,7 @@
   <!-- Hero -->
   <section class="hero">
     <h1 class="section-title">比特币 AHR999 定投决策</h1>
-    <p class="lead">更新：2026-08-28 14:58 · 数据源：yfinance · AHR999 自算。以 AHR999 为核心信号，仅熊市定投，MSTR / mNAV 作华尔街情绪代理。</p>
+    <p class="lead"><span id="btcUpd">更新：自动同步中</span> · AHR999 自算。以 AHR999 为核心信号，仅熊市定投，MSTR / mNAV 作华尔街情绪代理。</p>
   </section>
 
   <!-- KPI 第一组 -->
@@ -203,8 +203,10 @@
 <script>
 // 比特币行情覆盖：market-live.js（Yahoo 自动拉取，每日 3 次）回填关键数字
 (function () {
-  var b = window.MARKET_LIVE && window.MARKET_LIVE.btc; if (!b) return;
+  var L = window.MARKET_LIVE; var b = L && L.btc; if (!b) return;
   function set(id, v) { var e = document.getElementById(id); if (e && v != null) e.textContent = v; }
+  // 更新时间与数据源随自动抓取同步，避免顶部时间戳陈旧
+  if (L.generatedAt) set('btcUpd', '更新：' + L.generatedAt + ' · 数据源：' + (b.dataSource || L.source || 'Yahoo Finance'));
   if (b.price != null) set('btcPrice', '$' + b.price.toLocaleString('en-US'));
   if (b.dd52w != null) set('btcDd', '-' + b.dd52w.toFixed(1) + '%');
   if (b.p200ma != null) set('btcP200', '价格 / 200MA = ' + b.p200ma.toFixed(3));
