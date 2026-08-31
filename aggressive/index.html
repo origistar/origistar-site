@@ -28,7 +28,7 @@
     <div class="dash-text">
       <h4>更新频率：每日 3 次（08:30 / 16:30 / 23:00 北京时间，全站统一）</h4>
       <p>每日 3 次（08:30 盘前 / 16:30 收盘后 / 23:00 美股盘中，全站统一）。最新价与 ATR% 由行情接口自动拉取；趋势止盈价按当前口径自动计算：</p>
-      <p><b>持仓趋势止盈价（= 第④层清仓线，ratchet 高点止损）：</b>峰值（52周最高）× (1 − 3×ATR%)。它只对应 5 阶段里「④ 清仓」那一档的触发价；前面 ①~③ 是「预警/减仓」信号，不对应单一价格。<b>观察仓回踩买点：</b>最新价 × (1 − 2×ATR%)。</p>
+      <p><b>持仓趋势止盈价（= 第④层清仓线，ratchet 高点止损）：</b>峰值（52周最高）× (1 − 3×ATR%)。它只对应 5 阶段里「④ 清仓」那一档的触发价；前面 ①~③ 是「预警/减仓」信号，不对应单一价格。<b>观察仓距买一：</b>(最新价 − 买一价) / 买一价，≤ 0 即已到买一区。<b>观察仓触发：</b>最新价 ≤ 买一价 = 触发买一（行底色靛蓝 + 药丸）；≤ 买二价 = 触发买二（行底色绿 + 药丸）。</p>
       <p class="note">个股波动差异极大，不设置统一百分比模板；ATR% 按个股独立校准。</p>
       <p class="note">港股代码按 Yahoo 规则显示：去掉一个前导零（例 03330.HK → 3330.HK、01712.HK → 1712.HK、00340.HK → 0340.HK），全网统一。</p>
       <p id="a-live-meta" class="note"></p>
@@ -54,7 +54,7 @@
     <div class="table-wrap">
       <table class="tbl tbl-compact" id="tbl-watch">
         <thead><tr>
-          <th>标的</th><th>仓位</th><th>最新价</th><th>买一价</th><th>买二价</th><th>回踩买点</th><th>备注</th>
+          <th>标的</th><th>仓位</th><th>最新价</th><th title="用户买一价；最新价≤买一=触发买一（行底色+药丸）">买一价</th><th>买二价</th><th title="距买一 = (最新价−买一价)/买一价；≤0 即触发买一">距买一</th><th>备注</th>
         </tr></thead>
         <tbody></tbody>
       </table>
@@ -149,6 +149,23 @@
   }
 
   // 观察仓表
+  function watchTrigger(price, w){
+    if(price==null) return 'none';
+    if(w.userBuyWarn2!=null && price <= w.userBuyWarn2) return 'buy2';
+    if(w.userBuyWarn!=null && price <= w.userBuyWarn) return 'buy1';
+    return 'none';
+  }
+  function watchDistBuy1(price, w){
+    if(price==null || w.userBuyWarn==null || w.userBuyWarn<=0) return null;
+    return (price - w.userBuyWarn) / w.userBuyWarn; // 正=还需跌这么多才到买一；负=已到买一区
+  }
+  function fmtDistPct(d){
+    if(d==null) return { txt:'—', cls:'flat' };
+    var pct = d*100;
+    var txt = (pct>=0?'+':'') + pct.toFixed(1) + '%';
+    var cls = pct<=0 ? 'up' : (pct<=10 ? 'acc' : 'flat'); // 已到买一(up)/接近(acc)/尚远(flat)
+    return { txt:txt, cls:cls };
+  }
   var wBody = document.querySelector('#tbl-watch tbody');
   if(wBody){
     wBody.innerHTML = (a.watch||[]).map(function(w){
@@ -156,14 +173,19 @@
       var price = (lv && lv.price!=null) ? lv.price : w.lastPrice;
       var buy = (lv && lv.buyPoint!=null) ? lv.buyPoint
               : (w.lastPrice!=null && w.atrPct!=null ? w.lastPrice*(1-2*w.atrPct) : null);
+      var trig = (lv && lv.trigger) ? lv.trigger : watchTrigger(price, w);
       var codeShow = (lv && lv.yahooSymbol) ? lv.yahooSymbol : (w.code || '');
-      return '<tr>' +
+      var rowCls = trig==='buy2' ? ' trig-buy2' : trig==='buy1' ? ' trig-buy1' : '';
+      var pill = trig==='buy1' ? '<span class="pill pill-buy1">● 触发买一</span>'
+               : trig==='buy2' ? '<span class="pill pill-buy2">● 触发买二</span>' : '';
+      var buy1cell = (w.userBuyWarn==null ? '待设' : priceFmt(w.currency, w.userBuyWarn)) + pill;
+      return '<tr class="' + rowCls + '">' +
         '<td><b>' + esc(w.name) + '</b><br><small class="muted">' + esc(codeShow) + ' · ' + esc(w.market||'') + '</small></td>' +
         '<td><span class="tag ' + weightCls(w.weight) + '">' + esc(w.weight||'—') + '</span></td>' +
         '<td class="num">' + priceFmt(w.currency, price) + '</td>' +
-        '<td class="num">' + (w.userBuyWarn==null ? '待设' : priceFmt(w.currency, w.userBuyWarn)) + '</td>' +
+        '<td class="num">' + buy1cell + '</td>' +
         '<td class="num">' + (w.userBuyWarn2==null ? '待设' : priceFmt(w.currency, w.userBuyWarn2)) + '</td>' +
-        '<td class="num"><span class="tag acc">' + priceFmt(w.currency, buy) + '</span></td>' +
+        (function(){ var di = fmtDistPct(watchDistBuy1(price, w)); return '<td class="num"><span class="tag ' + di.cls + '">' + di.txt + '</span></td>'; })() +
         '<td>' + esc(w.note||'') + '</td>' +
       '</tr>';
     }).join('');

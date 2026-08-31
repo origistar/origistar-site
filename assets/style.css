@@ -251,6 +251,14 @@ table.tbl-compact th, table.tbl-compact td { padding: 9px 7px; font-size: var(--
 table.tbl-compact td:first-child { white-space: normal; min-width: 90px; }
 table.tbl-compact td:last-child { white-space: normal; word-break: break-word; min-width: 160px; }
 table.tbl-compact small.muted { color: var(--muted); font-size: var(--fs-2xs); }
+/* 观察仓触发高亮：买一=靛蓝、买二=绿（与持仓④线同色系）；不新增列，仅行底色 + 左高亮 + 药丸 */
+table.tbl-compact tr.trig-buy1 { background: color-mix(in srgb, var(--accent) 7%, transparent); }
+table.tbl-compact tr.trig-buy1 td { box-shadow: inset 4px 0 0 var(--accent); }
+table.tbl-compact tr.trig-buy2 { background: color-mix(in srgb, var(--down) 12%, transparent); }
+table.tbl-compact tr.trig-buy2 td { box-shadow: inset 4px 0 0 var(--down); }
+.pill { display: inline-block; margin-top: 5px; font-size: var(--fs-2xs); font-weight: 700; padding: 2px 7px; border-radius: 999px; white-space: nowrap; }
+.pill-buy1 { color: var(--accent); background: color-mix(in srgb, var(--accent) 16%, transparent); }
+.pill-buy2 { color: var(--down); background: color-mix(in srgb, var(--down) 20%, transparent); }
 @media (min-width: 720px) {
   table.tbl-compact th, table.tbl-compact td { padding: 11px 10px; font-size: var(--fs-base); }
 }

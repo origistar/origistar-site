@@ -106,18 +106,25 @@ async function fetchYahoo(sym) {
   return { meta: m, closes, highs, lows };
 }
 
-// 东财兜底（best-effort，价格缩放以 A/港为准；东财为大陆可达，美区 runner 可能不稳，故仅兜底）
+// 东财兜底（best-effort，K 线历史；东财为大陆可达，美区 runner 可能不稳，故仅兜底）
+// 用 push2his K 线拿完整 OHLC 历史，足以算 MA/ATR/峰值；字段 f51=日期 f52=开 f53=高 f54=低 f55=收
 async function fetchEastmoney(sym) {
   const secid = yahooToEmSecid(sym);
-  const url = `https://push2.eastmoney.com/api/qt/stock/get?secid=${secid}&fields=f43,f57,f58,f167,f164,f168`;
+  const url = `https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=${secid}&fields2=f51,f52,f53,f54,f55&klt=101&fqt=1&lmt=260`;
   const d = await curlJson(url);
-  const dt = d && d.data;
-  if (!dt || dt.f43 == null) throw new Error('empty');
-  // 东财 f43 单位：A/港股通常为 ×1000，美股 ×100（此处按 A/港假定，美股可能需 ×1）
-  const isUS = secid.startsWith('107.');
-  const scale = isUS ? 1 : 1000;
-  const price = dt.f43 / scale;
-  return { meta: { regularMarketPrice: price, currency: isUS ? 'USD' : (secid.startsWith('116.') ? 'HKD' : 'CNY'), fiftyTwoWeekHigh: dt.f169 != null ? dt.f169 / scale : null }, closes: [price], highs: [price], lows: [price] };
+  const klines = d && d.data && d.data.klines;
+  if (!klines || !klines.length) throw new Error('empty');
+  const closes = [], highs = [], lows = [];
+  for (const line of klines) {
+    const p = String(line).split(',');
+    highs.push(parseFloat(p[2]));
+    lows.push(parseFloat(p[3]));
+    closes.push(parseFloat(p[4]));
+  }
+  if (!closes.length) throw new Error('empty');
+  const price = closes[closes.length - 1];
+  const peak = Math.max(...highs);
+  return { meta: { regularMarketPrice: price, fiftyTwoWeekHigh: peak }, closes, highs, lows };
 }
 
 async function fetchWithFallback(cfg) {
@@ -200,6 +207,16 @@ function stageOf(m) {
 const STAGE_LABEL = ['持有/正常', '①预警', '②波动落袋', '③趋势破坏', '④清仓'];
 
 // ---------- 构建单条 ----------
+function computeTrigger(price, cfg) {
+  if (price == null) return 'none';
+  if (cfg.userBuyWarn2 != null && price <= cfg.userBuyWarn2) return 'buy2';
+  if (cfg.userBuyWarn != null && price <= cfg.userBuyWarn) return 'buy1';
+  return 'none';
+}
+function computeDistBuy1(price, cfg) {
+  if (price == null || cfg.userBuyWarn == null || cfg.userBuyWarn <= 0) return null;
+  return (price - cfg.userBuyWarn) / cfg.userBuyWarn; // 正=还需跌这么多才到买一；负=已到买一区
+}
 function buildItem(cfg, prev, live) {
   const base = {
     name: cfg.name, code: cfg.code || '', market: cfg.market, currency: cfg.currency,
@@ -244,16 +261,25 @@ function buildWatchItem(cfg, prev, live) {
   const base = { name: cfg.name, code: cfg.code || '', market: cfg.market, currency: cfg.currency, status: cfg.status, weight: null, presetSell: null };
   const ySym = (live && live.sym) || null;
   if (!cfg.code) {
-    return { ...base, yahooSymbol: null, price: cfg.lastPrice, atrPct: cfg.atrPct, buyPoint: null, stage: 0, stageLabel: '静态(代码待补)', dataSource: '静态(代码待补)', note: cfg.note || '', error: '代码缺失' };
+    const price = cfg.lastPrice;
+    return { ...base, yahooSymbol: null, price: price, atrPct: cfg.atrPct, buyPoint: null, distBuy1: computeDistBuy1(price, cfg), trigger: computeTrigger(price, cfg), stage: 0, stageLabel: '静态(代码待补)', dataSource: '静态(代码待补)', note: cfg.note || '', error: '代码缺失' };
   }
   const cm = computeMetrics(live, cfg);
   if (!cm.ok) {
-    if (prev && prev.price != null) return { ...base, yahooSymbol: ySym, ...prev, dataSource: '沿用上次(' + (prev.dataSource || '?') + ')', error: cm.error };
-    return { ...base, yahooSymbol: ySym, price: cfg.lastPrice, atrPct: cfg.atrPct, buyPoint: cfg.lastPrice != null && cfg.atrPct != null ? cfg.lastPrice * (1 - 2 * cfg.atrPct) : null, stage: 0, stageLabel: '静态(拉取失败)', dataSource: '静态(拉取失败)', error: cm.error };
+    if (prev && prev.price != null) {
+      const price = prev.price;
+      return { ...base, yahooSymbol: ySym, ...prev, distBuy1: computeDistBuy1(price, cfg), trigger: computeTrigger(price, cfg), dataSource: '沿用上次(' + (prev.dataSource || '?') + ')', error: cm.error };
+    }
+    const price = cfg.lastPrice;
+    return { ...base, yahooSymbol: ySym, price: price, atrPct: cfg.atrPct, buyPoint: (price != null && cfg.atrPct != null ? price * (1 - 2 * cfg.atrPct) : null), distBuy1: computeDistBuy1(price, cfg), trigger: computeTrigger(price, cfg), stage: 0, stageLabel: '静态(拉取失败)', dataSource: '静态(拉取失败)', error: cm.error };
   }
   const m = cm.m;
-  // 观察仓为买侧，不参与 5 阶段卖出判定；仅给回踩买点与距买点
-  return { ...base, yahooSymbol: ySym, price: m.price, atrPct: m.atrPct, buyPoint: m.price * (1 - 2 * m.atrPct), stage: 0, stageLabel: '—', dataSource: live.source || '?', error: null, note: cfg.note || '' };
+  // 观察仓为买侧，不参与 5 阶段卖出判定；给 距买一%(驱动触发) + 回踩买点(峰值锚定技术参考) + 触发状态
+  return { ...base, yahooSymbol: ySym, price: m.price, atrPct: m.atrPct,
+    buyPoint: m.peak * (1 - 2 * m.atrPct),
+    distBuy1: computeDistBuy1(m.price, cfg),
+    trigger: computeTrigger(m.price, cfg),
+    stage: 0, stageLabel: '—', dataSource: live.source || '?', error: null, note: cfg.note || '' };
 }
 
 // ---------- 主流程 ----------

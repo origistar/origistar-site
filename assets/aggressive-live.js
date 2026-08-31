@@ -1,8 +1,8 @@
 window.AGGRESSIVE_LIVE = {
-  "generatedAt": "2026-08-31 18:30:58 (北京)",
+  "generatedAt": "2026-08-31 19:11:59 (北京)",
   "updateFreq": "每日 3 次（08:30 / 16:30 / 23:00 北京时间）",
   "source": "Yahoo Finance 主力 + 东方财富 push2 兜底",
-  "fetchNote": "部分标的拉取失败：灵宝黄金 拉取失败；龙资源 拉取失败；潼关黄金 拉取失败；(观察)英伟达 拉取失败；(观察)台积电 拉取失败；(观察)礼来 拉取失败；(观察)微软 拉取失败；(观察)谷歌 拉取失败；(观察)亚马逊 拉取失败；(观察)ARM 拉取失败；(观察)博通 拉取失败；(观察)英特尔 拉取失败；(观察)罕王黄金 拉取失败",
+  "fetchNote": "全部标的已更新",
   "items": {
     "DRAM": {
       "name": "DRAM",
@@ -28,9 +28,9 @@ window.AGGRESSIVE_LIVE = {
       "stage": 4,
       "stageLabel": "④清仓",
       "trendStop": 64.55767538860206,
-      "dataSource": "沿用上次(Yahoo)",
-      "error": "数据不足",
-      "note": "DRAM ETF，半导体周期复苏主线 ｜ 本次拉取失败，沿用上次"
+      "dataSource": "Yahoo",
+      "error": null,
+      "note": "DRAM ETF，半导体周期复苏主线"
     },
     "灵宝黄金": {
       "name": "灵宝黄金",
@@ -56,9 +56,9 @@ window.AGGRESSIVE_LIVE = {
       "stage": 4,
       "stageLabel": "④清仓",
       "trendStop": 23.531849088120964,
-      "dataSource": "沿用上次(Yahoo)",
-      "error": "empty",
-      "note": "金价上行受益，ATR 较高 ｜ 本次拉取失败，沿用上次"
+      "dataSource": "Yahoo",
+      "error": null,
+      "note": "金价上行受益，ATR 较高"
     },
     "龙资源": {
       "name": "龙资源",
@@ -105,9 +105,9 @@ window.AGGRESSIVE_LIVE = {
       "stage": 4,
       "stageLabel": "④清仓",
       "trendStop": 3.374583552424172,
-      "dataSource": "沿用上次(Yahoo)",
-      "error": "empty",
-      "note": "金矿股，波动大 ｜ 本次拉取失败，沿用上次"
+      "dataSource": "Yahoo",
+      "error": null,
+      "note": "金矿股，波动大"
     }
   },
   "watchItems": {
@@ -120,13 +120,16 @@ window.AGGRESSIVE_LIVE = {
       "weight": null,
       "presetSell": null,
       "yahooSymbol": "NVDA",
-      "price": null,
-      "atrPct": null,
-      "buyPoint": null,
+      "price": 217.55,
+      "atrPct": 0.03324325299110938,
+      "buyPoint": 220.81328187496598,
+      "distBuy1": 0.08775000000000005,
+      "trigger": "none",
       "stage": 0,
-      "stageLabel": "静态(拉取失败)",
-      "dataSource": "静态(拉取失败)",
-      "error": "empty"
+      "stageLabel": "—",
+      "dataSource": "Yahoo",
+      "error": null,
+      "note": "AI 算力垄断，最看多；买一先底仓，买二加"
     },
     "台积电": {
       "name": "台积电",
@@ -137,13 +140,16 @@ window.AGGRESSIVE_LIVE = {
       "weight": null,
       "presetSell": null,
       "yahooSymbol": "TSM",
-      "price": null,
-      "atrPct": null,
-      "buyPoint": null,
+      "price": 417.52,
+      "atrPct": 0.03311517964779182,
+      "buyPoint": 447.27565789741544,
+      "distBuy1": 0.15977777777777774,
+      "trigger": "none",
       "stage": 0,
-      "stageLabel": "静态(拉取失败)",
-      "dataSource": "静态(拉取失败)",
-      "error": "empty"
+      "stageLabel": "—",
+      "dataSource": "Yahoo",
+      "error": null,
+      "note": "先进制程 70% 市占，信仰；补纳指空白"
     },
     "礼来": {
       "name": "礼来",
@@ -154,13 +160,16 @@ window.AGGRESSIVE_LIVE = {
       "weight": null,
       "presetSell": null,
       "yahooSymbol": "LLY",
-      "price": null,
-      "atrPct": null,
-      "buyPoint": null,
+      "price": 1174.61,
+      "atrPct": 0.033922069806090485,
+      "buyPoint": 1204.9512729303144,
+      "distBuy1": 0.06782727272727264,
+      "trigger": "none",
       "stage": 0,
-      "stageLabel": "静态(拉取失败)",
-      "dataSource": "静态(拉取失败)",
-      "error": "empty"
+      "stageLabel": "—",
+      "dataSource": "Yahoo",
+      "error": null,
+      "note": "GLP-1 垄断，玑哥\"矛\"；补纳指空白（玑哥补锚）"
     },
     "微软": {
       "name": "微软",
@@ -171,13 +180,16 @@ window.AGGRESSIVE_LIVE = {
       "weight": null,
       "presetSell": null,
       "yahooSymbol": "MSFT",
-      "price": null,
-      "atrPct": null,
-      "buyPoint": null,
+      "price": 513.53,
+      "atrPct": 0.02412827976472874,
+      "buyPoint": 526.9993778573488,
+      "distBuy1": 0.28382499999999994,
+      "trigger": "none",
       "stage": 0,
-      "stageLabel": "静态(拉取失败)",
-      "dataSource": "静态(拉取失败)",
-      "error": "empty"
+      "stageLabel": "—",
+      "dataSource": "Yahoo",
+      "error": null,
+      "note": "压舱石，深折让等回调"
     },
     "谷歌": {
       "name": "谷歌",
@@ -188,13 +200,16 @@ window.AGGRESSIVE_LIVE = {
       "weight": null,
       "presetSell": null,
       "yahooSymbol": "GOOGL",
-      "price": null,
-      "atrPct": null,
-      "buyPoint": null,
+      "price": 346.59,
+      "atrPct": 0.026520658468216066,
+      "buyPoint": 386.9367874866045,
+      "distBuy1": 0.0502727272727272,
+      "trigger": "none",
       "stage": 0,
-      "stageLabel": "静态(拉取失败)",
-      "dataSource": "静态(拉取失败)",
-      "error": "empty"
+      "stageLabel": "—",
+      "dataSource": "Yahoo",
+      "error": null,
+      "note": "搜索垄断+Gemini，压舱石（玑哥补锚）"
     },
     "亚马逊": {
       "name": "亚马逊",
@@ -205,13 +220,16 @@ window.AGGRESSIVE_LIVE = {
       "weight": null,
       "presetSell": null,
       "yahooSymbol": "AMZN",
-      "price": null,
-      "atrPct": null,
-      "buyPoint": null,
+      "price": 266.43,
+      "atrPct": 0.02655699868164571,
+      "buyPoint": 271.9456599572627,
+      "distBuy1": 0.33215000000000006,
+      "trigger": "none",
       "stage": 0,
-      "stageLabel": "静态(拉取失败)",
-      "dataSource": "静态(拉取失败)",
-      "error": "empty"
+      "stageLabel": "—",
+      "dataSource": "Yahoo",
+      "error": null,
+      "note": "云+电商压舱石，买二为玑哥建议深档"
     },
     "ARM": {
       "name": "ARM",
@@ -222,13 +240,16 @@ window.AGGRESSIVE_LIVE = {
       "weight": null,
       "presetSell": null,
       "yahooSymbol": "ARM",
-      "price": null,
-      "atrPct": null,
-      "buyPoint": null,
+      "price": 239.05,
+      "atrPct": 0.086700900465466,
+      "buyPoint": 374.2010047185671,
+      "distBuy1": 0.03934782608695657,
+      "trigger": "none",
       "stage": 0,
-      "stageLabel": "静态(拉取失败)",
-      "dataSource": "静态(拉取失败)",
-      "error": "empty"
+      "stageLabel": "—",
+      "dataSource": "Yahoo",
+      "error": null,
+      "note": "CPU 架构近垄断；买二为玑哥建议深档"
     },
     "博通": {
       "name": "博通",
@@ -241,12 +262,14 @@ window.AGGRESSIVE_LIVE = {
       "yahooSymbol": "AVGO",
       "price": 368.79,
       "atrPct": 0.040252409568530316,
-      "buyPoint": 339.10062775044344,
+      "buyPoint": 455.150114527155,
+      "distBuy1": 0.22930000000000006,
+      "trigger": "none",
       "stage": 0,
       "stageLabel": "—",
-      "dataSource": "沿用上次(Yahoo)",
-      "error": "empty",
-      "note": "AI 定制芯片龙头"
+      "dataSource": "Yahoo",
+      "error": null,
+      "note": "备胎≤2.5%，300 以内才捞，270 再加"
     },
     "英特尔": {
       "name": "英特尔",
@@ -257,13 +280,16 @@ window.AGGRESSIVE_LIVE = {
       "weight": null,
       "presetSell": null,
       "yahooSymbol": "INTC",
-      "price": null,
-      "atrPct": null,
-      "buyPoint": null,
+      "price": 89.47,
+      "atrPct": 0.07162567966889208,
+      "buyPoint": 121.95816899826642,
+      "distBuy1": 0.27814285714285714,
+      "trigger": "none",
       "stage": 0,
-      "stageLabel": "静态(拉取失败)",
-      "dataSource": "静态(拉取失败)",
-      "error": "empty"
+      "stageLabel": "—",
+      "dataSource": "Yahoo",
+      "error": null,
+      "note": "美国半导体主权彩票≤2%，买二为玑哥建议深档"
     },
     "罕王黄金": {
       "name": "罕王黄金",
@@ -276,12 +302,14 @@ window.AGGRESSIVE_LIVE = {
       "yahooSymbol": "3788.HK",
       "price": 3.315,
       "atrPct": 0.06462086355346519,
-      "buyPoint": 2.886563674640526,
+      "buyPoint": 4.87624632820119,
+      "distBuy1": 0.03593749999999993,
+      "trigger": "none",
       "stage": 0,
       "stageLabel": "—",
-      "dataSource": "沿用上次(Yahoo)",
-      "error": "empty",
-      "note": "黄金延伸观察"
+      "dataSource": "Yahoo",
+      "error": null,
+      "note": "2028-2030 年目标投产-达产 5-8 吨黄金，预计利润 15-30 亿+（按 4000 美金金价），3-5 年 150-300 亿市值，2-5 倍空间。核心管理层都有持股、紫金矿业入股（2026.1 月配售进入，每股 3.8 港元）。紫金矿业是成长-成熟期，罕王则是半风投型持股。"
     }
   }
 };
