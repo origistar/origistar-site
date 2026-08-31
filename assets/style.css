@@ -249,6 +249,7 @@ table.tbl th { color: var(--muted); font-weight: 700; font-size: var(--fs-xs); t
 table.tbl td.num { font-variant-numeric: tabular-nums; font-weight: 700; }
 table.tbl-compact th, table.tbl-compact td { padding: 9px 7px; font-size: var(--fs-sm); white-space: nowrap; }
 table.tbl-compact td:first-child { white-space: normal; min-width: 90px; }
+table.tbl-compact td:last-child { white-space: normal; word-break: break-word; min-width: 160px; }
 table.tbl-compact small.muted { color: var(--muted); font-size: var(--fs-2xs); }
 @media (min-width: 720px) {
   table.tbl-compact th, table.tbl-compact td { padding: 11px 10px; font-size: var(--fs-base); }
