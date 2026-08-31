@@ -87,95 +87,60 @@
     }).join('');
   }
 
-  // ---------- 进取仓预警 ----------
+  // ---------- 观察仓触发（仅进取仓） ----------
   (function renderAggroAlerts() {
     var a = d.aggressive; if (!a) return;
     var host = document.getElementById('aggro-alerts'); if (!host) return;
     function price(item, n) {
       if (n == null || isNaN(n)) return '—';
-      return esc((item.currency || '') + n.toFixed((n < 10) ? 2 : 2));
-    }
-    function aiWarn(item, type) {
-      if (item.status === '停牌' || item.lastPrice == null || item.atrPct == null) return null;
-      var mult = (type === 'holdings') ? 3 : 2;
-      return price(item, item.lastPrice * (1 - mult * item.atrPct));
-    }
-    function statusTag(st) {
-      var cls = (st === '停牌') ? 'flat' : (st === '持有' ? 'up' : 'acc');
-      return '<span class="a-tag tag ' + cls + '">' + esc(st) + '</span>';
-    }
-    function userWarn(item, type) {
-      var parts = [];
-      if (type === 'holdings') {
-        if (item.userBuyWarn != null) parts.push('用户买入 ' + price(item, item.userBuyWarn));
-        if (item.userSellWarn != null) parts.push('用户卖出 ' + price(item, item.userSellWarn));
-      } else {
-        if (item.userBuyWarn != null) parts.push('用户买入 ' + price(item, item.userBuyWarn));
-      }
-      return parts.length ? parts.join(' · ') : '<span class="muted">待设</span>';
+      return esc((item.currency || '') + Number(n).toFixed(2));
     }
     var rows = [];
-    (a.holdings || []).forEach(function (h) {
-      var ai = aiWarn(h, 'holdings');
-      rows.push({ item: h, type: 'holdings', ai: ai, aiLabel: 'AI止盈' });
-    });
     (a.watch || []).forEach(function (w) {
-      var ai = aiWarn(w, 'watch');
-      rows.push({ item: w, type: 'watch', ai: ai, aiLabel: 'AI建议买入' });
+      if (w.lastPrice == null || w.userBuyWarn == null) return;
+      var trig = null;
+      if (w.lastPrice <= w.userBuyWarn) trig = 'buy1';
+      else if (w.userBuyWarn2 != null && w.lastPrice <= w.userBuyWarn2) trig = 'buy2';
+      if (!trig) return;
+      rows.push({ item: w, trig: trig });
     });
-    if (!rows.length) { host.innerHTML = '<p class="muted">暂无预警数据</p>'; return; }
+    if (!rows.length) {
+      host.innerHTML = '<p class="muted">观察仓无触发</p>';
+      return;
+    }
+    var trigLabel = { buy1: '买一触发', buy2: '买二触发' };
     host.innerHTML = '<div class="alert-list">' + rows.map(function (r) {
       var it = r.item;
+      var cls = (r.trig === 'buy1') ? 'up' : 'acc';
       return '<div class="alert-row">' +
         '<span class="a-name">' + esc(it.name) + '</span>' +
-        statusTag(it.status) +
-        '<span class="muted">' + userWarn(it, r.type) + '</span>' +
-        '<span class="a-warn">' + (r.ai || '—') + '<small>' + esc(r.aiLabel) + '</small></span>' +
-      '</div>';
+        '<span class="a-tag tag ' + cls + '">' + trigLabel[r.trig] + '</span>' +
+        '<span class="muted">现价 ' + price(it, it.lastPrice) + '</span>' +
+        '</div>';
     }).join('') + '</div>';
   })();
 
-  // ---------- 系统配置追踪（3:3:4） ----------
+  // ---------- 系统配置 · 当前仓位 ----------
   (function renderConfig() {
     var cfg = d.config; if (!cfg) return;
     var host = document.getElementById('config-track');
     if (!host) return;
     var dt = document.getElementById('cfg-date');
     if (dt) dt.textContent = '更新于 ' + (cfg.updated || d.updated);
-    var t = cfg.target, c = cfg.current;
+    var c = cfg.current || {};
     var keys = ['defensive', 'stable', 'aggressive'];
     var names = { defensive: '防守仓', stable: '稳健仓', aggressive: '进取仓' };
     var colors = { defensive: '#0ea5e9', stable: '#4f46e5', aggressive: '#ef4444' };
-    var total = t.defensive + t.stable + t.aggressive;
-    var segs = keys.map(function (k) {
-      return '<div class="seg" style="width:' + (t[k] / total * 100) + '%;background:' + colors[k] + '"></div>';
-    }).join('');
     var rowsHtml = keys.map(function (k) {
       var cur = c[k];
-      var dev = (cur == null) ? null : (cur - t[k]);
-      var devTxt = (dev == null) ? '待录入' : (dev > 0 ? '+' : '') + dev.toFixed(1) + '%';
-      var devCls = (dev == null) ? 'flat' : (Math.abs(dev) > 5 ? 'down' : 'up');
-      var devNote = (dev == null) ? '' : (Math.abs(dev) > 5 ? ' · 偏离>5%' : ' · 正常');
       var fillW = (cur == null) ? 0 : Math.min(Math.max(cur, 0), 100);
       return '<div class="cfg-row">' +
         '<div class="cfg-name">' + names[k] + '</div>' +
         '<div class="cfg-bar"><div class="cfg-fill" style="width:' + fillW + '%;background:' + colors[k] + '"></div></div>' +
-        '<div class="cfg-num"><span class="cfg-cur">' + (cur == null ? '—' : cur + '%') + '</span><span class="cfg-tgt">目标 ' + t[k] + '%</span></div>' +
-        '<div class="cfg-dev tag ' + devCls + '">' + devTxt + devNote + '</div>' +
+        '<div class="cfg-num"><span class="cfg-cur">' + (cur == null ? '—' : cur + '%') + '</span></div>' +
         '</div>';
     }).join('');
-    var legend = keys.map(function (k) {
-      return '<span><i style="background:' + colors[k] + '"></i>' + names[k] + ' ' + t[k] + '%</span>';
-    }).join('');
-    var checks = ((cfg.rebalance && cfg.rebalance.halfYearCheck) || []).map(function (x) {
-      return '<li>' + esc(x) + '</li>';
-    }).join('');
-    host.innerHTML =
-      '<div class="cfg-bar-wrap"><div class="mc-bar" style="background:var(--surface-2)">' + segs + '</div></div>' +
-      '<div class="cfg-legend">' + legend + '</div>' +
-      rowsHtml +
-      '<div class="cfg-note">再平衡三阶段：现金流再平衡 → 阈值(5/25)再平衡 → Glide path 临近用钱降仓。现金仓在体系外、不计入。半年人工校验一次（见下）。</div>' +
-      '<details class="cfg-detail"><summary>半年校验清单（8 项）</summary><ul>' + checks + '</ul></details>';
+    host.innerHTML = rowsHtml;
   })();
 
   // ---------- 顶部时间 ----------
