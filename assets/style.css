@@ -437,7 +437,7 @@ a.rule h3 { display: flex; align-items: center; justify-content: space-between; 
 @media (max-width: 719px) {
   .book-tags { gap: 4px; margin-top: 6px; }
   .book-tags span { font-size: var(--fs-2xs); padding: 2px 6px; }
-  .book-tags span:nth-child(n+3) { display: none; }
+  .book-tags span:nth-child(n+2) { display: none; }
 }
 
 /* 文章阅读页（研习录子页） */
