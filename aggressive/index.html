@@ -14,31 +14,33 @@
 </head>
 <body>
 <script src="../assets/data.js"></script>
+<script src="../assets/aggressive-live.js"></script>
 <script src="../assets/nav.js" data-system="aggressive" data-page="index"></script>
 
 <div class="wrap">
   <section class="sys-hero">
     <h1 class="section-title">进取仓总览</h1>
-    <p class="lead">高弹性个股 / 主题仓。本页不含成本与仓位比重，只展示标的、用户预警价与 AI 趋势预警价。</p>
+    <p class="lead">高弹性个股 / 主题仓。本页不含成本与仓位数值，仅展示标的、仓位档位（重/中/轻）、最新价、预设卖出价与趋势止盈参考价。</p>
   </section>
 
   <!-- 更新与口径 -->
   <section class="section">
     <div class="dash-text">
-      <h4>更新频率：每日 2 次</h4>
-      <p>早盘一次、收盘后一次。最新价与 ATR% 手动维护或接入行情；AI 预警价按当前口径自动计算：</p>
-      <p><b>持仓：</b>最新价 × (1 − 3×ATR%) = 趋势止盈价；<b>观察仓：</b>最新价 × (1 − 2×ATR%) = 建议买入价。</p>
+      <h4>更新频率：每日 3 次（08:30 / 16:30 / 23:00 北京时间，全站统一）</h4>
+      <p>每日 3 次（08:30 盘前 / 16:30 收盘后 / 23:00 美股盘中，全站统一）。最新价与 ATR% 由行情接口自动拉取；趋势止盈价按当前口径自动计算：</p>
+      <p><b>持仓趋势止盈价：</b>最新价 × (1 − 3×ATR%) = 第④层清仓线（仅最底线，阶段判断见下方规则表）；<b>观察仓回踩买点：</b>最新价 × (1 − 2×ATR%)。</p>
       <p class="note">个股波动差异极大，不设置统一百分比模板；ATR% 按个股独立校准。</p>
+      <p id="a-live-meta" class="note"></p>
     </div>
   </section>
 
   <!-- 持仓标的 -->
   <section class="section">
-    <div class="section-head"><h2>持仓标的</h2><span class="sub">用户预警价 + AI 趋势止盈价</span></div>
+    <div class="section-head"><h2>持仓标的</h2><span class="sub">仓位档位 + 预设卖出价 + 趋势止盈价</span></div>
     <div class="table-wrap">
       <table class="tbl tbl-compact" id="tbl-holdings">
         <thead><tr>
-          <th>标的</th><th>状态</th><th>最新价</th><th>用户买入预警</th><th>用户卖出预警</th><th>AI 趋势止盈</th><th>备注</th>
+          <th>标的</th><th>状态</th><th>仓位</th><th>最新价</th><th>预设卖出价</th><th>趋势止盈价</th><th>5 阶段</th><th>备注</th>
         </tr></thead>
         <tbody></tbody>
       </table>
@@ -47,11 +49,11 @@
 
   <!-- 观察仓 -->
   <section class="section">
-    <div class="section-head"><h2>观察仓</h2><span class="sub">用户买入预警 + AI 建议买入价</span></div>
+    <div class="section-head"><h2>观察仓</h2><span class="sub">用户买入预警 + 回踩买点（价格参考，非买入建议）</span></div>
     <div class="table-wrap">
       <table class="tbl tbl-compact" id="tbl-watch">
         <thead><tr>
-          <th>标的</th><th>状态</th><th>最新价</th><th>用户买入预警</th><th>AI 建议买入</th><th>备注</th>
+          <th>标的</th><th>状态</th><th>最新价</th><th>用户买入预警</th><th>回踩买点</th><th>距买点</th><th>备注</th>
         </tr></thead>
         <tbody></tbody>
       </table>
@@ -76,45 +78,74 @@
   </section>
 </div>
 
-<footer class="foot">origistar · 进取仓总览 · 数据仅供参考，非投资建议</footer>
+<footer class="foot">origistar · 进取仓总览 · 时间均为北京时间 · 数据仅供参考，非投资建议</footer>
 
 <script>
 (function(){
   var a = (window.ORIGISTAR && window.ORIGISTAR.aggressive); if(!a) return;
+  var LIVE = window.AGGRESSIVE_LIVE; // 行情自动拉取产物，可能不存在（静态降级）
 
   function esc(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-  function price(item, n){
+  function priceFmt(cur, n){
     if(n==null || isNaN(n)) return '—';
-    var fixed = (n < 10) ? 2 : ((n < 100) ? 2 : 2);
-    return esc(item.currency || '') + n.toFixed(fixed);
+    var fixed = (Math.abs(n) < 10) ? 2 : 2;
+    return esc(cur || '') + n.toFixed(fixed);
   }
-  function warnPrice(item, type){
-    // type: 'holdings' -> 趋势止盈价 (最新价 × (1-3×ATR%))
-    // type: 'watch'    -> 建议买入价 (最新价 × (1-2×ATR%))
-    if(item.status==='停牌' || item.lastPrice==null || item.atrPct==null) return { txt:'—', cls:'flat' };
-    var mult = (type==='holdings') ? 3 : 2;
-    var p = item.lastPrice * (1 - mult * item.atrPct);
-    var fixed = (p < 10) ? 2 : 2;
-    return { txt: esc(item.currency||'') + p.toFixed(fixed), cls:'acc' };
+  function statusCls(st){ if(st==='停牌') return 'flat'; if(st==='持有') return 'up'; return 'acc'; }
+  function weightCls(w){ if(w==='重') return 'up'; if(w==='轻') return 'flat'; return 'acc'; }
+  function stageClass(st){ return ['flat','acc','warn','warn','up'][st] || 'flat'; }
+  function liveOf(name, bucket){ return (LIVE && LIVE[bucket] && LIVE[bucket][name]) || null; }
+
+  // 行情拉取元信息
+  var metaEl = document.getElementById('a-live-meta');
+  if(metaEl){
+    if(LIVE){
+      metaEl.innerHTML = '🟢 行情已自动拉取 · 生成于 <b>' + esc(LIVE.generatedAt) + '</b> · 源：' + esc(LIVE.source || '') +
+        '<br><span class="muted">' + esc(LIVE.fetchNote || '') + '</span>';
+    } else {
+      metaEl.innerHTML = '⚪ 当前为静态数据（行情接口尚未拉取），趋势止盈价/回踩买点按静态 ATR% 估算，5 阶段状态不评。';
+    }
   }
-  function statusCls(st){
-    if(st==='停牌') return 'flat';
-    if(st==='持有') return 'up';
-    return 'acc';
+
+  function stageReason(lv){
+    switch(lv.stage){
+      case 4: return '距高点回撤 ' + (lv.ddPkAtr!=null?lv.ddPkAtr.toFixed(1):'?') + '×ATR';
+      case 3: return '收盘<MA50 且 周线<MA10';
+      case 2: return (lv.atrPctPercentile!=null && lv.atrPctPercentile>0.75)
+                ? ('ATR%分位 ' + (lv.atrPctPercentile*100).toFixed(0) + '%')
+                : ('单日 +' + ((lv.dailyRet||0)*100).toFixed(1) + '%');
+      case 1: return (lv.consec>=2) ? ('连' + lv.consec + '日<MA20') : ('距高点 ' + (lv.ddPkAtr!=null?lv.ddPkAtr.toFixed(1):'?') + '×ATR');
+      default: return (lv.ma20!=null) ? ('价格' + (lv.price>lv.ma20?'>MA20':'<MA20') + '·常态') : '常态';
+    }
+  }
+  function renderStage(lv){
+    if(!lv) return '<span class="tag flat">—</span>';
+    var sc = stageClass(lv.stage);
+    var zc = '';
+    if(lv.zeroCost===true) zc = '<div class="mini"><span class="tag up">⑤负成本可达</span></div>';
+    else if(lv.zeroCost===false) zc = '<div class="mini">' + esc(lv.zeroCostNote || '') + '</div>';
+    else zc = '<div class="mini"><span class="tag flat">成本待录入</span></div>';
+    return '<span class="tag ' + sc + '">' + esc(lv.stageLabel) + '</span>' +
+           '<div class="mini">' + esc(stageReason(lv)) + '</div>' + zc;
   }
 
   // 持仓表
   var hBody = document.querySelector('#tbl-holdings tbody');
   if(hBody){
     hBody.innerHTML = (a.holdings||[]).map(function(h){
-      var ai = warnPrice(h, 'holdings');
+      var lv = liveOf(h.name, 'items');
+      var price = (lv && lv.price!=null) ? lv.price : h.lastPrice;
+      var trendStop = (lv && lv.trendStop!=null) ? lv.trendStop
+                    : (h.lastPrice!=null && h.atrPct!=null ? h.lastPrice*(1-3*h.atrPct) : null);
+      var priceTag = (lv && lv.price!=null) ? ('<small class="muted">' + esc(lv.dataSource) + '</small>') : '';
       return '<tr>' +
         '<td><b>' + esc(h.name) + '</b><br><small class="muted">' + esc(h.code||'') + ' · ' + esc(h.market||'') + '</small></td>' +
         '<td><span class="tag ' + statusCls(h.status) + '">' + esc(h.status) + '</span></td>' +
-        '<td class="num">' + price(h, h.lastPrice) + '</td>' +
-        '<td class="num">' + (h.userBuyWarn==null ? '待设' : price(h, h.userBuyWarn)) + '</td>' +
-        '<td class="num">' + (h.userSellWarn==null ? '待设' : price(h, h.userSellWarn)) + '</td>' +
-        '<td class="num"><span class="tag ' + ai.cls + '">' + ai.txt + '</span></td>' +
+        '<td><span class="tag ' + weightCls(h.weight) + '">' + esc(h.weight||'—') + '</span></td>' +
+        '<td class="num">' + priceFmt(h.currency, price) + priceTag + '</td>' +
+        '<td class="num">' + (h.userSellWarn==null ? '待设' : priceFmt(h.currency, h.userSellWarn)) + '</td>' +
+        '<td class="num"><span class="tag acc">' + priceFmt(h.currency, trendStop) + '</span></td>' +
+        '<td>' + renderStage(lv) + '</td>' +
         '<td>' + esc(h.note||'') + '</td>' +
       '</tr>';
     }).join('');
@@ -124,13 +155,21 @@
   var wBody = document.querySelector('#tbl-watch tbody');
   if(wBody){
     wBody.innerHTML = (a.watch||[]).map(function(w){
-      var ai = warnPrice(w, 'watch');
+      var lv = liveOf(w.name, 'watchItems');
+      var price = (lv && lv.price!=null) ? lv.price : w.lastPrice;
+      var buy = (lv && lv.buyPoint!=null) ? lv.buyPoint
+              : (w.lastPrice!=null && w.atrPct!=null ? w.lastPrice*(1-2*w.atrPct) : null);
+      var dist = (price!=null && buy!=null && buy>0) ? ((price-buy)/buy*100) : null;
+      var distCls = (dist!=null && dist<=5) ? 'up' : (dist!=null && dist<=15) ? 'acc' : 'flat';
+      var distTxt = dist==null ? '—' : (dist>=0 ? ('+'+dist.toFixed(1)+'%') : dist.toFixed(1)+'%');
+      var priceTag = (lv && lv.price!=null) ? ('<small class="muted">' + esc(lv.dataSource) + '</small>') : '';
       return '<tr>' +
         '<td><b>' + esc(w.name) + '</b><br><small class="muted">' + esc(w.code||'') + ' · ' + esc(w.market||'') + '</small></td>' +
         '<td><span class="tag ' + statusCls(w.status) + '">' + esc(w.status) + '</span></td>' +
-        '<td class="num">' + price(w, w.lastPrice) + '</td>' +
-        '<td class="num">' + (w.userBuyWarn==null ? '待设' : price(w, w.userBuyWarn)) + '</td>' +
-        '<td class="num"><span class="tag ' + ai.cls + '">' + ai.txt + '</span></td>' +
+        '<td class="num">' + priceFmt(w.currency, price) + priceTag + '</td>' +
+        '<td class="num">' + (w.userBuyWarn==null ? '待设' : priceFmt(w.currency, w.userBuyWarn)) + '</td>' +
+        '<td class="num"><span class="tag acc">' + priceFmt(w.currency, buy) + '</span></td>' +
+        '<td class="num"><span class="tag ' + distCls + '">' + distTxt + '</span></td>' +
         '<td>' + esc(w.note||'') + '</td>' +
       '</tr>';
     }).join('');

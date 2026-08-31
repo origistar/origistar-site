@@ -207,6 +207,8 @@ img { max-width: 100%; }
 .tag.down { color: var(--down); background: color-mix(in srgb, var(--down) 12%, transparent); }
 .tag.flat { color: var(--muted); background: var(--surface-2); }
 .tag.acc { color: var(--accent); background: var(--accent-soft); }
+.tag.warn { color: var(--warn); background: color-mix(in srgb, var(--warn) 14%, transparent); }
+.mini { font-size: var(--fs-2xs); color: var(--muted); margin-top: 3px; line-height: 1.35; }
 .kpi .spark { position: absolute; right: -6px; bottom: -6px; opacity: .10; width: 120px; height: 60px; }
 .kpi-link { position:absolute; inset:0; }
 

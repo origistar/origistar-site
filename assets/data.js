@@ -57,18 +57,18 @@ window.ORIGISTAR = {
   aggressive: {
     target: 40,          // 占系统目标权重 %
     cap: 45,             // 上限 %
-    updateFreq: "每日 2 次",
-    // 持仓标的：用户预设买入/卖出预警价 + 最新价 + ATR%，AI 按趋势规则动态算预警价
+    updateFreq: "每日 3 次（08:30 / 16:30 / 23:00 北京时间）",
+    // 持仓标的：仓位档位(重/中/轻) + 最新价 + ATR% + 预设卖出价；趋势止盈价按 3×ATR 公式算（对应第④层清仓线）
     holdings: [
-      { name: "DRAM", code: "", market: "美股", currency: "$", status: "持有", lastPrice: 95.00, atrPct: 0.05, userBuyWarn: null, userSellWarn: 80, note: "半导体周期复苏主线" },
-      { name: "灵宝黄金", code: "03330.HK", market: "港股", currency: "HK$", status: "持有", lastPrice: 6.50, atrPct: 0.08, userBuyWarn: null, userSellWarn: null, note: "金价上行受益，ATR 较高" },
-      { name: "龙资源", code: "01712.HK", market: "港股", currency: "HK$", status: "停牌", lastPrice: null, atrPct: null, userBuyWarn: null, userSellWarn: null, note: "停牌中，等待复牌" },
-      { name: "潼关黄金", code: "00340.HK", market: "港股", currency: "HK$", status: "持有", lastPrice: 1.20, atrPct: 0.07, userBuyWarn: null, userSellWarn: null, note: "金矿股，波动大" }
+      { name: "DRAM", code: "", market: "美股", currency: "$", status: "持有", weight: "重", lastPrice: 95.00, atrPct: 0.05, entry: null, userSellWarn: 80, note: "半导体周期复苏主线" },
+      { name: "灵宝黄金", code: "03330.HK", market: "港股", currency: "HK$", status: "持有", weight: "重", lastPrice: 22.24, atrPct: 0.082, entry: null, userSellWarn: 30, note: "金价上行受益，ATR 较高" },
+      { name: "龙资源", code: "01712.HK", market: "港股", currency: "HK$", status: "停牌", weight: "中", lastPrice: null, atrPct: null, entry: null, userSellWarn: 12, note: "停牌中，等待复牌" },
+      { name: "潼关黄金", code: "00340.HK", market: "港股", currency: "HK$", status: "持有", weight: "中", lastPrice: 3.285, atrPct: 0.062, entry: null, userSellWarn: 4, note: "金矿股，波动大" }
     ],
-    // 观察仓：以买入预警为主；AI 给出建议买入价
+    // 观察仓：以用户买入预警为主；回踩买点 = 最新价 × (1 − 2×ATR%)，仅作价格参考，非买入建议
     watch: [
-      { name: "罕王黄金", code: "03788.HK", market: "港股", currency: "HK$", status: "观察", lastPrice: 2.00, atrPct: 0.08, userBuyWarn: null, note: "黄金延伸观察" },
-      { name: "博通", code: "AVGO", market: "美股", currency: "$", status: "观察", lastPrice: 180.00, atrPct: 0.04, userBuyWarn: null, note: "AI 定制芯片龙头" },
+      { name: "罕王黄金", code: "03788.HK", market: "港股", currency: "HK$", status: "观察", lastPrice: 3.415, atrPct: 0.063, userBuyWarn: null, note: "黄金延伸观察" },
+      { name: "博通", code: "AVGO", market: "美股", currency: "$", status: "观察", lastPrice: 368.79, atrPct: 0.040, userBuyWarn: null, note: "AI 定制芯片龙头" },
       { name: "思格新能", code: "", market: "港股", currency: "HK$", status: "观察", lastPrice: null, atrPct: null, userBuyWarn: null, note: "9月入通预期" },
       { name: "长光辰芯", code: "", market: "A股", currency: "¥", status: "观察", lastPrice: null, atrPct: null, userBuyWarn: null, note: "9月入通预期·科创板" }
     ],
@@ -80,10 +80,10 @@ window.ORIGISTAR = {
       { layer: "④ 清仓", cond: "自高点回落 ≥ 3×ATR", action: "清仓" },
       { layer: "⑤ 负成本", cond: "盈利 ≥ 1R 后，止损上移至成本", action: "锁定零成本" }
     ],
-    // AI 预警价计算口径（脚本里按此公式生成）
-    aiFormula: {
-      holdings: "最新价 × (1 - 3×ATR%) = 趋势止盈价",
-      watch: "最新价 × (1 - 2×ATR%) = 建议买入价"
+    // 趋势止盈价/回踩买点 计算口径（脚本自动拉行情后按此公式生成）
+    warnFormula: {
+      holdings: "最新价 × (1 - 3×ATR%) = 趋势止盈价（第④层清仓线）",
+      watch: "最新价 × (1 - 2×ATR%) = 回踩买点（价格参考，非买入建议）"
     },
     decisionLog: {
       fields: ["买入理由", "预期催化剂", "证伪条件", "计划持有期", "季度回看"],
