@@ -11,6 +11,8 @@
 <link rel="stylesheet" href="../assets/style.css">
 <link rel="manifest" href="../manifest.json">
 <link rel="apple-touch-icon" href="../assets/icon-192.png">
+<script src="../assets/data.js"></script>
+<script src="../assets/defensive-live.js"></script>
 <style>
   .mc-card{background:var(--surface);border:1px solid var(--border);border-radius:16px;padding:16px 16px 12px;margin-bottom:12px}
   .mc-head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:12px}
@@ -91,15 +93,15 @@
     <div class="grid k4">
       <div class="card kpi">
         <div class="top"><span class="ic" style="background:linear-gradient(135deg,#0ea5e9,#06b6d4)">S</span>SCHD 本周系数</div>
-        <div class="val" style="color:#f59e0b">×0.6</div>
-        <div class="meta">偏贵 / 等待</div>
-        <span class="tag down">减量</span>
+        <div class="val" id="kpi-schd-coeff" style="color:#f59e0b">×0.6</div>
+        <div class="meta" id="kpi-schd-meta">偏贵 / 等待</div>
+        <span class="tag down" id="kpi-schd-tag">减量</span>
       </div>
       <div class="card kpi">
         <div class="top"><span class="ic" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">B</span>BRK.B 本周系数</div>
-        <div class="val" style="color:#f59e0b">×0.6</div>
-        <div class="meta">偏贵 / 等待</div>
-        <span class="tag down">减量</span>
+        <div class="val" id="kpi-brk-coeff" style="color:#f59e0b">×0.6</div>
+        <div class="meta" id="kpi-brk-meta">偏贵 / 等待</div>
+        <span class="tag down" id="kpi-brk-tag">减量</span>
       </div>
       <div class="card kpi">
         <div class="top"><span class="ic" style="background:linear-gradient(135deg,#10b981,#14b8a6)">息</span>SCHD 股息率</div>
@@ -116,17 +118,6 @@
     </div>
   </section>
 
-  <!-- 图例 -->
-  <section class="section">
-    <div class="legend">
-      <span><i style="background:#047857"></i>极度便宜（×2.0 重投）</span>
-      <span><i style="background:#0d9488"></i>甜区（×1.5 加投）</span>
-      <span><i style="background:#d97706"></i>合理（×1.0 基准）</span>
-      <span><i style="background:#9ca3af"></i>偏贵（×0.6 减量）</span>
-      <span><i style="background:#dc2626"></i>极贵（×0.3 观望）</span>
-    </div>
-  </section>
-
   <!-- SCHD -->
   <section class="section">
     <div class="mc-card">
@@ -138,13 +129,13 @@
         <span class="tag flat">防守</span>
       </div>
       <div class="mc-price-row">
-        <div class="mc-price">$34.83</div>
-        <span class="tag down">偏贵 / 等待</span>
+        <div class="mc-price" id="schd-price">$34.83</div>
+        <span class="tag down" id="schd-zone">偏贵 / 等待</span>
       </div>
       <div class="mc-mult-row">
         <div class="mc-mult-label">本周定投系数</div>
-        <div class="mc-mult">×0.6</div>
-        <div class="mc-mult-sub">便宜度 0.95 · 股息率 3.01%（合理 3.16%）</div>
+        <div class="mc-mult" id="schd-coeff">×0.6</div>
+        <div class="mc-mult-sub" id="schd-sub">便宜度 0.95 · 股息率 3.01%（合理 3.16%）</div>
       </div>
       <div class="mc-bar-wrap">
         <div class="mc-bar">
@@ -164,7 +155,6 @@
       <div class="mc-meta">
         <div class="mc-row"><span>锚定逻辑</span><b>合理收益率 = 2012–2025 历史中位数 3.16%；各档价 = TTM 分红 ÷ 目标收益率，随分红自动抬高</b></div>
         <div class="mc-row"><span>信号解读</span><b>价高于合理线 +5.0%，本周按 ×0.6 减量等待</b></div>
-        <div class="mc-row"><span>数据状态</span><b>快照（2026-08-28 10:55）</b></div>
       </div>
     </div>
   </section>
@@ -180,13 +170,13 @@
         <span class="tag flat">防守</span>
       </div>
       <div class="mc-price-row">
-        <div class="mc-price">$503.70</div>
-        <span class="tag down">偏贵 / 等待</span>
+        <div class="mc-price" id="brk-price">$503.70</div>
+        <span class="tag down" id="brk-zone">偏贵 / 等待</span>
       </div>
       <div class="mc-mult-row">
         <div class="mc-mult-label">本周定投系数</div>
-        <div class="mc-mult">×0.6</div>
-        <div class="mc-mult-sub">便宜度 0.94 · 市净率 P/B 1.49×（合理 1.40×）</div>
+        <div class="mc-mult" id="brk-coeff">×0.6</div>
+        <div class="mc-mult-sub" id="brk-sub">便宜度 0.94 · 市净率 P/B 1.49×（合理 1.40×）</div>
       </div>
       <div class="mc-bar-wrap">
         <div class="mc-bar">
@@ -206,7 +196,6 @@
       <div class="mc-meta">
         <div class="mc-row"><span>锚定逻辑</span><b>锚定巴菲特框架：合理 = 1.40×BVPS、甜区 = 1.20×BVPS（显著低估回购区）、偏贵线 = 1.50×BVPS；BVPS = 337.04（2026-06-30）</b></div>
         <div class="mc-row"><span>信号解读</span><b>价高于合理线 +6.7%，本周按 ×0.6 减量等待</b></div>
-        <div class="mc-row"><span>数据状态</span><b>快照（2026-08-28 10:55）</b></div>
       </div>
     </div>
   </section>
@@ -229,18 +218,45 @@
       <div class="mc-meta">
         <div class="mc-row"><span>常规分批区</span><b id="gold-range">4000–4500</b></div>
         <div class="mc-row"><span>战略占比</span><b>10%（防守仓内）</b></div>
-        <div class="mc-row"><span>数据状态</span><b>手动维护 · 更新于 <span id="gold-upd">—</span></b></div>
       </div>
     </div>
     <script>
     (function(){
-      var g = (window.ORIGISTAR && window.ORIGISTAR.gold);
-      if(!g) return;
-      if(g.price != null){ var p=document.getElementById('gold-price'); if(p) p.textContent = '$' + Number(g.price).toLocaleString(); }
-      if(g.zone){ var z=document.getElementById('gold-zone'); if(z) z.textContent = g.zone; }
-      if(g.note){ var n=document.getElementById('gold-note'); if(n) n.textContent = g.note; }
-      if(g.sweet && g.fair){ var r=document.getElementById('gold-range'); if(r) r.textContent = g.sweet + '–' + g.fair; }
-      var u=document.getElementById('gold-upd'); if(u) u.textContent = (window.ORIGISTAR.updated||'—');
+      var L = window.DEFENSIVE_LIVE, O = window.ORIGISTAR;
+      function fmt(n){ return n==null ? '—' : '$' + Number(n).toLocaleString('en-US',{maximumFractionDigits:2}); }
+      function setTag(el, type, text){ if(!el) return; el.textContent = text; el.className = 'tag ' + (type||'flat'); }
+      // 黄金
+      var g = (L && L.items && L.items.gold) || (O && O.gold) || {};
+      var gp = document.getElementById('gold-price');
+      if(gp && g.price != null) gp.textContent = fmt(g.price);
+      setTag(document.getElementById('gold-zone'), g.zoneType || 'flat', g.zone || '—');
+      var og = (O && O.gold) || {};
+      var gr = document.getElementById('gold-range');
+      if(gr && og.sweet && og.fair) gr.textContent = og.sweet + '–' + og.fair;
+      // SCHD
+      var s = (L && L.items && L.items.schd) || (O && O.defensive && O.defensive.schd) || {};
+      var sp = document.getElementById('schd-price');
+      if(sp && s.price != null) sp.textContent = fmt(s.price);
+      setTag(document.getElementById('schd-zone'), s.zoneType || 'down', s.zone || '偏贵 / 等待');
+      var sc = document.getElementById('schd-coeff');
+      if(sc && s.coefficient != null) sc.textContent = '×' + Number(s.coefficient).toFixed(1);
+      var ksc = document.getElementById('kpi-schd-coeff');
+      if(ksc && s.coefficient != null) ksc.textContent = '×' + Number(s.coefficient).toFixed(1);
+      var ksm = document.getElementById('kpi-schd-meta');
+      if(ksm && s.zone) ksm.textContent = s.zone;
+      setTag(document.getElementById('kpi-schd-tag'), s.zoneType || 'down', s.coefficient >= 1 ? '加投' : '减量');
+      // BRK.B
+      var b = (L && L.items && L.items.brk) || (O && O.defensive && O.defensive.brk) || {};
+      var bp = document.getElementById('brk-price');
+      if(bp && b.price != null) bp.textContent = fmt(b.price);
+      setTag(document.getElementById('brk-zone'), b.zoneType || 'down', b.zone || '偏贵 / 等待');
+      var bc = document.getElementById('brk-coeff');
+      if(bc && b.coefficient != null) bc.textContent = '×' + Number(b.coefficient).toFixed(1);
+      var kbc = document.getElementById('kpi-brk-coeff');
+      if(kbc && b.coefficient != null) kbc.textContent = '×' + Number(b.coefficient).toFixed(1);
+      var kbm = document.getElementById('kpi-brk-meta');
+      if(kbm && b.zone) kbm.textContent = b.zone;
+      setTag(document.getElementById('kpi-brk-tag'), b.zoneType || 'down', b.coefficient >= 1 ? '加投' : '减量');
     })();
     </script>
   </section>

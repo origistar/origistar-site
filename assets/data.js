@@ -39,18 +39,18 @@ window.ORIGISTAR = {
 
   /* 防守仓 · 锚定便宜价（周定投基数 + 甜区乘数） */
   defensive: {
-    schd:  { price: 35.10, extreme: 27.0, sweet: 30.0, fair: 32.0, zone: "偏贵", zoneType: "down", weeklyBase: 5000 },
-    brk:   { price: 504.30, extreme: 450.0, sweet: 475.0, fair: 500.0, zone: "偏贵", zoneType: "down", weeklyBase: 5000 },
+    schd:  { price: 34.83, extreme: 27.0, sweet: 30.0, fair: 33.0, expensive: 37.0, zone: "偏贵 / 等待", zoneType: "down", weeklyBase: 5000 },
+    brk:   { price: 503.70, extreme: 337.0, sweet: 404.0, fair: 472.0, expensive: 506.0, zone: "偏贵 / 等待", zoneType: "down", weeklyBase: 5000 },
     note: "价格 ≤ 甜区 进入定投；≤ 极度便宜 加倍；≤ 合理价 半档；> 合理价 停止等待。当前均高于合理价，等待。"
   },
 
-  /* 防守仓 · 黄金（战略配置价格提示，手动维护） */
+  /* 防守仓 · 黄金（战略配置价格提示，自动/手动均可） */
   gold: {
-    price: null,         // 纽约黄金现货 $/oz，手动填或接实时
-    sweet: 4000,         // 第一批买入参考价
-    fair: 4500,          // 暂停/缓投参考价
+    price: null,         // 纽约黄金期货主连 GC=F $/oz，由 fetch-defensive.mjs 自动拉取
+    threshold: 4100,     // ≥ 此价显示「偏贵/等待」，< 此价显示「建仓」
+    fair: 4500,          // 高于此价暂停/缓投
     zone: "—",
-    note: "纽约黄金现货价格；约 $4100/oz 开第一批，每跌约 5% 加一批（越跌越买），高于 $4500 暂停。"
+    note: "纽约黄金期货主连 GC=F；约 $4100/oz 开第一批，每跌约 5% 加一批（越跌越买），高于 $4500 暂停。"
   },
 
   /* 进取仓 · 高弹性个股 / 主题（不含成本/仓位比重） */
