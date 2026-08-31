@@ -276,7 +276,7 @@ table.tbl-compact tr.trig-buy2 td { box-shadow: inset 4px 0 0 var(--down); }
 .foot a { color: var(--accent); }
 
 /* Hero */
-.hero { padding: 30px 0 10px; }
+.hero { padding: 14px 0 10px; }
 .hero .badge { display:inline-flex; gap:7px; align-items:center; font-size:var(--fs-xs); font-weight:700; color:var(--accent);
   background: var(--accent-soft); padding:6px 12px; border-radius:999px; margin-bottom:14px; }
 .hero h1 { font-size: var(--fs-xl); line-height: 1.12; font-weight: 850; letter-spacing: -.4px; margin: 0 0 10px; }
