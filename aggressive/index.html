@@ -41,7 +41,7 @@
     <div class="table-wrap">
       <table class="tbl tbl-compact" id="tbl-holdings">
         <thead><tr>
-          <th>标的</th><th>状态</th><th>仓位</th><th>最新价</th><th>预设卖出价</th><th title="第④层清仓线 = 最新价 × (1−3×ATR%)">趋势止盈价（④）</th><th>5 阶段</th><th>备注</th>
+          <th>标的</th><th>仓位</th><th>最新价</th><th>预设卖出价</th><th title="第④层清仓线 = 峰值(52周最高) × (1−3×ATR%)，ratchet 高点止损">趋势止盈价（④）</th><th>5 阶段</th><th>备注</th>
         </tr></thead>
         <tbody></tbody>
       </table>
@@ -92,7 +92,6 @@
     var fixed = (Math.abs(n) < 10) ? 2 : 2;
     return esc(cur || '') + n.toFixed(fixed);
   }
-  function statusCls(st){ if(st==='停牌') return 'flat'; if(st==='持有') return 'up'; return 'acc'; }
   function weightCls(w){ if(w==='重') return 'up'; if(w==='轻') return 'flat'; return 'acc'; }
   function stageClass(st){ return ['flat','acc','warn','warn','up'][st] || 'flat'; }
   function liveOf(name, bucket){ return (LIVE && LIVE[bucket] && LIVE[bucket][name]) || null; }
@@ -137,7 +136,6 @@
       var codeShow = (lv && lv.yahooSymbol) ? lv.yahooSymbol : (h.code || '');
       return '<tr>' +
         '<td><b>' + esc(h.name) + '</b><br><small class="muted">' + esc(codeShow) + ' · ' + esc(h.market||'') + '</small></td>' +
-        '<td><span class="tag ' + statusCls(h.status) + '">' + esc(h.status) + '</span></td>' +
         '<td><span class="tag ' + weightCls(h.weight) + '">' + esc(h.weight||'—') + '</span></td>' +
         '<td class="num">' + priceFmt(h.currency, price) + '</td>' +
         '<td class="num">' + (h.userSellWarn==null ? '待设' : priceFmt(h.currency, h.userSellWarn)) + '</td>' +
