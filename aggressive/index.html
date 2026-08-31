@@ -48,6 +48,14 @@
       </table>
     </div>
   </section>
+  <!-- 趋势止盈规则 -->
+  <section class="section">
+    <div class="section-head"><h2>趋势止盈规则</h2><span class="sub">5 层规则 · 个股独立校准</span></div>
+    <table class="tbl" style="margin-top:12px">
+      <thead><tr><th>层级</th><th>触发条件</th><th>动作</th></tr></thead>
+      <tbody id="a-rules"></tbody>
+    </table>
+  </section>
 </div>
 
 <footer class="foot">origistar · 进取仓 · 时间均为北京时间 · 数据仅供参考，非投资建议</footer>
@@ -148,6 +156,12 @@
       '</tr>';
     }).join('');
   }
+
+  // 规则表
+  var rEl = document.getElementById('a-rules');
+  if(rEl) rEl.innerHTML = (a.stopRules||[]).map(function(r){
+    return '<tr><td class="num">' + esc(r.layer) + '</td><td>' + esc(r.cond) + '</td><td><b>' + esc(r.action) + '</b></td></tr>';
+  }).join('');
 
 })();
 </script>
