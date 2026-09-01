@@ -134,7 +134,10 @@
         (s._ahPotential != null ? pct(s._ahPotential) : '计算中…') + '</span>' +
         (s._aPrice ? '<br><span class="mut">A股' + esc(s.aCode) + ' 现价 ' + fmt(s._aPrice) + ' · 发行价 HKD' + (s.ipoPrice != null ? fmt(s.ipoPrice) : '待定价') + '</span>' : '') + '</div>';
     } else if (s.raiseCap != null) {
-      var need = s.toConnectPct, w = Math.min(100, Math.max(4, (s.raiseCap / (s._threshold || 100)) * 100));
+      // 达标需涨：优先人工字段，否则按「门槛/发行市值-1」现算（toConnectPct 全网基本为空，null 会误显示「已达标」）
+      var need = s.toConnectPct;
+      if (need == null) need = s.raiseCap >= (s._threshold || 100) ? 0 : Math.round(((s._threshold || 100) / s.raiseCap - 1) * 100);
+      var w = Math.min(100, Math.max(4, (s.raiseCap / (s._threshold || 100)) * 100));
       var needCls = need <= 0 ? 'up' : (need > 200 ? 'down' : 'mut');
       gate = '<div class="gate"><div class="gtitle">📊 入通市值门槛测算（≈' + (s._threshold || 100) + '亿）</div>' +
         '<div class="mini" style="grid-template-columns:1fr 1fr;margin-top:4px">' +

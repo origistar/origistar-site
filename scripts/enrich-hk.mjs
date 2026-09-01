@@ -112,7 +112,7 @@ async function detectAH(name) {
 // 研究库继承：把研究字段补进 hk-data 同代码标的（仅填空）
 const RESEARCH_FIELDS = ['sponsor', 'corners', 'cornerN', 'cornerstonePct', 'lockup', 'unlockDate',
   'score', 'advice', 'leader', 'riskLevel', 'risk', 'ipoPrice', 'raiseCap', 'totalShares',
-  'ipoDate', 'isAH', 'aCode', 'ahRule', 'connectDate', 'floatShares', 'industry', 'lotSize'];
+  'ipoDate', 'deadline', 'isAH', 'aCode', 'ahRule', 'connectDate', 'floatShares', 'industry', 'lotSize'];
 function mergeResearch(stocks, researchStocks) {
   const byCode = new Map();
   for (const r of researchStocks) { const k = normCode(r.code); if (k) byCode.set(k, r); }
