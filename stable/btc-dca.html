@@ -205,6 +205,7 @@
 (function () {
   var L = window.MARKET_LIVE; var b = L && L.btc;
   function set(id, v) { var e = document.getElementById(id); if (e && v != null) e.textContent = v; }
+  function setHTML(id, v) { var e = document.getElementById(id); if (e && v != null) e.innerHTML = v; }
   // 更新时间与数据源随自动抓取同步，避免顶部时间戳陈旧
   if (L && L.generatedAt) set('btcUpd', '更新：' + L.generatedAt + ' · 数据源：' + ((b && b.dataSource) || (L && L.source) || 'Yahoo Finance'));
   // nav.js 在 head 先于 market-live.js 执行，此处回填全局导航时间戳
@@ -246,15 +247,15 @@
     e.className = (r === tier) ? 'now' : '';
   });
   set('btcLab', lab);
-  set('btcAmt', amt > 0 ? '¥' + amt.toLocaleString('zh-CN') + '<small> / 周</small>' : '暂停定投');
   set('btcStage', zone + (amt > 0 ? ' · ¥' + amt.toLocaleString('zh-CN') + '/周' : ' · 停止'));
+  setHTML('btcAmt', amt > 0 ? '¥' + amt.toLocaleString('zh-CN') + '<small> / 周</small>' : '暂停定投');
   // 本周操作随决策动态（IBIT 股数用 live 价）
   set('btcOpTitle', '本周操作 · ' + (amt > 0 ? '¥' + amt.toLocaleString('zh-CN') + ' / 周' : '暂停'));
   if (amt > 0) {
     var sh = Math.round(amt / 7.1 / ibitPx);
-    set('btcOpBody', 'IBIT $' + ibitPx.toFixed(2) + ' × ' + sh + ' 股 · <b>' + zone + '</b>');
+    setHTML('btcOpBody', 'IBIT $' + ibitPx.toFixed(2) + ' × ' + sh + ' 股 · <b>' + zone + '</b>');
   } else {
-    set('btcOpBody', '<b>暂停定投</b> · 等 AHR999 回落至 1.2 以下再启动');
+    setHTML('btcOpBody', '<b>暂停定投</b> · 等 AHR999 回落至 1.2 以下再启动');
   }
 })();
 </script>
