@@ -267,10 +267,23 @@
       "score": 46,
       "daily": 1500,
       "premium": 12.6
+    },
+    {
+      "date": "2026-09-02",
+      "pe": 30.31,
+      "pe_pct": 47.4,
+      "vix": 15.27,
+      "ndx": 29205,
+      "dd_pct": -5.06,
+      "tier": "mid_low",
+      "phase": "①",
+      "score": 46,
+      "daily": 1500,
+      "premium": 12.8
     }
   ],
-  "last_data_hash": "30.31|15.30|29253",
-  "generatedAt": "2026-09-01 23:57 北京时间",
+  "last_data_hash": "30.31|15.27|29205",
+  "generatedAt": "2026-09-02 00:13 北京时间",
   "dataSource": "蛋卷 PE/分位/ROE + Yahoo NDX/VIX/52周高 + 腾讯gtimg现价 + 东财513100净值（指数·汇率修正）",
-  "lastNote": "全部成功"
+  "lastNote": "回填 2026-09-02: 无历史K线，跳过"
 }
