@@ -1,5 +1,5 @@
 window.AGGRESSIVE_LIVE = {
-  "generatedAt": "2026-09-01 16:43:24 (北京)",
+  "generatedAt": "2026-09-01 18:44:00 (北京)",
   "updateFreq": "每日 3 次（08:30 / 16:30 / 23:00 北京时间）",
   "source": "Yahoo Finance 主力 + 腾讯 gtimg 兜底",
   "fetchNote": "全部标的已更新",
