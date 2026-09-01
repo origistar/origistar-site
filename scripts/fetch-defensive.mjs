@@ -28,14 +28,25 @@ function curlJson(url) {
     execFile('curl', ['-s', '-m', '25', '-H', 'User-Agent: ' + UA, '-H', 'Accept: application/json', url],
       { maxBuffer: 32 * 1024 * 1024 }, (err, stdout) => {
         if (err) return reject(err);
+        if (!stdout || !stdout.trim()) return reject(new Error('空响应'));
         try { resolve(JSON.parse(stdout)); } catch (e) { reject(new Error('JSON 解析失败')); }
       });
   });
 }
 
+// Yahoo 双域名容灾：query1 会整站不可达（HTTP 000），query2 正常。轮换重试。
+const YAHOO_HOSTS = ['query2.finance.yahoo.com', 'query1.finance.yahoo.com'];
+async function curlJsonRetry(path) {
+  let lastErr;
+  for (const host of YAHOO_HOSTS) {
+    try { return await curlJson(`https://${host}${path}`); }
+    catch (e) { lastErr = e; }
+  }
+  throw lastErr || new Error('全部 Yahoo 域名失败');
+}
+
 async function fetchYahoo(sym) {
-  const url = `https://query1.finance.yahoo.com/v8/finance/chart/${encodeURIComponent(sym)}?range=5d&interval=1d`;
-  const d = await curlJson(url);
+  const d = await curlJsonRetry(`/v8/finance/chart/${encodeURIComponent(sym)}?range=5d&interval=1d`);
   const r = d.chart && d.chart.result && d.chart.result[0];
   if (!r) throw new Error('empty result');
   const m = r.meta || {};
