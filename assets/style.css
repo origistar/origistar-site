@@ -304,6 +304,20 @@ table.tbl-compact tr.trig-buy2 td { box-shadow: inset 4px 0 0 var(--down); }
 .bigcard .stage { display:inline-block; margin-top:12px; font-size: var(--fs-xs); font-weight:700;
   background: rgba(255,255,255,.2); padding:5px 13px; border-radius:999px; }
 
+/* 双指标行：AHR999 与本周金额并列 */
+.bigcard .bigrow { display:flex; align-items:flex-end; justify-content:space-between; gap:12px; margin:8px 0 4px; }
+.bigcard .bigval { font-size: 38px; font-weight: 900; letter-spacing:-1.2px; line-height:1; font-variant-numeric: tabular-nums; }
+.bigcard .bigval small { font-size: var(--fs-md); font-weight:700; opacity:.85; margin-left:2px; }
+.bigcard .bigsub { font-size: var(--fs-xs); opacity:.88; font-weight:600; margin-top:2px; }
+
+/* BTC 卡片：暖橙红渐变（呼应"抄底机会"，饱和度高保证白字清晰） */
+.bigcard.btc { background: linear-gradient(135deg, #EA580C 0%, #B91C1C 100%); }
+.bigcard.btc .bigval { color:#FFFBEB; text-shadow: 0 1px 0 rgba(120, 30, 0, .25); }
+
+/* 纳指卡片：冷蓝绿渐变（呼应"稳健"，深底避免与 BTC 撞色） */
+.bigcard.ndx { background: linear-gradient(135deg, #0E7490 0%, #1E3A8A 100%); }
+.bigcard.ndx .bigval { color:#F0F9FF; text-shadow: 0 1px 0 rgba(8, 47, 73, .35); }
+
 /* 参数矩阵表（紧凑、带色块，用于 PE×VIX / DD 乘数） */
 .scroll-x { overflow: visible; }
 table.matrix { width:100%; border-collapse: collapse; font-size: var(--fs-xs); font-variant-numeric: tabular-nums; min-width: 0; table-layout: fixed; }
