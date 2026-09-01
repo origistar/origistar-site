@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-01 12:36",
+  "updated": "2026-09-01 12:42",
   "threshold": 100,
   "stocks": [
     {
@@ -124,7 +124,7 @@
       "_ahPotential": 8.818223580391038,
       "_price": 100,
       "_chgFromIpo": -2.72,
-      "_ahPremium": 16.482,
+      "_ahPremium": 16.483999999999998,
       "_autoUpdated": true,
       "_floatCap": 31.29,
       "_mktCap": 514.95,
@@ -2644,7 +2644,7 @@
       "_autoUpdated": true
     }
   ],
-  "hkdCnyRate": 0.857368,
+  "hkdCnyRate": 0.857383,
   "dataSource": "腾讯 gtimg（行情/市值）+ 东财港股资料表（新股发现）+ 新浪（汇率）；研究字段人工维护",
   "updateFreq": "每日 3 次（北京时间 08:30 / 16:30 / 23:00）",
   "errors": []
