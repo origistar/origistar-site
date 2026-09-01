@@ -207,6 +207,8 @@
   function set(id, v) { var e = document.getElementById(id); if (e && v != null) e.textContent = v; }
   // 更新时间与数据源随自动抓取同步，避免顶部时间戳陈旧
   if (L && L.generatedAt) set('btcUpd', '更新：' + L.generatedAt + ' · 数据源：' + ((b && b.dataSource) || (L && L.source) || 'Yahoo Finance'));
+  // nav.js 在 head 先于 market-live.js 执行，此处回填全局导航时间戳
+  if (L && L.generatedAt && window.origistarSetUpdated) window.origistarSetUpdated(L.generatedAt);
   if (!b) return;
   if (b.price != null) set('btcPrice', '$' + b.price.toLocaleString('en-US'));
   if (b.dd52w != null) set('btcDd', '-' + b.dd52w.toFixed(1) + '%');
