@@ -133,7 +133,7 @@
         esc(s.ahRule || '') + '<br><b>潜在 AH 溢价</b>（发行价 vs A股）：<span class="' + (s._ahPotential >= 0 ? 'up' : 'down') + '">' +
         (s._ahPotential != null ? pct(s._ahPotential) : '计算中…') + '</span>' +
         (s._aPrice ? '<br><span class="mut">A股' + esc(s.aCode) + ' 现价 ' + fmt(s._aPrice) + ' · 发行价 HKD' + fmt(s.ipoPrice) + '</span>' : '') + '</div>';
-    } else {
+    } else if (s.raiseCap != null) {
       var need = s.toConnectPct, w = Math.min(100, Math.max(4, (s.raiseCap / (s._threshold || 100)) * 100));
       var needCls = need <= 0 ? 'up' : (need > 200 ? 'down' : 'mut');
       gate = '<div class="gate"><div class="gtitle">📊 入通市值门槛测算（≈' + (s._threshold || 100) + '亿）</div>' +
@@ -142,6 +142,8 @@
         '<div><span>达标需涨</span><span class="' + needCls + '">' + (need <= 0 ? '已达标✅' : (need != null ? '+' + need + '%' : '—')) + '</span></div></div>' +
         '<div class="bar"><i style="width:' + w.toFixed(0) + '%"></i></div>' +
         '<div class="mut" style="font-size:11px">发行市值占门槛 ' + w.toFixed(0) + '%</div></div>';
+    } else {
+      gate = '<div class="gate" style="background:rgba(148,163,184,.08);border-color:rgba(148,163,184,.22)"><div class="gtitle" style="color:#94a3b8">📊 入通测算待补充</div><div class="mut" style="font-size:11px;margin-top:4px">发行市值 / 招股价待研究补充后显示</div></div>';
     }
     var csTxt = s.cornerN == null ? '—' :
       s.cornerN + '家 · ' + (s.cornerstonePct != null ? fmt(s.cornerstonePct, 1) + '%' : '比例—') +
@@ -151,8 +153,8 @@
     return '<div class="ipo-card">' +
       '<div class="ipo-top"><div><div class="ipo-nm">' + esc(s.name) + '</div>' +
       '<div class="ipo-cd">' + esc(s.code) + ' · ' + esc(s.industry || '') + '</div></div>' +
-      '<span class="tag acc">🎯 打新</span></div>' +
-      '<div class="ipo-price"><span class="now">招股中</span><span class="chg">发售价 ' + fmt(s.ipoPrice) + '</span></div>' +
+      (s._researched ? '<span class="tag acc">🎯 打新</span>' : '<span class="tag mut" style="background:rgba(148,163,184,.16);color:#94a3b8">🔍 自动发现</span>') + '</div>' +
+      '<div class="ipo-price"><span class="now">' + (s.ipoPrice != null ? '发售价 ' + fmt(s.ipoPrice) : '招股中') + '</span></div>' +
       '<div class="mini">' +
       '<div><span>IPO 价</span><span>' + fmt(s.ipoPrice) + '</span></div>' +
       '<div><span>上市日</span><span>' + esc(s.listDate || '—') + '</span></div>' +
