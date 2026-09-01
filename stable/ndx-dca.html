@@ -78,21 +78,16 @@
     </div>
   </section>
 
-  <!-- 场内纳指 ETF 溢价率 · 5 只对比 -->
+  <!-- 场内纳指 ETF 溢价率 · 5 只对比（图表） -->
   <section class="section">
     <div class="section-head">
       <h2 id="sec-prem">场内纳指 ETF 溢价率</h2>
-      <span class="sub" id="etfPremUpd">加载中…</span>
+      <span class="sub">实时现价 + NDX/汇率修正</span>
     </div>
-    <div class="card">
-      <div class="scroll-x">
-        <table class="matrix" id="etfPremTbl">
-          <thead><tr>
-            <th>ETF</th><th style="text-align:right">现价</th><th style="text-align:right">公布净值</th><th>净值日</th><th style="text-align:right">溢价率</th><th>信号</th>
-          </tr></thead>
-          <tbody id="etfPremBody"><tr><td colspan="6">加载中…</td></tr></tbody>
-        </table>
-      </div>
+    <div class="chart-box">
+      <h3>五只场内纳指 ETF 修正后溢价率对比</h3>
+      <div class="csub" id="etfPremUpd">加载中…</div>
+      <div class="cv" style="height:300px"><canvas id="etfPremChart"></canvas></div>
     </div>
     <div class="rule warn" style="margin-top:10px">
       <h3 id="premTitle">—</h3>
@@ -202,9 +197,9 @@
   set('roe', n.roe);
   set('prem', n.premium);
 
-  // ===== 5 只场内纳指 ETF 溢价率对比（按修正后溢价率排序，最低在前）=====
+  // ===== 5 只场内纳指 ETF 溢价率：横向条形图（降序，最高在上、最低在下并标 ★）=====
   var etfs = (L && L.etf && L.etf.list) ? L.etf.list : [];
-  // 排序：未取到值的排到末尾
+  // 复制一份：图表用降序（高溢价在上），后续操作建议仍按最低 etfs[0] 升序
   etfs.sort(function (a, b) {
     var pa = (a.premium == null ? 9999 : a.premium);
     var pb = (b.premium == null ? 9999 : b.premium);
@@ -217,25 +212,61 @@
     var updTs = (L && L.etf && L.etf.updateAt) || (L && L.generatedAt) || '—';
     updEl.textContent = '更新于 ' + updTs + ' · 实时现价 + NDX/汇率修正净值';
   }
-  // 表格渲染：最低溢价行左侧绿色条 + ★最低
-  var tbody = document.getElementById('etfPremBody');
-  if (tbody && etfs.length) {
-    tbody.innerHTML = etfs.map(function (e, i) {
-      var p = e.premium;
-      var pStr = p != null ? p.toFixed(2) + '%' : '—';
-      var cls = p == null ? '' : (p > 8 ? 'down' : (p >= 5 ? '' : 'up'));
-      var isLow = (i === 0 && p != null);
-      var trStyle = isLow ? ' style="box-shadow: inset 3px 0 0 var(--accent)"' : '';
-      var badge = isLow ? ' <span style="font-size:10px;color:var(--accent);font-weight:500">★最低</span>' : '';
-      return '<tr' + trStyle + '>' +
-        '<td class="lb"><b>' + e.code + '</b> ' + (e.name || '') + badge + '</td>' +
-        '<td style="text-align:right">' + (e.price != null ? e.price.toFixed(4) : '—') + '</td>' +
-        '<td style="text-align:right">' + (e.nav != null ? e.nav.toFixed(4) : '—') + '</td>' +
-        '<td>' + (e.navDate || '—') + '</td>' +
-        '<td class="' + cls + '" style="text-align:right;font-weight:700">' + pStr + '</td>' +
-        '<td style="font-size:11px">' + (e.signal || '') + '</td>' +
-        '</tr>';
-    }).join('');
+  // 图表渲染：横向条形图 + 5%/8% 阈值虚线 + 最低端 ★ 标注
+  if (window.Chart && document.getElementById('etfPremChart') && etfs.length) {
+    var chartSorted = etfs.slice().sort(function (a, b) {
+      return (b.premium || 0) - (a.premium || 0);
+    });
+    var cLabels = chartSorted.map(function (e) { return e.code + ' ' + (e.name || ''); });
+    var cVals = chartSorted.map(function (e) { return e.premium != null ? +e.premium : 0; });
+    var cColors = cVals.map(function (v) { return v > 8 ? '#E24B4A' : (v >= 5 ? '#EF9F27' : '#639922'); });
+    var thr = {
+      id: 'thr',
+      afterDatasetsDraw: function (c) {
+        var ctx = c.ctx, x = c.scales.x, a = c.chartArea;
+        [5, 8].forEach(function (v) {
+          var px = x.getPixelForValue(v);
+          ctx.save();
+          ctx.strokeStyle = '#378ADD';
+          ctx.lineWidth = 1.5;
+          ctx.setLineDash([5, 4]);
+          ctx.beginPath();
+          ctx.moveTo(px, a.top);
+          ctx.lineTo(px, a.bottom);
+          ctx.stroke();
+          ctx.restore();
+        });
+        c.getDatasetMeta(0).data.forEach(function (bar, i) {
+          ctx.save();
+          ctx.fillStyle = '#e5e7eb';
+          ctx.font = '500 12px sans-serif';
+          ctx.textBaseline = 'middle';
+          ctx.textAlign = 'left';
+          var isLow = (i === cVals.length - 1);
+          ctx.fillText(cVals[i].toFixed(2) + '%' + (isLow ? ' ★' : ''), bar.x + 8, bar.y);
+          ctx.restore();
+        });
+      }
+    };
+    new Chart(document.getElementById('etfPremChart').getContext('2d'), {
+      type: 'bar',
+      data: { labels: cLabels, datasets: [{ data: cVals, backgroundColor: cColors, borderRadius: 4, barPercentage: 0.7 }] },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { display: false },
+          tooltip: { callbacks: { label: function (c) { return c.parsed.x.toFixed(2) + '%'; } } }
+        },
+        scales: {
+          x: { min: 0, max: 15, grid: { color: 'rgba(139,151,171,.10)' },
+            ticks: { color: '#8b97ab', font: { size: 11 }, callback: function (v) { return v + '%'; } } },
+          y: { grid: { display: false }, ticks: { color: '#8b97ab', font: { size: 12 } } }
+        }
+      },
+      plugins: [thr]
+    });
   }
   // 操作建议：按「最低溢价」驱动（最低<5%才买场内；最低>8%才卖）
   if (lowest && lowest.premium != null) {
