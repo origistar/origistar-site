@@ -164,20 +164,21 @@
   function detailRow(s) {
     var sc = s.score;
     var cls = sc == null ? 'md' : (sc >= 70 ? 'hi' : sc < 55 ? 'lo' : 'md');
+    var isOld = !!s.isOld;
     return '<tr class="drow" id="d_' + s.code + '" style="display:none"><td colspan="6">' +
       '<div class="mini">' +
       (s.leader ? '<div><span>地位</span><span>' + esc(s.leader) + '</span></div>' : '') +
-      '<div><span>保荐</span><span>' + esc(s.sponsor || '—') + '</span></div>' +
+      (isOld ? '' : '<div><span>保荐</span><span>' + esc(s.sponsor || '—') + '</span></div>') +
       (s.cornerN ? '<div><span>基石</span><span>' + s.cornerN + '家·' + (s.cornerstonePct != null ? fmt(s.cornerstonePct, 0) + '%' : '') + ' ' + esc((s.corners || []).slice(0, 3).join('、')) + '</span></div>' : '') +
       (s._ahPremium != null ? '<div><span>AH 溢价</span><span class="' + (s._ahPremium >= 0 ? 'up' : 'down') + '">' + pct(s._ahPremium) + '</span></div>' : '') +
       '</div>' +
-      '<div class="mut" style="font-size:11px;margin:4px 0">行业：' + esc(s.industry || '—') + (s.greyMarket != null ? ' · 暗盘 ' + (s.greyMarket > 0 ? '+' : '') + s.greyMarket + '%' : '') + '</div>' +
+      '<div class="mut" style="font-size:11px;margin:4px 0">行业：' + esc(s.industry || '—') + (isOld ? ' · 老股（不显示保荐/基石）' : '') + (s.greyMarket != null ? ' · 暗盘 ' + (s.greyMarket > 0 ? '+' : '') + s.greyMarket + '%' : '') + '</div>' +
       (s.advice ? '<div class="adv"><span class="h">💡 建议</span>' + esc(s.advice) + '</div>' : '') +
       '<div class="mini3">' +
       '<div><span class="mk">发行市值</span><span class="mv">' + (s.raiseCap ? fmt(s.raiseCap, 0) + '亿' : '—') + '</span></div>' +
-      '<div><span class="mk">上市以来</span><span class="mv ' + (s._chgFromIpo == null ? 'mut' : (s._chgFromIpo >= 0 ? 'up' : 'down')) + '">' + (s._chgFromIpo != null ? pct(s._chgFromIpo) : '—') + '</span></div>' +
-      '<div><span class="mk">锁定期</span><span class="mv">' + esc(s.lockup || '—') + '</span></div>' +
-      '<div><span class="mk">解禁日</span><span class="mv">' + esc(s.unlockDate || '—') + '</span></div>' +
+      (isOld ? '' : '<div><span class="mk">上市以来</span><span class="mv ' + (s._chgFromIpo == null ? 'mut' : (s._chgFromIpo >= 0 ? 'up' : 'down')) + '">' + (s._chgFromIpo != null ? pct(s._chgFromIpo) : '—') + '</span></div>') +
+      (isOld ? '' : '<div><span class="mk">锁定期</span><span class="mv">' + esc(s.lockup || '—') + '</span></div>') +
+      (isOld ? '' : '<div><span class="mk">解禁日</span><span class="mv">' + esc(s.unlockDate || '—') + '</span></div>') +
       '<div><span class="mk">流通股</span><span class="mv">' + (s.floatShares != null ? fmt(s.floatShares, 2) + '亿' : '—') + '</span></div>' +
       '<div><span class="mk">风险</span><span class="mv">' + esc(s.riskLevel || '—') + '</span></div>' +
       '</div>' +

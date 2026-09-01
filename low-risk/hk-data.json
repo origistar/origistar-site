@@ -45,7 +45,9 @@
       "_connectGapPct": 218.6,
       "_connectStatus": "已达标",
       "_connectDone": false,
-      "_connectDays": 6
+      "_connectDays": 6,
+      "listDate": "2026-04-28",
+      "isOld": false
     },
     {
       "code": "02729.HK",
@@ -92,7 +94,9 @@
       "_connectGapPct": 40,
       "_connectStatus": "已达标",
       "_connectDone": false,
-      "_connectDays": 6
+      "_connectDays": 6,
+      "listDate": "2026-03-24",
+      "isOld": false
     },
     {
       "code": "02526.HK",
@@ -117,7 +121,10 @@
       "_connectGapPct": 355.9,
       "_connectStatus": "已达标",
       "_connectDone": false,
-      "_connectDays": 6
+      "_connectDays": 6,
+      "listDate": "2026-03-30",
+      "industry": "其他医疗保健",
+      "isOld": false
     },
     {
       "code": "06636.HK",
@@ -165,7 +172,9 @@
       "_connectGapPct": 1.6,
       "_connectStatus": "已达标",
       "_connectDone": false,
-      "_connectDays": 6
+      "_connectDays": 6,
+      "listDate": "2026-03-30",
+      "isOld": false
     },
     {
       "code": "02726.HK",
@@ -190,7 +199,10 @@
       "_connectGapPct": 350.3,
       "_connectStatus": "已达标",
       "_connectDone": false,
-      "_connectDays": 6
+      "_connectDays": 6,
+      "listDate": "2026-03-30",
+      "industry": "半导体",
+      "isOld": false
     },
     {
       "code": "03625.HK",
@@ -235,7 +247,9 @@
       "_connectGapPct": 4.6,
       "_connectStatus": "已达标",
       "_connectDone": false,
-      "_connectDays": 6
+      "_connectDays": 6,
+      "listDate": "2026-03-31",
+      "isOld": false
     },
     {
       "code": "06656.HK",
@@ -290,7 +304,9 @@
       "_connectGapPct": 724.1,
       "_connectStatus": "已达标",
       "_connectDone": false,
-      "_connectDays": 6
+      "_connectDays": 6,
+      "listDate": "2026-04-16",
+      "isOld": false
     },
     {
       "code": "00068.HK",
@@ -340,7 +356,9 @@
       "_connectGapPct": 53,
       "_connectStatus": "已达标",
       "_connectDone": false,
-      "_connectDays": 6
+      "_connectDays": 6,
+      "listDate": "2026-04-17",
+      "isOld": false
     },
     {
       "code": "03277.HK",
@@ -394,7 +412,9 @@
       "_connectGapPct": 296.6,
       "_connectStatus": "已达标",
       "_connectDone": false,
-      "_connectDays": 6
+      "_connectDays": 6,
+      "listDate": "2026-04-17",
+      "isOld": false
     },
     {
       "code": "01236.HK",
@@ -441,7 +461,8 @@
       "_connectGapPct": 15.5,
       "_connectStatus": "已达标",
       "_connectDone": false,
-      "_connectDays": 6
+      "_connectDays": 6,
+      "isOld": false
     },
     {
       "code": "07666.HK",
@@ -469,7 +490,8 @@
       "_connectGapPct": 45.9,
       "_connectStatus": "已达标",
       "_connectDone": false,
-      "_connectDays": 6
+      "_connectDays": 6,
+      "isOld": false
     },
     {
       "code": "06872.HK",
@@ -516,7 +538,8 @@
       "_connectGapPct": -4,
       "_connectStatus": "差 4%",
       "_connectDone": false,
-      "_connectDays": 6
+      "_connectDays": 6,
+      "isOld": false
     },
     {
       "code": "00340.HK",
@@ -541,7 +564,10 @@
       "_connectGapPct": 74.5,
       "_connectStatus": "已达标",
       "_connectDone": false,
-      "_connectDays": 6
+      "_connectDays": 6,
+      "listDate": "1997-03-26",
+      "industry": "黄金及贵金属",
+      "isOld": true
     },
     {
       "code": "02723.HK",
@@ -589,7 +615,8 @@
       "_connectGapPct": 726.1,
       "_connectStatus": "已达标",
       "_connectDone": false,
-      "_connectDays": 6
+      "_connectDays": 6,
+      "isOld": false
     },
     {
       "code": "03310.HK",
@@ -638,7 +665,8 @@
       "_connectGapPct": 21.7,
       "_connectStatus": "已达标",
       "_connectDone": false,
-      "_connectDays": 6
+      "_connectDays": 6,
+      "isOld": false
     },
     {
       "code": "03388.HK",
@@ -666,7 +694,8 @@
       "_connectGapPct": 16.2,
       "_connectStatus": "已达标",
       "_connectDone": false,
-      "_connectDays": 6
+      "_connectDays": 6,
+      "isOld": false
     },
     {
       "code": "06658.HK",
@@ -714,7 +743,8 @@
       "_connectGapPct": 11.1,
       "_connectStatus": "已达标",
       "_connectDone": false,
-      "_connectDays": 6
+      "_connectDays": 6,
+      "isOld": false
     },
     {
       "code": "06675.HK",
@@ -759,7 +789,9 @@
       "_connectGapPct": 23.1,
       "_connectStatus": "已达标",
       "_connectDone": false,
-      "_connectDays": 6
+      "_connectDays": 6,
+      "listDate": "2026-06-17",
+      "isOld": false
     },
     {
       "code": "01392.HK",
@@ -807,7 +839,8 @@
       "_connectGapPct": 111.4,
       "_connectStatus": "已达标",
       "_connectDone": false,
-      "_connectDays": 6
+      "_connectDays": 6,
+      "isOld": false
     },
     {
       "code": "01956.HK",
@@ -860,7 +893,8 @@
       "_connectGapPct": 42.1,
       "_connectStatus": "已达标",
       "_connectDone": false,
-      "_connectDays": 6
+      "_connectDays": 6,
+      "isOld": false
     },
     {
       "code": "02272.HK",
@@ -908,7 +942,8 @@
       "_connectGapPct": 11.2,
       "_connectStatus": "已达标",
       "_connectDone": false,
-      "_connectDays": 6
+      "_connectDays": 6,
+      "isOld": false
     },
     {
       "code": "03774.HK",
@@ -933,7 +968,10 @@
       "_connectGapPct": 97.2,
       "_connectStatus": "已达标",
       "_connectDone": false,
-      "_connectDays": 6
+      "_connectDays": 6,
+      "listDate": "2018-10-15",
+      "industry": "其他医疗保健",
+      "isOld": true
     },
     {
       "code": "02697.HK",
@@ -981,7 +1019,8 @@
       "_connectGapPct": 130.5,
       "_connectStatus": "已达标",
       "_connectDone": false,
-      "_connectDays": 6
+      "_connectDays": 6,
+      "isOld": false
     },
     {
       "code": "02616.HK",
@@ -1006,7 +1045,10 @@
       "_connectGapPct": -9.1,
       "_connectStatus": "差 9%",
       "_connectDone": false,
-      "_connectDays": 6
+      "_connectDays": 6,
+      "listDate": "2019-02-26",
+      "industry": "药品及生物科技",
+      "isOld": true
     },
     {
       "code": "01440.HK",
@@ -1031,7 +1073,10 @@
       "_connectGapPct": 75.5,
       "_connectStatus": "已达标",
       "_connectDone": false,
-      "_connectDays": 6
+      "_connectDays": 6,
+      "listDate": "2021-01-13",
+      "industry": "纺织及服饰",
+      "isOld": true
     },
     {
       "code": "01133.HK",
@@ -1056,7 +1101,10 @@
       "_connectGapPct": 270.3,
       "_connectStatus": "已达标",
       "_connectDone": false,
-      "_connectDays": 6
+      "_connectDays": 6,
+      "listDate": "1994-12-16",
+      "industry": "工业工程",
+      "isOld": true
     },
     {
       "code": "01286.HK",
@@ -1081,7 +1129,10 @@
       "_connectGapPct": 66.3,
       "_connectStatus": "已达标",
       "_connectDone": false,
-      "_connectDays": 6
+      "_connectDays": 6,
+      "listDate": "2019-06-28",
+      "industry": "工业工程",
+      "isOld": true
     },
     {
       "code": "01651.HK",
@@ -1106,7 +1157,10 @@
       "_connectGapPct": 87.8,
       "_connectStatus": "已达标",
       "_connectDone": false,
-      "_connectDays": 6
+      "_connectDays": 6,
+      "listDate": "2017-09-25",
+      "industry": "工业工程",
+      "isOld": true
     },
     {
       "code": "01672.HK",
@@ -1131,7 +1185,10 @@
       "_connectGapPct": 0.6,
       "_connectStatus": "已达标",
       "_connectDone": false,
-      "_connectDays": 6
+      "_connectDays": 6,
+      "listDate": "2018-08-01",
+      "industry": "药品及生物科技",
+      "isOld": true
     },
     {
       "code": "01866.HK",
@@ -1156,7 +1213,10 @@
       "_connectGapPct": 47.4,
       "_connectStatus": "已达标",
       "_connectDone": false,
-      "_connectDays": 6
+      "_connectDays": 6,
+      "listDate": "2009-12-08",
+      "industry": "原材料",
+      "isOld": true
     },
     {
       "code": "02142.HK",
@@ -1181,7 +1241,10 @@
       "_connectGapPct": 18.2,
       "_connectStatus": "已达标",
       "_connectDone": false,
-      "_connectDays": 6
+      "_connectDays": 6,
+      "listDate": "2020-12-10",
+      "industry": "药品及生物科技",
+      "isOld": true
     },
     {
       "code": "02225.HK",
@@ -1206,7 +1269,10 @@
       "_connectGapPct": 153.6,
       "_connectStatus": "已达标",
       "_connectDone": false,
-      "_connectDays": 6
+      "_connectDays": 6,
+      "listDate": "2017-10-17",
+      "industry": "其他医疗保健",
+      "isOld": true
     },
     {
       "code": "02696.HK",
@@ -1231,7 +1297,10 @@
       "_connectGapPct": 259.1,
       "_connectStatus": "已达标",
       "_connectDone": false,
-      "_connectDays": 6
+      "_connectDays": 6,
+      "listDate": "2019-09-25",
+      "industry": "药品及生物科技",
+      "isOld": true
     },
     {
       "code": "02245.HK",
@@ -1256,7 +1325,10 @@
       "_connectGapPct": 185.1,
       "_connectStatus": "已达标",
       "_connectDone": false,
-      "_connectDays": 6
+      "_connectDays": 6,
+      "listDate": "2022-12-01",
+      "industry": "一般金属及矿石",
+      "isOld": true
     },
     {
       "code": "02670.HK",
@@ -1301,7 +1373,9 @@
       "_connectGapPct": -14,
       "_connectStatus": "差 14%",
       "_connectDone": false,
-      "_connectDays": 6
+      "_connectDays": 6,
+      "listDate": "2025-10-16",
+      "isOld": false
     },
     {
       "code": "03355.HK",
@@ -1346,7 +1420,9 @@
       "_connectGapPct": 74.5,
       "_connectStatus": "已达标",
       "_connectDone": false,
-      "_connectDays": 6
+      "_connectDays": 6,
+      "listDate": "2026-03-23",
+      "isOld": false
     },
     {
       "code": "06938.HK",
@@ -1391,7 +1467,9 @@
       "_connectGapPct": 4.5,
       "_connectStatus": "已达标",
       "_connectDone": false,
-      "_connectDays": 6
+      "_connectDays": 6,
+      "listDate": "2026-01-09",
+      "isOld": false
     },
     {
       "code": "00600.HK",
@@ -1438,7 +1516,9 @@
       "_connectGapPct": 9.4,
       "_connectStatus": "已达标",
       "_connectDone": false,
-      "_connectDays": 6
+      "_connectDays": 6,
+      "listDate": "2026-02-10",
+      "isOld": false
     },
     {
       "code": "03223.HK",
@@ -1491,7 +1571,8 @@
       "_connectStatus": "A+H · 免市值门槛",
       "_connectGapPct": null,
       "_connectDone": false,
-      "_connectDays": 20
+      "_connectDays": 20,
+      "isOld": false
     },
     {
       "board": "ipo",
