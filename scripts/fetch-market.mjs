@@ -51,6 +51,19 @@ function curlJson(url, extraHeaders = []) {
       });
   });
 }
+// 取纯文本（非 JSON，如腾讯 gtimg 行情）
+function curlText(url, extraHeaders = []) {
+  const args = ['-s', '-m', '25', '-H', 'User-Agent: ' + UA];
+  for (const h of extraHeaders) args.push('-H', h);
+  args.push(url);
+  return new Promise((resolve, reject) => {
+    execFile('curl', args, { maxBuffer: 32 * 1024 * 1024 }, (err, stdout) => {
+      if (err) return reject(err);
+      if (!stdout || !stdout.trim()) return reject(new Error('空响应'));
+      resolve(stdout);
+    });
+  });
+}
 // 东财基金净值接口必须带 Referer，否则返回 HTML 404
 const EM_FUND_REF = ['Referer: http://fund.eastmoney.com/'];
 async function curlJsonRetry(path) {
@@ -139,17 +152,19 @@ async function main() {
   // 用户策略阈值：<5% 当天改买场内 ETF，>8% 卖出换回场外 —— 必须自动、准确、可审计
   try {
     const ETF_LIST = [
-      { code: '513100', secid: '1.513100', name: '纳指ETF国泰' },
-      { code: '159941', secid: '0.159941', name: '纳指ETF广发' },
-      { code: '513300', secid: '1.513300', name: '纳斯达克ETF' },
-      { code: '159632', secid: '0.159632', name: '纳斯达克ETF' },
-      { code: '513390', secid: '1.513390', name: '纳指科技ETF' }
+      { code: '513100', gtflag: 'sh', name: '纳指ETF国泰' },
+      { code: '159941', gtflag: 'sz', name: '纳指ETF广发' },
+      { code: '513300', gtflag: 'sh', name: '纳斯达克ETF华夏' },
+      { code: '159632', gtflag: 'sz', name: '纳斯达克ETF华安' },
+      { code: '513390', gtflag: 'sh', name: '纳指科技ETF博时' }
     ];
-    // 1) NDX 日线 + 现价（用于按净值日修正）
-    const ndxChart = await fetchYahooChart('^NDX');
-    const ndxNow = ndxChart.meta.regularMarketPrice;
+    // 1) NDX 日线 + 现价（用于按净值日修正）—— Yahoo 限流时降级为未修正净值，不阻断 ETF 块
+    let ndxChart = null, ndxNow = null, fxNow = null, fxSeries = [];
+    try {
+      ndxChart = await fetchYahooChart('^NDX');
+      ndxNow = ndxChart.meta.regularMarketPrice;
+    } catch (e) { mark('NDX(ETF修正): ' + (e.message || e)); }
     // 2) 美元人民币（QDII 净值以美元资产计，需汇率修正）
-    let fxNow = null, fxSeries = [];
     try {
       const fx = await fetchYahooChart('CNY=X');
       fxNow = fx.meta.regularMarketPrice;
@@ -159,21 +174,22 @@ async function main() {
     const etfs = [];
     for (const etf of ETF_LIST) {
       try {
-        // 3) 场内现价（东财 push2）
-        const qRaw = await curlJson(`https://push2.eastmoney.com/api/qt/stock/get?secid=${etf.secid}&fields=f43,f57,f58,f169,f170`);
-        const qd = qRaw && qRaw.data;
-        const price = qd && qd.f43 != null ? qd.f43 / 1000 : null;
+        // 3) 场内现价（腾讯 gtimg，免鉴权，本环境/runner 均稳定；东财 push2 已失效）
+        const gtRaw = await curlText(`https://qt.gtimg.cn/q=${etf.gtflag}${etf.code}`);
+        const gm = gtRaw.match(/="([^"]*)"/);
+        const gf = gm ? gm[1].split('~') : [];
+        const price = gf[3] ? parseFloat(gf[3]) : null;
         if (!price) throw new Error('现价缺失');
-        // 4) 最新公布净值 + 净值日期（东财 f10/lsjz）
+        // 4) 最新公布净值 + 净值日期（东财 f10/lsjz，仍正常）
         const jzRaw = await curlJson(`https://api.fund.eastmoney.com/f10/lsjz?fundCode=${etf.code}&pageIndex=1&pageSize=1`, EM_FUND_REF);
         const jz = jzRaw && jzRaw.Data && jzRaw.Data.LSJZList && jzRaw.Data.LSJZList[0];
         if (!jz || !jz.DWJZ) throw new Error('净值缺失');
         const nav = parseFloat(jz.DWJZ);
         const navDate = new Date(jz.FSRQ + 'T23:59:59Z');
-        // 5) 指数修正 + 汇率修正
-        const ndxThen = closeOnOrBefore(ndxChart.series, navDate);
+        // 5) 指数修正 + 汇率修正（NDX/汇率取不到时退回未修正净值）
+        const ndxThen = (ndxChart && ndxChart.series) ? closeOnOrBefore(ndxChart.series, navDate) : null;
         const fxThen = fxSeries.length ? closeOnOrBefore(fxSeries, navDate) : null;
-        let adjNav = nav, basis = '最新公布净值（未修正）';
+        let adjNav = nav, basis = '最新公布净值（未修正，NDX/汇率暂不可用）';
         if (ndxNow && ndxThen) {
           const idxRatio = ndxNow / ndxThen;
           const fxRatio = (fxNow && fxThen) ? (fxThen / fxNow) : 1;
@@ -183,7 +199,7 @@ async function main() {
         const premiumRaw = (price - nav) / nav * 100;
         const premium = (price - adjNav) / adjNav * 100;
         etfs.push({
-          code: etf.code, name: jz.FSRQ ? (qd && qd.f58) || etf.name : etf.name,
+          code: etf.code, name: etf.name,
           price: +price.toFixed(4),
           nav: +nav.toFixed(4), navDate: jz.FSRQ,
           adjNav: +adjNav.toFixed(4),
@@ -191,7 +207,7 @@ async function main() {
           premiumRaw: +premiumRaw.toFixed(2),
           basis: basis,
           signal: premium < 5 ? '溢价<5% · 可买场内' : (premium > 8 ? '溢价>8% · 换回场外' : '5%~8% · 维持场外'),
-          dataSource: '东财 push2 + 东财基金净值 + Yahoo NDX/CNY'
+          dataSource: '腾讯 gtimg 现价 + 东财基金净值 + Yahoo NDX/CNY 修正'
         });
       } catch (e) { mark(`ETF ${etf.code}: ` + (e.message || e)); }
     }

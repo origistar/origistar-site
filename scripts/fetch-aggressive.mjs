@@ -1,6 +1,6 @@
 // 进取仓行情拉取 + 5 阶段趋势止盈计算
 // 主源：Yahoo Finance（美股/港股/Ａ股通吃，免 key）
-// 兜底：东方财富 push2（中国大陆可达；本工作流跑在美区 runner，东财可能不稳，故仅作 best-effort 兜底）
+// 兜底：腾讯 gtimg K线（web.ifzq.gtimg.cn，全球可达；彻底移除东财 push2 依赖）
 // 输出：assets/aggressive-live.js  ->  window.AGGRESSIVE_LIVE
 //
 // 计算口径（与页面"计算口径"说明保持一致）：
@@ -63,12 +63,12 @@ function normSymbol(s) {
   if (x.toUpperCase().endsWith('.HK') && x.startsWith('0')) x = x.slice(1);
   return x;
 }
-function yahooToEmSecid(s) {
+function yahooToTencentCode(s) {
   const u = String(s).toUpperCase();
-  if (u.endsWith('.HK')) return '116.' + u.replace('.HK', '');
-  if (u.endsWith('.SS')) return '1.' + u.replace('.SS', '');
-  if (u.endsWith('.SZ')) return '0.' + u.replace('.SZ', '');
-  return '107.' + u; // 美股
+  if (u.endsWith('.HK')) return 'hk' + u.replace('.HK', '').padStart(5, '0');
+  if (u.endsWith('.SS')) return 'sh' + u.replace('.SS', '');
+  if (u.endsWith('.SZ')) return 'sz' + u.replace('.SZ', '');
+  return 'us' + u + '.OQ'; // 美股（NASDAQ/OTC）
 }
 
 // ---------- 读取静态配置（data.js 是纯数据，挂到 window.ORIGISTAR）----------
@@ -117,20 +117,20 @@ async function fetchYahoo(sym) {
   return { meta: m, closes, highs, lows };
 }
 
-// 东财兜底（best-effort，K 线历史；东财为大陆可达，美区 runner 可能不稳，故仅兜底）
-// 用 push2his K 线拿完整 OHLC 历史，足以算 MA/ATR/峰值；字段 f51=日期 f52=开 f53=高 f54=低 f55=收
-async function fetchEastmoney(sym) {
-  const secid = yahooToEmSecid(sym);
-  const url = `https://push2his.eastmoney.com/api/qt/stock/kline/get?secid=${secid}&fields2=f51,f52,f53,f54,f55&klt=101&fqt=1&lmt=260`;
+// 腾讯 gtimg K线兜底（best-effort，全球可达；彻底移除东财 push2 依赖）
+// web.ifzq.gtimg.cn 日K线，qfqday 每项：[日期, 开, 收, 高, 低, 量]，足以算 MA/ATR/峰值
+async function fetchTencent(sym) {
+  const code = yahooToTencentCode(sym);
+  const url = `https://web.ifzq.gtimg.cn/appstuff/app/kline/kline?param=${code},day,,,320,qfq`;
   const d = await curlJson(url);
-  const klines = d && d.data && d.data.klines;
-  if (!klines || !klines.length) throw new Error('empty');
+  const node = d && d.data && d.data[code];
+  const arr = node && (node.qfqday || node.day);
+  if (!arr || !arr.length) throw new Error('empty');
   const closes = [], highs = [], lows = [];
-  for (const line of klines) {
-    const p = String(line).split(',');
-    highs.push(parseFloat(p[2]));
-    lows.push(parseFloat(p[3]));
-    closes.push(parseFloat(p[4]));
+  for (const p of arr) {
+    closes.push(parseFloat(p[2]));
+    highs.push(parseFloat(p[3]));
+    lows.push(parseFloat(p[4]));
   }
   if (!closes.length) throw new Error('empty');
   const price = closes[closes.length - 1];
@@ -151,10 +151,10 @@ async function fetchWithFallback(cfg) {
       else break; // 404 / 结构错误不再重试
     }
   }
-  // Yahoo 失败 -> 东财兜底
+  // Yahoo 失败 -> 腾讯 gtimg 兜底
   try {
-    const em = await fetchEastmoney(sym);
-    return { ...em, source: '东财', sym };
+    const em = await fetchTencent(sym);
+    return { ...em, source: '腾讯', sym };
   } catch (e2) {
     lastErr = e2;
   }
@@ -330,7 +330,7 @@ async function main() {
   const out = {
     generatedAt: nowBJ(),
     updateFreq: '每日 3 次（08:30 / 16:30 / 23:00 北京时间）',
-    source: 'Yahoo Finance 主力 + 东方财富 push2 兜底',
+    source: 'Yahoo Finance 主力 + 腾讯 gtimg 兜底',
     fetchNote: notes.length ? ('部分标的拉取失败：' + notes.join('；')) : '全部标的已更新',
     items, watchItems
   };
