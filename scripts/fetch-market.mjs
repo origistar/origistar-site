@@ -138,13 +138,32 @@ async function main() {
       const ratio2 = Math.pow(2, years);
       ahr999 = (price / sma200) * (price / ratio2);
     }
-    let mstr = null;
-    try { mstr = (await fetchYahooChart('MSTR')).meta.regularMarketPrice; } catch (e) { mark('MSTR: ' + (e.message || e)); }
+    // IBIT 现价（定投标的）
+    let ibit = null;
+    try { ibit = (await fetchYahooChart('IBIT')).meta.regularMarketPrice; } catch (e) { mark('IBIT: ' + (e.message || e)); }
+    // MSTR：现价 + 52周高（算回撤）+ 市值（算 mNAV）
+    let mstr = null, mstr52w = null, mstrMcap = null;
+    try {
+      const ms = await fetchYahooChart('MSTR');
+      mstr = ms.meta.regularMarketPrice;
+      mstr52w = ms.meta.fiftyTwoWeekHigh;
+      mstrMcap = ms.meta.marketCap;
+    } catch (e) { mark('MSTR: ' + (e.message || e)); }
+    const mstrDd = (mstr != null && mstr52w != null) ? +(((mstr - mstr52w) / mstr52w) * 100).toFixed(1) : null;
+    // mNAV = MSTR 市值 / (持仓 BTC 数 × BTC 现价)，持仓取公开口径 578,000 BTC
+    const mnav = (mstrMcap != null && price) ? +(mstrMcap / (578000 * price)).toFixed(2) : null;
     out.btc = {
       price: price, ahr999: ahr999 != null ? +ahr999.toFixed(4) : null,
       p200ma: sma200 ? +(price / sma200).toFixed(3) : null,
+      ma200: sma200 ? +sma200.toFixed(0) : null,
+      hi52w: hi != null ? +hi.toFixed(0) : null,
       dd52w: dd52w != null ? +dd52w.toFixed(1) : null,
-      mstr: mstr, dataSource: 'Yahoo Finance'
+      ibit: ibit != null ? +ibit.toFixed(2) : null,
+      mstr: mstr != null ? +mstr.toFixed(2) : null,
+      mstr52w: mstr52w != null ? +mstr52w.toFixed(0) : null,
+      mstrDd: mstrDd,
+      mnav: mnav,
+      dataSource: 'Yahoo Finance'
     };
   } catch (e) { mark('BTC: ' + (e.message || e)); out.btc = null; }
 
