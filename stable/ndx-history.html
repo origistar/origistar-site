@@ -142,7 +142,7 @@
 
   fetch('state.json?t=' + Date.now())
     .then(function (r) { return r.json(); })
-    .then(function (d) { ALL = d.history || []; render(30); })
+    .then(function (d) { ALL = d.history || []; render(30); if (window.origistarSetUpdated) window.origistarSetUpdated('定投记录·手动维护'); })
     .catch(function (e) { tbody.innerHTML = '<tr><td colspan="11">加载失败：' + esc(e.message) + '</td></tr>'; });
 })();
 </script>
