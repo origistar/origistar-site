@@ -22,7 +22,7 @@
       "industry": "光计算",
       "leader": "光计算芯片",
       "advice": "基石65%过重,解禁砸盘风险极大;已涨91%。入通弹性被解禁吞噬,观望。",
-      "raiseCap": null,
+      "raiseCap": 140.9,
       "riskLevel": "中",
       "lockup": "基石6个月(20家/65%)",
       "unlockDate": "2026-10-27(基石)",
@@ -124,7 +124,10 @@
       "_connectDays": 6,
       "listDate": "2026-03-30",
       "industry": "其他医疗保健",
-      "isOld": false
+      "isOld": false,
+      "ipoPrice": 99,
+      "ipoDate": "2026-03-30",
+      "_chgFromIpo": 415.66
     },
     {
       "code": "06636.HK",
@@ -202,7 +205,10 @@
       "_connectDays": 6,
       "listDate": "2026-03-30",
       "industry": "半导体",
-      "isOld": false
+      "isOld": false,
+      "ipoPrice": 76.26,
+      "ipoDate": "2026-03-30",
+      "_chgFromIpo": 38.21
     },
     {
       "code": "03625.HK",
@@ -491,7 +497,10 @@
       "_connectStatus": "已达标",
       "_connectDone": false,
       "_connectDays": 6,
-      "isOld": false
+      "isOld": false,
+      "ipoPrice": 10.5,
+      "ipoDate": "2026-05-13",
+      "_chgFromIpo": 18.1
     },
     {
       "code": "06872.HK",
@@ -567,7 +576,10 @@
       "_connectDays": 6,
       "listDate": "1997-03-26",
       "industry": "黄金及贵金属",
-      "isOld": true
+      "isOld": true,
+      "ipoPrice": 1.05,
+      "ipoDate": "1997-03-26",
+      "_chgFromIpo": 213.81
     },
     {
       "code": "02723.HK",
@@ -695,7 +707,10 @@
       "_connectStatus": "已达标",
       "_connectDone": false,
       "_connectDays": 6,
-      "isOld": false
+      "isOld": false,
+      "ipoPrice": 18.8,
+      "ipoDate": "2026-05-29",
+      "_chgFromIpo": 30.32
     },
     {
       "code": "06658.HK",
@@ -971,7 +986,8 @@
       "_connectDays": 6,
       "listDate": "2018-10-15",
       "industry": "其他医疗保健",
-      "isOld": true
+      "isOld": true,
+      "ipoDate": "2018-10-15"
     },
     {
       "code": "02697.HK",
@@ -1048,7 +1064,10 @@
       "_connectDays": 6,
       "listDate": "2019-02-26",
       "industry": "药品及生物科技",
-      "isOld": true
+      "isOld": true,
+      "ipoPrice": 12,
+      "ipoDate": "2019-02-26",
+      "_chgFromIpo": -51.46
     },
     {
       "code": "01440.HK",
@@ -1076,7 +1095,10 @@
       "_connectDays": 6,
       "listDate": "2021-01-13",
       "industry": "纺织及服饰",
-      "isOld": true
+      "isOld": true,
+      "ipoPrice": 0.4,
+      "ipoDate": "2021-01-13",
+      "_chgFromIpo": 3337.5
     },
     {
       "code": "01133.HK",
@@ -1104,7 +1126,10 @@
       "_connectDays": 6,
       "listDate": "1994-12-16",
       "industry": "工业工程",
-      "isOld": true
+      "isOld": true,
+      "ipoPrice": 2.58,
+      "ipoDate": "1994-12-16",
+      "_chgFromIpo": 539.15
     },
     {
       "code": "01286.HK",
@@ -1132,7 +1157,10 @@
       "_connectDays": 6,
       "listDate": "2019-06-28",
       "industry": "工业工程",
-      "isOld": true
+      "isOld": true,
+      "ipoPrice": 3,
+      "ipoDate": "2019-06-28",
+      "_chgFromIpo": 186
     },
     {
       "code": "01651.HK",
@@ -1160,7 +1188,10 @@
       "_connectDays": 6,
       "listDate": "2017-09-25",
       "industry": "工业工程",
-      "isOld": true
+      "isOld": true,
+      "ipoPrice": 5.6,
+      "ipoDate": "2017-09-25",
+      "_chgFromIpo": 811.61
     },
     {
       "code": "01672.HK",
@@ -1188,7 +1219,10 @@
       "_connectDays": 6,
       "listDate": "2018-08-01",
       "industry": "药品及生物科技",
-      "isOld": true
+      "isOld": true,
+      "ipoPrice": 14,
+      "ipoDate": "2018-08-01",
+      "_chgFromIpo": -30.96
     },
     {
       "code": "01866.HK",
@@ -1216,7 +1250,8 @@
       "_connectDays": 6,
       "listDate": "2009-12-08",
       "industry": "原材料",
-      "isOld": true
+      "isOld": true,
+      "ipoDate": "2009-12-08"
     },
     {
       "code": "02142.HK",
@@ -1244,7 +1279,10 @@
       "_connectDays": 6,
       "listDate": "2020-12-10",
       "industry": "药品及生物科技",
-      "isOld": true
+      "isOld": true,
+      "ipoPrice": 12.38,
+      "ipoDate": "2020-12-10",
+      "_chgFromIpo": 10.02
     },
     {
       "code": "02225.HK",
@@ -1272,7 +1310,10 @@
       "_connectDays": 6,
       "listDate": "2017-10-17",
       "industry": "其他医疗保健",
-      "isOld": true
+      "isOld": true,
+      "ipoPrice": 0.52,
+      "ipoDate": "2017-10-17",
+      "_chgFromIpo": 822.12
     },
     {
       "code": "02696.HK",
@@ -1300,7 +1341,10 @@
       "_connectDays": 6,
       "listDate": "2019-09-25",
       "industry": "药品及生物科技",
-      "isOld": true
+      "isOld": true,
+      "ipoPrice": 49.6,
+      "ipoDate": "2019-09-25",
+      "_chgFromIpo": 33.77
     },
     {
       "code": "02245.HK",
@@ -1328,7 +1372,10 @@
       "_connectDays": 6,
       "listDate": "2022-12-01",
       "industry": "一般金属及矿石",
-      "isOld": true
+      "isOld": true,
+      "ipoPrice": 15.8,
+      "ipoDate": "2022-12-01",
+      "_chgFromIpo": 15.38
     },
     {
       "code": "02670.HK",
@@ -1728,7 +1775,7 @@
     }
   ],
   "hkdCnyRate": 0.857434,
-  "dataSource": "腾讯 gtimg（行情/市值）+ 东财港股资料表（仅 IPO 发现）+ 新浪（汇率）；待入通清单来自活报告人工维护",
+  "dataSource": "腾讯 gtimg（行情/市值）+ 东财港股资料表（发行价/上市日/IPO 发现）+ 新浪（汇率）；待入通清单来自活报告人工维护；发行价·上市以来由 scripts/fill-ipo.mjs 从东财补充",
   "updateFreq": "每日 3 次（北京时间 08:30 / 16:30 / 23:00）",
   "errors": [],
   "note": "待入通清单来自活报告（Live Report）手工维护；港股打新 IPO 由 fetch-hk.mjs 每日自动发现"
