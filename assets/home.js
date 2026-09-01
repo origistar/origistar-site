@@ -3,10 +3,36 @@
 (function () {
   var d = window.ORIGISTAR;
   if (!d) return;
-  // 行情快照覆盖（market-live.js，Yahoo 自动拉取）：仅覆盖存在的字段，其余回落 data.js
+  // 行情快照覆盖（仅覆盖存在的字段，其余回落 data.js）
   if (window.MARKET_LIVE) {
     if (d.ndx) Object.assign(d.ndx, window.MARKET_LIVE.ndx || {});
     if (d.btc) Object.assign(d.btc, window.MARKET_LIVE.btc || {});
+  }
+  if (window.DEFENSIVE_LIVE && d.defensive) {
+    var di = window.DEFENSIVE_LIVE.items || {};
+    if (di.schd && d.defensive.schd) Object.assign(d.defensive.schd, di.schd);
+    if (di.brk && d.defensive.brk) Object.assign(d.defensive.brk, di.brk);
+    if (di.gold && d.gold) Object.assign(d.gold, di.gold);
+  }
+  if (window.CB_LIVE) {
+    d.cb = {
+      signal: window.CB_LIVE.badge || (window.CB_LIVE.emptySignal === '触发' ? '今日空仓' : '可观察'),
+      detail: window.CB_LIVE.verdict || '双低筛选'
+    };
+  }
+  if (window.AGGRESSIVE_LIVE && d.aggressive) {
+    var ai = window.AGGRESSIVE_LIVE.items || {};
+    function applyAggro(list) {
+      if (!list) return;
+      list.forEach(function (it) {
+        var live = ai[it.code];
+        if (!live) return;
+        if (live.price != null) it.lastPrice = live.price;
+        if (live.atrPct != null) it.atrPct = live.atrPct;
+      });
+    }
+    applyAggro(d.aggressive.holdings);
+    applyAggro(d.aggressive.watch);
   }
   var base = (window.ORIGISTAR_NAV && window.ORIGISTAR_NAV.base) || '';
 
