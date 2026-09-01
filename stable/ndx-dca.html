@@ -78,12 +78,25 @@
     </div>
   </section>
 
-  <!-- 溢价切换 -->
+  <!-- 场内纳指 ETF 溢价率 · 5 只对比 -->
   <section class="section">
-    <div class="section-head"><h2 id="sec-prem">溢价率切换</h2><span class="sub">场内 / 场外 套利</span></div>
-    <div class="rule warn">
-      <h3 id="premTitle">溢价率 11.5% &gt; 8%</h3>
-      <p id="premBody">分批次卖出场内持仓，切换回场外（需有场外额度）。&lt;5% 时反向：当日改买场内 ETF；&gt;8% 卖出换回场外，叠加恐慌 + 低溢价效果最佳。</p>
+    <div class="section-head">
+      <h2 id="sec-prem">场内纳指 ETF 溢价率</h2>
+      <span class="sub" id="etfPremUpd">加载中…</span>
+    </div>
+    <div class="card">
+      <div class="scroll-x">
+        <table class="matrix" id="etfPremTbl">
+          <thead><tr>
+            <th>ETF</th><th style="text-align:right">现价</th><th style="text-align:right">公布净值</th><th>净值日</th><th style="text-align:right">溢价率</th><th>信号</th>
+          </tr></thead>
+          <tbody id="etfPremBody"><tr><td colspan="6">加载中…</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+    <div class="rule warn" style="margin-top:10px">
+      <h3 id="premTitle">—</h3>
+      <p id="premBody">—</p>
     </div>
   </section>
 
@@ -188,14 +201,58 @@
   set('ndxPt', n.ndx ? n.ndx.toLocaleString() : '—');
   set('roe', n.roe);
   set('prem', n.premium);
-  // 溢价率卡片标题随实际值动态判定，避免写死 ">8%"
-  if (n.premium != null) {
-    var p = +n.premium;
-    set('premTitle', p < 5 ? ('溢价率 ' + p + '% < 5%') : (p > 8 ? ('溢价率 ' + p + '% > 8%') : ('溢价率 ' + p + '% · 5%~8% 区间')));
-    if (n.premiumBasis) {
-      var pe = document.getElementById('prem');
-      if (pe) pe.title = n.premiumBasis + '（净值日 ' + (n.premiumNavDate || '—') + '，QDII 净值 T+2~T+3 滞后，已做指数与汇率修正）';
-    }
+
+  // ===== 5 只场内纳指 ETF 溢价率对比（按修正后溢价率排序，最低在前）=====
+  var etfs = (L && L.etf && L.etf.list) ? L.etf.list : [];
+  // 排序：未取到值的排到末尾
+  etfs.sort(function (a, b) {
+    var pa = (a.premium == null ? 9999 : a.premium);
+    var pb = (b.premium == null ? 9999 : b.premium);
+    return pa - pb;
+  });
+  var lowest = etfs[0];
+  // 更新时间（场内现价是 gtimg 实时，估算净值按 NDX/汇率推到当前时点；详见 tooltip）
+  var updEl = document.getElementById('etfPremUpd');
+  if (updEl) {
+    var updTs = (L && L.etf && L.etf.updateAt) || (L && L.generatedAt) || '—';
+    updEl.textContent = '更新于 ' + updTs + ' · 实时现价 + NDX/汇率修正净值';
+  }
+  // 表格渲染：最低溢价行左侧绿色条 + ★最低
+  var tbody = document.getElementById('etfPremBody');
+  if (tbody && etfs.length) {
+    tbody.innerHTML = etfs.map(function (e, i) {
+      var p = e.premium;
+      var pStr = p != null ? p.toFixed(2) + '%' : '—';
+      var cls = p == null ? '' : (p > 8 ? 'down' : (p >= 5 ? '' : 'up'));
+      var isLow = (i === 0 && p != null);
+      var trStyle = isLow ? ' style="box-shadow: inset 3px 0 0 var(--accent)"' : '';
+      var badge = isLow ? ' <span style="font-size:10px;color:var(--accent);font-weight:500">★最低</span>' : '';
+      return '<tr' + trStyle + '>' +
+        '<td class="lb"><b>' + e.code + '</b> ' + (e.name || '') + badge + '</td>' +
+        '<td style="text-align:right">' + (e.price != null ? e.price.toFixed(4) : '—') + '</td>' +
+        '<td style="text-align:right">' + (e.nav != null ? e.nav.toFixed(4) : '—') + '</td>' +
+        '<td>' + (e.navDate || '—') + '</td>' +
+        '<td class="' + cls + '" style="text-align:right;font-weight:700">' + pStr + '</td>' +
+        '<td style="font-size:11px">' + (e.signal || '') + '</td>' +
+        '</tr>';
+    }).join('');
+  }
+  // 操作建议：按「最低溢价」驱动（最低<5%才买场内；最低>8%才卖）
+  if (lowest && lowest.premium != null) {
+    var lp = +lowest.premium;
+    var lCodeName = lowest.code + '（' + (lowest.name || '') + '）';
+    var lTag = lp < 5 ? '< 5%' : (lp > 8 ? '> 8%' : '5%~8% 区间');
+    set('premTitle', '最低溢价 ' + lCodeName + ' ' + lp.toFixed(2) + '% · ' + lTag);
+    var lMsg;
+    if (lp < 5) lMsg = '<b>当日改买 ' + lowest.code + '</b>（最低溢价 ETF），叠加恐慌 + 低溢价效果最佳。&lt;5% 反向：当日改买场内；&gt;8% 卖出换回场外。';
+    else if (lp > 8) lMsg = '最低溢价 ' + lCodeName + ' 也 <b>&gt; 8%</b>，分批次卖出多余场内持仓，切换回场外（需有场外额度）。&lt;5% 反向：当日改买场内；&gt;8% 卖出换回场外。';
+    else lMsg = '最低溢价 ' + lCodeName + ' 在 <b>5%~8%</b> 区间，维持场外定投、不买入。&lt;5% 反向：当日改买场内；&gt;8% 卖出换回场外。';
+    document.getElementById('premBody').innerHTML = lMsg;
+  }
+  // 顶部 513100 kv 小卡：保留鼠标悬浮显示计算口径（供审计）
+  if (n.premiumBasis) {
+    var peEl = document.getElementById('prem');
+    if (peEl) peEl.title = n.premiumBasis + '（净值日 ' + (n.premiumNavDate || '—') + '，QDII 净值 T+2~T+3 滞后，已做指数与汇率修正）';
   }
   set('score', n.score);
   set('score2', n.score);
