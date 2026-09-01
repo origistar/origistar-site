@@ -20,17 +20,17 @@
 
   <!-- Hero -->
   <section class="hero">
-    <h1 class="section-title">可转债双低筛选 <span class="grad">20260826</span></h1>
-    <p class="lead">双低 + 安全债底 + 估值水位总开关。当前双低&lt;130 的合格标的不足 15 只，市场整体偏贵，双低策略暂时失效。</p>
+    <h1 class="section-title">可转债双低筛选 <span class="grad" id="cb-date">—</span></h1>
+    <p class="lead" id="cb-lead">双低 + 安全债底 + 估值水位总开关。</p>
   </section>
 
   <!-- 今日决策大卡 -->
   <section class="section">
     <div class="bigcard">
-      <div class="lab">今日结论 · ⚠️ 空仓观望</div>
-      <div class="amt">空仓<small> / 不新建仓</small></div>
-      <div class="calc">估值高位 —— 双低已失效，空仓观望</div>
-      <span class="stage">等双低&lt;130 数量回到 15 只以上再出手</span>
+      <div class="lab" id="cb-big-lab">今日结论</div>
+      <div class="amt" id="cb-big-amt">—<small> / 加载中</small></div>
+      <div class="calc" id="cb-big-calc">—</div>
+      <span class="stage" id="cb-big-stage">—</span>
     </div>
   </section>
 
@@ -39,39 +39,39 @@
     <div class="grid c3">
       <div class="card kpi">
         <div class="top"><span class="ic" style="background:linear-gradient(135deg,#ec4899,#f43f5e)">数</span>可交易转债</div>
-        <div class="val">278</div>
+        <div class="val" id="cb-k-tradable">—</div>
         <div class="meta">全市场样本</div>
         <span class="tag flat">样本量</span>
       </div>
       <div class="card kpi">
         <div class="top"><span class="ic" style="background:linear-gradient(135deg,#f59e0b,#fbbf24)">价</span>价格中位数</div>
-        <div class="val">137.08</div>
+        <div class="val" id="cb-k-price">—</div>
         <div class="meta">越高越贵</div>
         <span class="tag flat">估值水位</span>
       </div>
       <div class="card kpi">
         <div class="top"><span class="ic" style="background:linear-gradient(135deg,#8b5cf6,#a855f7)">双</span>双低值中位数</div>
-        <div class="val">209.48</div>
+        <div class="val" id="cb-k-dl">—</div>
         <div class="meta">越高越贵</div>
         <span class="tag flat">双低水位</span>
       </div>
       <div class="card kpi">
         <div class="top"><span class="ic" style="background:linear-gradient(135deg,#0ea5e9,#22d3ee)">≤</span>双低&lt;130 数量</div>
-        <div class="val">4</div>
+        <div class="val" id="cb-k-dl130">—</div>
         <div class="meta">阈值 15 只</div>
-        <span class="tag down">严重不足</span>
+        <span class="tag down" id="cb-k-dl130-tag">—</span>
       </div>
       <div class="card kpi">
         <div class="top"><span class="ic" style="background:linear-gradient(135deg,#ef4444,#f97316)">赎</span>强赎关注区</div>
-        <div class="val">185</div>
+        <div class="val" id="cb-k-redeem">—</div>
         <div class="meta">价格 ≥ 130 元</div>
         <span class="tag flat">风险警示</span>
       </div>
       <div class="card kpi">
         <div class="top"><span class="ic" style="background:linear-gradient(135deg,#ef4444,#dc2626)">停</span>空仓信号</div>
-        <div class="val" style="font-size:20px">触发</div>
-        <div class="meta">双低策略失效</div>
-        <span class="tag down">不硬买</span>
+        <div class="val" style="font-size:20px" id="cb-k-signal">—</div>
+        <div class="meta" id="cb-k-signal-meta">双低策略失效</div>
+        <span class="tag down" id="cb-k-signal-tag">—</span>
       </div>
     </div>
   </section>
@@ -79,9 +79,9 @@
   <!-- 今日结论与操作建议 -->
   <section class="section">
     <div class="section-head"><h2>今日结论与操作建议</h2><span class="sub">每日北京 22:00 更新</span></div>
-    <div class="rule danger">
-      <h3>操作建议：空仓观望，不新建仓</h3>
-      <p>当前双低&lt;130 的合格标的不足 15 只，说明市场整体偏贵。<b>等该数量回到 15 只以上再出手。</b></p>
+    <div class="rule danger" id="cb-advice-box">
+      <h3 id="cb-advice-h3">操作建议</h3>
+      <p id="cb-advice-p">—</p>
     </div>
     <p class="note">本页基于「双低 + 安全债底 + 估值水位」的量化模型自动生成，每日北京 22:00 更新。<a href="cb-history.html">查看历史存档 →</a></p>
   </section>
@@ -133,28 +133,8 @@
     <p class="note" style="margin:-4px 0 8px">入选条件：评级 ≥ AA-、规模 2~30 亿、价格 ≤ 130 元，按双低值由低到高排。「债底」为偏贵表示当前价已高于剩余本息锚的 105%，安全边际不足。</p>
     <div class="card">
       <div class="scroll-x">
-        <table class="matrix">
+        <table class="matrix" id="cb-safe-table">
           <tr><th>代码</th><th>名称</th><th>价格</th><th>双低值</th><th>溢价率</th><th>评级</th><th>规模(亿)</th><th>债底</th></tr>
-          <tr><td class="lb">113051</td><td>节能转债</td><td>124.08</td><td>144.9</td><td>20.8%</td><td>AAA</td><td>30.0</td><td>偏贵</td></tr>
-          <tr><td class="lb">113048</td><td>晶科转债</td><td>116.04</td><td>156.2</td><td>40.2%</td><td>AA</td><td>30.0</td><td>—</td></tr>
-          <tr><td class="lb">123114</td><td>三角转债</td><td>126.59</td><td>164.1</td><td>37.5%</td><td>AA-</td><td>9.0</td><td>偏贵</td></tr>
-          <tr><td class="lb">127034</td><td>绿茵转债</td><td>122.40</td><td>166.4</td><td>44.0%</td><td>AA-</td><td>7.1</td><td>偏贵</td></tr>
-          <tr><td class="lb">123119</td><td>康泰转2</td><td>124.40</td><td>169.0</td><td>44.6%</td><td>AA</td><td>20.0</td><td>偏贵</td></tr>
-          <tr><td class="lb">113070</td><td>渝水转债</td><td>127.09</td><td>170.9</td><td>43.9%</td><td>AAA</td><td>19.0</td><td>偏贵</td></tr>
-          <tr><td class="lb">113054</td><td>绿动转债</td><td>122.84</td><td>173.3</td><td>50.4%</td><td>AA+</td><td>23.6</td><td>偏贵</td></tr>
-          <tr><td class="lb">110087</td><td>天业转债</td><td>125.97</td><td>176.1</td><td>50.1%</td><td>AA+</td><td>30.0</td><td>偏贵</td></tr>
-          <tr><td class="lb">127046</td><td>百润转债</td><td>128.38</td><td>176.5</td><td>48.1%</td><td>AA</td><td>11.3</td><td>偏贵</td></tr>
-          <tr><td class="lb">113067</td><td>燃23转债</td><td>129.35</td><td>178.0</td><td>48.6%</td><td>AAA</td><td>30.0</td><td>偏贵</td></tr>
-          <tr><td class="lb">110093</td><td>神马转债</td><td>125.37</td><td>182.4</td><td>57.0%</td><td>AAA</td><td>30.0</td><td>偏贵</td></tr>
-          <tr><td class="lb">127054</td><td>双箭转债</td><td>127.14</td><td>183.8</td><td>56.6%</td><td>AA</td><td>5.1</td><td>偏贵</td></tr>
-          <tr><td class="lb">123133</td><td>佩蒂转债</td><td>128.81</td><td>185.2</td><td>56.4%</td><td>AA-</td><td>7.2</td><td>偏贵</td></tr>
-          <tr><td class="lb">127108</td><td>太能转债</td><td>125.34</td><td>186.1</td><td>60.7%</td><td>AA+</td><td>29.5</td><td>偏贵</td></tr>
-          <tr><td class="lb">110095</td><td>双良转债</td><td>118.43</td><td>186.7</td><td>68.3%</td><td>AA-</td><td>26.0</td><td>偏贵</td></tr>
-          <tr><td class="lb">110100</td><td>龙建转债</td><td>122.95</td><td>190.4</td><td>67.5%</td><td>AA</td><td>10.0</td><td>偏贵</td></tr>
-          <tr><td class="lb">113652</td><td>伟22转债</td><td>128.29</td><td>190.6</td><td>62.3%</td><td>AA</td><td>14.8</td><td>偏贵</td></tr>
-          <tr><td class="lb">123216</td><td>科顺转债</td><td>124.82</td><td>193.9</td><td>69.1%</td><td>AA-</td><td>22.0</td><td>偏贵</td></tr>
-          <tr><td class="lb">127102</td><td>浙建转债</td><td>122.54</td><td>194.0</td><td>71.4%</td><td>AA+</td><td>10.0</td><td>偏贵</td></tr>
-          <tr><td class="lb">110086</td><td>精工转债</td><td>124.78</td><td>194.5</td><td>69.7%</td><td>AA</td><td>20.0</td><td>偏贵</td></tr>
         </table>
       </div>
     </div>
@@ -166,38 +146,146 @@
     <p class="note" style="margin:-4px 0 8px">⚠️ 这里是「高价高溢价的妖债/强赎博弈区」：价格远超 130、股性极强，正股回调时跌幅可能很大；<b>非买入清单</b>，仅作风险警示与观察。</p>
     <div class="card">
       <div class="scroll-x">
-        <table class="matrix">
+        <table class="matrix" id="cb-redeem-table">
           <tr><th>代码</th><th>名称</th><th>价格</th><th>溢价率</th><th>双低值</th><th>评级</th></tr>
-          <tr><td class="lb">123118</td><td>惠城转债</td><td>866.59</td><td>32.1%</td><td>898.7</td><td>A+</td></tr>
-          <tr><td class="lb">123241</td><td>欧通转债</td><td>815.00</td><td>17.8%</td><td>832.8</td><td>AA-</td></tr>
-          <tr><td class="lb">118030</td><td>睿创转债</td><td>560.73</td><td>38.4%</td><td>599.2</td><td>AA</td></tr>
-          <tr><td class="lb">127037</td><td>银轮转债</td><td>535.60</td><td>35.0%</td><td>570.6</td><td>AA</td></tr>
-          <tr><td class="lb">127096</td><td>泰坦转债</td><td>515.40</td><td>32.6%</td><td>548.0</td><td>A</td></tr>
-          <tr><td class="lb">123176</td><td>精测转2</td><td>459.75</td><td>40.8%</td><td>500.6</td><td>AA-sti</td></tr>
-          <tr><td class="lb">118058</td><td>微导转债</td><td>454.21</td><td>34.2%</td><td>488.4</td><td>AAsti</td></tr>
-          <tr><td class="lb">123255</td><td>鼎龙转债</td><td>383.52</td><td>50.8%</td><td>434.3</td><td>AA</td></tr>
-          <tr><td class="lb">111012</td><td>福新转债</td><td>360.20</td><td>38.5%</td><td>398.7</td><td>A+</td></tr>
-          <tr><td class="lb">118064</td><td>联瑞转债</td><td>359.41</td><td>46.0%</td><td>405.4</td><td>AAsti</td></tr>
         </table>
       </div>
     </div>
   </section>
 </div>
 
-<footer class="foot">数据来源：东方财富 · 仅为量化筛选，不构成投资建议<br>策略：双低+安全债底+评级/规模过滤+估值水位总开关 · 自用研究</footer>
+<footer class="foot" id="cb-foot">数据来源：东方财富 · 仅为量化筛选，不构成投资建议<br>策略：双低+安全债底+评级/规模过滤+估值水位总开关 · 自用研究</footer>
 
+<script>
+/* 兜底快照（20260826，最后一次人工同步）。线上 assets/cb-live.js 拉取成功时自动覆盖。 */
+window.CB_FALLBACK = {
+  date: '20260826',
+  verdict: '估值高位 —— 双低已失效，空仓观望',
+  emptySignal: '触发',
+  badge: '⚠️ 空仓观望',
+  kpis: { tradable: 278, priceMedian: 137.08, dlMedian: 209.48, dl130: 4, redeemWatch: 185 },
+  series: { labels: ['08-18','08-19','08-20','08-21','08-22','08-23','08-24','08-25','08-26'],
+            price: [136.88,135.66,135.6,135.74,135.74,135.74,135.17,136.68,137.08],
+            cnt: [4,4,4,4,4,4,4,4,4] },
+  safe: [
+    {code:'113051',name:'节能转债',price:124.08,dlv:144.9,prem:20.8,rating:'AAA',scale:30.0,anchor:'偏贵'},
+    {code:'113048',name:'晶科转债',price:116.04,dlv:156.2,prem:40.2,rating:'AA',scale:30.0,anchor:'—'},
+    {code:'123114',name:'三角转债',price:126.59,dlv:164.1,prem:37.5,rating:'AA-',scale:9.0,anchor:'偏贵'},
+    {code:'127034',name:'绿茵转债',price:122.40,dlv:166.4,prem:44.0,rating:'AA-',scale:7.1,anchor:'偏贵'},
+    {code:'123119',name:'康泰转2',price:124.40,dlv:169.0,prem:44.6,rating:'AA',scale:20.0,anchor:'偏贵'},
+    {code:'113070',name:'渝水转债',price:127.09,dlv:170.9,prem:43.9,rating:'AAA',scale:19.0,anchor:'偏贵'},
+    {code:'113054',name:'绿动转债',price:122.84,dlv:173.3,prem:50.4,rating:'AA+',scale:23.6,anchor:'偏贵'},
+    {code:'110087',name:'天业转债',price:125.97,dlv:176.1,prem:50.1,rating:'AA+',scale:30.0,anchor:'偏贵'},
+    {code:'127046',name:'百润转债',price:128.38,dlv:176.5,prem:48.1,rating:'AA',scale:11.3,anchor:'偏贵'},
+    {code:'113067',name:'燃23转债',price:129.35,dlv:178.0,prem:48.6,rating:'AAA',scale:30.0,anchor:'偏贵'},
+    {code:'110093',name:'神马转债',price:125.37,dlv:182.4,prem:57.0,rating:'AAA',scale:30.0,anchor:'偏贵'},
+    {code:'127054',name:'双箭转债',price:127.14,dlv:183.8,prem:56.6,rating:'AA',scale:5.1,anchor:'偏贵'},
+    {code:'123133',name:'佩蒂转债',price:128.81,dlv:185.2,prem:56.4,rating:'AA-',scale:7.2,anchor:'偏贵'},
+    {code:'127108',name:'太能转债',price:125.34,dlv:186.1,prem:60.7,rating:'AA+',scale:29.5,anchor:'偏贵'},
+    {code:'110095',name:'双良转债',price:118.43,dlv:186.7,prem:68.3,rating:'AA-',scale:26.0,anchor:'偏贵'},
+    {code:'110100',name:'龙建转债',price:122.95,dlv:190.4,prem:67.5,rating:'AA',scale:10.0,anchor:'偏贵'},
+    {code:'113652',name:'伟22转债',price:128.29,dlv:190.6,prem:62.3,rating:'AA',scale:14.8,anchor:'偏贵'},
+    {code:'123216',name:'科顺转债',price:124.82,dlv:193.9,prem:69.1,rating:'AA-',scale:22.0,anchor:'偏贵'},
+    {code:'127102',name:'浙建转债',price:122.54,dlv:194.0,prem:71.4,rating:'AA+',scale:10.0,anchor:'偏贵'},
+    {code:'110086',name:'精工转债',price:124.78,dlv:194.5,prem:69.7,rating:'AA',scale:20.0,anchor:'偏贵'}
+  ],
+  redeem: [
+    {code:'123118',name:'惠城转债',price:866.59,prem:'32.1%',dlv:898.7,rating:'A+'},
+    {code:'123241',name:'欧通转债',price:815.00,prem:'17.8%',dlv:832.8,rating:'AA-'},
+    {code:'118030',name:'睿创转债',price:560.73,prem:'38.4%',dlv:599.2,rating:'AA'},
+    {code:'127037',name:'银轮转债',price:535.60,prem:'35.0%',dlv:570.6,rating:'AA'},
+    {code:'127096',name:'泰坦转债',price:515.40,prem:'32.6%',dlv:548.0,rating:'A'},
+    {code:'123176',name:'精测转2',price:459.75,prem:'40.8%',dlv:500.6,rating:'AA-sti'},
+    {code:'118058',name:'微导转债',price:454.21,prem:'34.2%',dlv:488.4,rating:'AAsti'},
+    {code:'123255',name:'鼎龙转债',price:383.52,prem:'50.8%',dlv:434.3,rating:'AA'},
+    {code:'111012',name:'福新转债',price:360.20,prem:'38.5%',dlv:398.7,rating:'A+'},
+    {code:'118064',name:'联瑞转债',price:359.41,prem:'46.0%',dlv:405.4,rating:'AAsti'}
+  ]
+};
+</script>
+<script src="../assets/cb-live.js"></script>
 <script src="../assets/chart.umd.js"></script>
 <script>
 (function () {
-  var labels = ['08-18','08-19','08-20','08-21','08-22','08-23','08-24','08-25','08-26'];
-  var price  = [136.88,135.66,135.6,135.74,135.74,135.74,135.17,136.68,137.08];
-  var cnt    = [4,4,4,4,4,4,4,4,4];
-  if (window.Chart && document.getElementById('spark')) {
+  var D = window.CB_LIVE || window.CB_FALLBACK;
+  var $ = function (id) { return document.getElementById(id); };
+  var triggered = D.emptySignal === '触发';
+
+  /* Hero + 大卡 */
+  $('cb-date').textContent = D.date;
+  $('cb-lead').textContent = '双低 + 安全债底 + 估值水位总开关。' + (D.verdict || '') + (triggered ? ' 当前双低<130 的合格标的不足 15 只，市场整体偏贵，双低策略暂时失效。' : ' 双低<130 的合格标的已回到阈值附近，可关注候选池机会。');
+  $('cb-big-lab').textContent = '今日结论 · ' + D.badge;
+  $('cb-big-amt').innerHTML = (triggered ? '空仓' : '可出手') + '<small> / ' + (triggered ? '不新建仓' : '分批关注候选池') + '</small>';
+  $('cb-big-calc').textContent = D.verdict || '—';
+  $('cb-big-stage').textContent = triggered ? '等双低<130 数量回到 15 只以上再出手' : '双低<130 数量已达标，可按候选池分批布局';
+
+  /* KPI 六卡 */
+  var k = D.kpis || {};
+  $('cb-k-tradable').textContent = k.tradable != null ? k.tradable : '—';
+  $('cb-k-price').textContent = k.priceMedian != null ? k.priceMedian : '—';
+  $('cb-k-dl').textContent = k.dlMedian != null ? k.dlMedian : '—';
+  $('cb-k-dl130').textContent = k.dl130 != null ? k.dl130 : '—';
+  var dl130tag = $('cb-k-dl130-tag');
+  if (k.dl130 != null) {
+    if (k.dl130 >= 15) { dl130tag.textContent = '已达标'; dl130tag.className = 'tag up'; }
+    else if (k.dl130 >= 10) { dl130tag.textContent = '接近阈值'; dl130tag.className = 'tag flat'; }
+    else { dl130tag.textContent = '严重不足'; dl130tag.className = 'tag down'; }
+  }
+  $('cb-k-redeem').textContent = k.redeemWatch != null ? k.redeemWatch : '—';
+  $('cb-k-signal').textContent = triggered ? '触发' : '未触发';
+  $('cb-k-signal-meta').textContent = triggered ? '双低策略失效' : '双低策略有效';
+  var sigTag = $('cb-k-signal-tag');
+  sigTag.textContent = triggered ? '不硬买' : '可出手';
+  sigTag.className = triggered ? 'tag down' : 'tag up';
+
+  /* 操作建议 */
+  $('cb-advice-h3').textContent = triggered ? '操作建议：空仓观望，不新建仓' : '操作建议：可关注安全候选池';
+  $('cb-advice-p').innerHTML = triggered
+    ? '当前双低&lt;130 的合格标的不足 15 只（现存 ' + (k.dl130 != null ? k.dl130 : '—') + ' 只），说明市场整体偏贵。<b>等该数量回到 15 只以上再出手。</b>'
+    : '双低&lt;130 的合格标的已回到 ' + (k.dl130 != null ? k.dl130 : '—') + ' 只，可从下方安全候选池中按双低值由低到高分批关注，注意「债底偏贵」标的的安全边际。';
+
+  /* 候选表 */
+  function fillTable(tableId, rows, cols) {
+    var t = $(tableId);
+    if (!t) return;
+    rows.forEach(function (r) {
+      var tr = document.createElement('tr');
+      tr.innerHTML = cols.map(function (c) { return '<td>' + c(r) + '</td>'; }).join('');
+      t.appendChild(tr);
+    });
+  }
+  fillTable('cb-safe-table', D.safe || [], [
+    function (r) { return '<span class="lb">' + r.code + '</span>'; },
+    function (r) { return r.name; },
+    function (r) { return r.price; },
+    function (r) { return '<b>' + r.dlv + '</b>'; },
+    function (r) { return r.prem + '%'; },
+    function (r) { return r.rating; },
+    function (r) { return r.scale; },
+    function (r) { return r.anchor; }
+  ]);
+  fillTable('cb-redeem-table', D.redeem || [], [
+    function (r) { return '<span class="lb">' + r.code + '</span>'; },
+    function (r) { return r.name; },
+    function (r) { return r.price; },
+    function (r) { return r.prem; },
+    function (r) { return r.dlv; },
+    function (r) { return r.rating; }
+  ]);
+
+  /* 数据来源注脚 */
+  if (window.CB_LIVE) {
+    $('cb-foot').innerHTML = '数据来源：东方财富（经可转债双低筛选独立站，' + D.date + '）· 仅为量化筛选，不构成投资建议<br>策略：双低+安全债底+评级/规模过滤+估值水位总开关 · 自用研究';
+  }
+
+  /* 趋势图（全量历史） */
+  var s = D.series || { labels: [], price: [], cnt: [] };
+  if (window.Chart && document.getElementById('spark') && s.labels.length) {
     new Chart(document.getElementById('spark').getContext('2d'), {
       type: 'line',
-      data: { labels: labels, datasets: [
-        { label: '价格中位数', data: price, borderColor: '#ec4899', yAxisID: 'y', tension: .2, pointRadius: 2, borderWidth: 2 },
-        { label: '双低<130 数量', data: cnt, borderColor: '#0ea5e9', yAxisID: 'y1', tension: .2, pointRadius: 2, borderWidth: 2, borderDash: [4,3] }
+      data: { labels: s.labels, datasets: [
+        { label: '价格中位数', data: s.price, borderColor: '#ec4899', yAxisID: 'y', tension: .2, pointRadius: 2, borderWidth: 2 },
+        { label: '双低<130 数量', data: s.cnt, borderColor: '#0ea5e9', yAxisID: 'y1', tension: .2, pointRadius: 2, borderWidth: 2, borderDash: [4,3] }
       ]},
       options: {
         responsive: true, maintainAspectRatio: false,
