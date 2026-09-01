@@ -51,8 +51,8 @@ function parseCsv(text) {
 }
 
 const r1 = (n) => Math.round(n * 10) / 10;
-// 北京时间时间戳（与全站口径一致）：'YYYY-MM-DD HH:MM'
-const nowBeijing = () => new Date(Date.now() + 8 * 3600e3).toISOString().slice(0, 16).replace('T', ' ');
+// 北京时间时间戳（与全站口径一致）：'YYYY-MM-DD HH:MM 北京时间'
+const nowBeijing = () => new Date(Date.now() + 8 * 3600e3).toISOString().slice(0, 16).replace('T', ' ') + ' 北京时间';
 
 async function main() {
   /* 1) history.csv：全量历史 + 最新一行聚合 */
