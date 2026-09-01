@@ -133,10 +133,13 @@ async function main() {
     const sma200 = sma(b.closes, 200);
     let ahr999 = null;
     if (sma200) {
+      // AHR999 = (price / 200MA) × (price / growthVal)
+      // growthVal = 10^(5.84 * log10(days_since_2009-01-03) - 17.01)  ← 九神拟合式
+      // 与非小号/老页 0.5097 对齐（实测算得 0.5110）
       const genesis = Date.parse('2009-01-03');
-      const years = (Date.now() - genesis) / (365.25 * 86400000);
-      const ratio2 = Math.pow(2, years);
-      ahr999 = (price / sma200) * (price / ratio2);
+      const days = Math.floor((Date.now() - genesis) / 86400000);
+      const growthVal = Math.pow(10, 5.84 * Math.log10(days) - 17.01);
+      ahr999 = (price / sma200) * (price / growthVal);
     }
     // IBIT 现价（定投标的）
     let ibit = null;
