@@ -295,9 +295,9 @@ function buildWatchItem(cfg, prev, live) {
 
 // ---------- 主流程 ----------
 function nowBJ() {
-  // 北京时间 = UTC+8
+  // 北京时间 = UTC+8（与全站口径一致：YYYY-MM-DD HH:MM 北京时间）
   const d = new Date(Date.now() + 8 * 3600 * 1000);
-  return d.toISOString().replace('T', ' ').slice(0, 19) + ' (北京)';
+  return d.toISOString().slice(0, 16).replace('T', ' ') + ' 北京时间';
 }
 
 async function main() {
