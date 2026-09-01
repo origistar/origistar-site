@@ -325,11 +325,25 @@
     ovw.innerHTML = renderOverview(SYS);
   }
 
-  // ---------- 数据时间戳 ----------
+  // ---------- 数据时间戳（统一取最新，避免静态日期 / 缺数据页显示陈旧） ----------
+  // 优先级：各 live 快照 generatedAt > data.js.updated > 页面自声明 PAGE_UPDATED
   try {
-    if (window.ORIGISTAR && window.ORIGISTAR.updated) {
-      document.getElementById('nav-updated').textContent = '更新于 ' + window.ORIGISTAR.updated;
-    }
+    var cand = [];
+    if (window.ORIGISTAR && window.ORIGISTAR.updated) cand.push(window.ORIGISTAR.updated);
+    [window.MARKET_LIVE, window.DEFENSIVE_LIVE, window.CB_LIVE, window.AGGRESSIVE_LIVE].forEach(function (L) {
+      if (L && L.generatedAt) cand.push(L.generatedAt);
+    });
+    if (window.PAGE_UPDATED) cand.push(window.PAGE_UPDATED);
+    var eff = cand.length ? cand.reduce(function (a, b) { return a > b ? a : b; }, '') : '';
+    if (window.ORIGISTAR && eff) window.ORIGISTAR.updated = eff;   // 同步给 sectionHead 等
+    var pill = document.getElementById('nav-updated');
+    if (pill) pill.textContent = eff ? ('更新于 ' + eff) : '数据待同步';
+    // 供异步页面（fetch JSON）回填导航时间戳
+    window.origistarSetUpdated = function (v) {
+      window.PAGE_UPDATED = v;
+      var p = document.getElementById('nav-updated');
+      if (p) p.textContent = v ? ('更新于 ' + v) : '数据待同步';
+    };
   } catch (e) {}
 
   }
