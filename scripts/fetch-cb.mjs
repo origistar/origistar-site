@@ -51,6 +51,8 @@ function parseCsv(text) {
 }
 
 const r1 = (n) => Math.round(n * 10) / 10;
+// 北京时间时间戳（与全站口径一致）：'YYYY-MM-DD HH:MM'
+const nowBeijing = () => new Date(Date.now() + 8 * 3600e3).toISOString().slice(0, 16).replace('T', ' ');
 
 async function main() {
   /* 1) history.csv：全量历史 + 最新一行聚合 */
@@ -64,6 +66,16 @@ async function main() {
     price: hist.map((h) => Number(h.price_median)),
     cnt: hist.map((h) => Number(h.dl130_count)),
   };
+  // 完整历史行（升序），供 cb-history.html 动态渲染每日清单
+  const history = hist.map((h) => ({
+    date: h.date,
+    priceMedian: Number(h.price_median),
+    dual: Number(h.dl_median),
+    dl130: Number(h.dl130_count),
+    redeem: Number(h.redeem_watch),
+    verdict: h.verdict || '',
+    empty: h.empty_signal || '',
+  }));
 
   /* 2) 候选清单 CSV（日期与 history 最新行一致） */
   const csvUrl = BASE + '/output/' + encodeURIComponent(`候选清单_${date}.csv`);
@@ -98,7 +110,7 @@ async function main() {
   }
 
   const live = {
-    generatedAt: new Date().toISOString(),
+    generatedAt: nowBeijing(),
     date,
     verdict: latest.verdict || '',
     emptySignal: latest.empty_signal || '',
@@ -114,6 +126,7 @@ async function main() {
       redeemWatch: Number(latest.redeem_watch),
     },
     series,
+    history,
     safe,
     redeem,
     source: 'origistar.github.io/convertible-bond-screener · 每日北京 22:00',

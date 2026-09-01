@@ -21,7 +21,7 @@
   <!-- Hero -->
   <section class="hero">
     <h1 class="section-title">可转债历史</h1>
-    <p class="lead">估值水位历史存档 · 共 9 天 · 数据来源：东方财富。价格中位数与双低值中位数反映市场整体贵贱（越高越贵）；双低&lt;130 标的数量反映可选机会多少（越多越便宜）。</p>
+    <p class="lead" id="cbh-lead">估值水位历史存档 · 数据来源：东方财富。价格中位数与双低值中位数反映市场整体贵贱（越高越贵）；双低&lt;130 标的数量反映可选机会多少（越多越便宜）。</p>
   </section>
 
   <!-- KPI 三卡 -->
@@ -29,21 +29,21 @@
     <div class="grid c3">
       <div class="card kpi">
         <div class="top"><span class="ic" style="background:linear-gradient(135deg,#ec4899,#f43f5e)">价</span>价格中位数</div>
-        <div class="val">137.08</div>
-        <div class="meta">最新（08-26）· 越高越贵</div>
+        <div class="val" id="cbh-price">—</div>
+        <div class="meta" id="cbh-price-meta">最新 · 越高越贵</div>
         <span class="tag flat">估值水位</span>
       </div>
       <div class="card kpi">
         <div class="top"><span class="ic" style="background:linear-gradient(135deg,#8b5cf6,#a855f7)">双</span>双低值中位数</div>
-        <div class="val">209.48</div>
-        <div class="meta">最新（08-26）· 越高越贵</div>
+        <div class="val" id="cbh-dual">—</div>
+        <div class="meta" id="cbh-dual-meta">最新 · 越高越贵</div>
         <span class="tag flat">双低水位</span>
       </div>
       <div class="card kpi">
         <div class="top"><span class="ic" style="background:linear-gradient(135deg,#f59e0b,#fbbf24)">≤</span>双低&lt;130 数量</div>
-        <div class="val">4</div>
-        <div class="meta">远少于 15 只阈值</div>
-        <span class="tag down">空仓触发</span>
+        <div class="val" id="cbh-cnt">—</div>
+        <div class="meta" id="cbh-cnt-meta">—</div>
+        <span class="tag flat" id="cbh-cnt-tag">—</span>
       </div>
     </div>
   </section>
@@ -68,66 +68,56 @@
 
   <!-- 每日清单 -->
   <section class="section">
-    <div class="section-head"><h2>每日清单</h2><span class="sub">共 9 天</span></div>
+    <div class="section-head"><h2>每日清单</h2><span class="sub" id="cbh-days">—</span></div>
     <div class="card">
       <div class="scroll-x">
-        <table class="matrix">
+        <table class="matrix" id="cbh-table">
           <tr>
             <th>日期</th><th>价格中位</th><th>双低中位</th><th>双低&lt;130</th><th>强赎区</th><th>估值结论</th><th>空仓</th><th>详情</th>
-          </tr>
-          <tr>
-            <td class="lb">20260826</td><td>137.08</td><td>209.48</td><td>4</td><td>185</td>
-            <td>估值高位 —— 双低已失效，空仓观望</td><td>触发</td><td><a href="cb-archive/20260826.html">查看</a></td>
-          </tr>
-          <tr>
-            <td class="lb">20260825</td><td>136.68</td><td>209.41</td><td>4</td><td>181</td>
-            <td>估值高位 —— 双低已失效，空仓观望</td><td>触发</td><td><a href="cb-archive/20260825.html">查看</a></td>
-          </tr>
-          <tr>
-            <td class="lb">20260824</td><td>135.17</td><td>209.66</td><td>4</td><td>173</td>
-            <td>估值高位 —— 双低已失效，空仓观望</td><td>触发</td><td><a href="cb-archive/20260824.html">查看</a></td>
-          </tr>
-          <tr>
-            <td class="lb">20260823</td><td>135.74</td><td>207.25</td><td>4</td><td>174</td>
-            <td>估值高位 —— 双低已失效，空仓观望</td><td>触发</td><td><a href="cb-archive/20260823.html">查看</a></td>
-          </tr>
-          <tr>
-            <td class="lb">20260822</td><td>135.74</td><td>207.25</td><td>4</td><td>174</td>
-            <td>估值高位 —— 双低已失效，空仓观望</td><td>触发</td><td><a href="cb-archive/20260822.html">查看</a></td>
-          </tr>
-          <tr>
-            <td class="lb">20260821</td><td>135.74</td><td>207.25</td><td>4</td><td>174</td>
-            <td>估值高位 —— 双低已失效，空仓观望</td><td>触发</td><td><a href="cb-archive/20260821.html">查看</a></td>
-          </tr>
-          <tr>
-            <td class="lb">20260820</td><td>135.6</td><td>207.74</td><td>4</td><td>176</td>
-            <td>估值高位 —— 双低已失效，空仓观望</td><td>触发</td><td><a href="cb-archive/20260820.html">查看</a></td>
-          </tr>
-          <tr>
-            <td class="lb">20260819</td><td>135.66</td><td>210.02</td><td>4</td><td>172</td>
-            <td>估值高位 —— 双低已失效，空仓观望</td><td>触发</td><td><a href="cb-archive/20260819.html">查看</a></td>
-          </tr>
-          <tr>
-            <td class="lb">20260818</td><td>136.88</td><td>206.49</td><td>4</td><td>180</td>
-            <td>估值高位 —— 双低已失效，空仓观望</td><td>触发</td><td><a href="cb-archive/20260818.html">查看</a></td>
           </tr>
         </table>
       </div>
     </div>
-    <p class="note">说明：横轴为历史运行日期。价格中位数反映市场整体贵贱；双低&lt;130 标的数量反映可选机会多少，数量越多，市场越便宜。双低&lt;130 连续 9 天仅 4 只，远低于 15 只阈值，空仓信号持续触发。</p>
+    <p class="note" id="cbh-note">说明：横轴为历史运行日期。价格中位数反映市场整体贵贱；双低&lt;130 标的数量反映可选机会多少，数量越多，市场越便宜。</p>
   </section>
 </div>
 
 <footer class="foot">origistar · 可转债历史 · 仅为量化筛选，不构成投资建议</footer>
 
+<script src="../assets/cb-live.js"></script>
 <script src="../assets/chart.umd.js"></script>
 <script>
 (function () {
-  var labels = ['08-18','08-19','08-20','08-21','08-22','08-23','08-24','08-25','08-26'];
-  var price = [136.88,135.66,135.6,135.74,135.74,135.74,135.17,136.68,137.08];
-  var dual  = [206.49,210.02,207.74,207.25,207.25,207.25,209.66,209.41,209.48];
-  var cnt   = [4,4,4,4,4,4,4,4,4];
-  var redeem= [180,172,176,174,174,174,173,181,185];
+  var D = window.CB_LIVE;
+  if (!D || !D.history || !D.history.length) return;
+  var H = D.history; // 升序
+  var last = H[H.length - 1];
+  var labels = H.map(function (r) { return r.date.slice(4, 6) + '-' + r.date.slice(6, 8); });
+
+  /* Hero 天数 + 更新时间 */
+  var lead = document.getElementById('cbh-lead');
+  if (lead) lead.textContent = '估值水位历史存档 · 共 ' + H.length + ' 天（' + H[0].date + ' ～ ' + last.date
+    + '）· 数据来源：东方财富。价格中位数与双低值中位数反映市场整体贵贱（越高越贵）；双低<130 标的数量反映可选机会多少（越多越便宜）。';
+
+  /* KPI 三卡 */
+  function setText(id, t) { var el = document.getElementById(id); if (el) el.textContent = t; }
+  setText('cbh-price', last.priceMedian);
+  setText('cbh-price-meta', '最新（' + last.date.slice(4, 6) + '-' + last.date.slice(6, 8) + '）· 越高越贵');
+  setText('cbh-dual', last.dual);
+  setText('cbh-dual-meta', '最新（' + last.date.slice(4, 6) + '-' + last.date.slice(6, 8) + '）· 越高越贵');
+  setText('cbh-cnt', last.dl130);
+  var cntTag = document.getElementById('cbh-cnt-tag');
+  if (cntTag) {
+    if (last.dl130 >= 15) { cntTag.textContent = '已达阈值'; cntTag.className = 'tag up'; }
+    else if (last.dl130 >= 10) { cntTag.textContent = '接近阈值'; cntTag.className = 'tag flat'; }
+    else { cntTag.textContent = '严重不足'; cntTag.className = 'tag down'; }
+  }
+
+  /* 图表数据 */
+  var price = H.map(function (r) { return r.priceMedian; });
+  var dual  = H.map(function (r) { return r.dual; });
+  var cnt   = H.map(function (r) { return r.dl130; });
+  var redeem= H.map(function (r) { return r.redeem; });
 
   function gridY(extra) {
     var o = { grid: { display: false }, ticks: { font: { size: 9 }, color: '#8b97ab' } };
@@ -165,6 +155,31 @@
         scales: { y: gridY({ position: 'left' }), y1: gridY({ position: 'right' }) }
       }
     });
+  }
+
+  /* 每日清单（新→旧），详情链接指向老站当日存档页 */
+  var table = document.getElementById('cbh-table');
+  if (table) {
+    for (var i = H.length - 1; i >= 0; i--) {
+      var r = H[i];
+      var tr = document.createElement('tr');
+      tr.innerHTML = '<td class="lb">' + r.date + '</td><td>' + r.priceMedian + '</td><td>' + r.dual + '</td><td>' + r.dl130
+        + '</td><td>' + r.redeem + '</td><td>' + r.verdict + '</td><td>' + (r.empty || '—')
+        + '</td><td><a href="https://origistar.github.io/convertible-bond-screener/archive/' + r.date + '.html">查看</a></td>';
+      table.appendChild(tr);
+    }
+  }
+  var days = document.getElementById('cbh-days');
+  if (days) days.textContent = '共 ' + H.length + ' 天 · 更新于 ' + (D.generatedAt || '—');
+
+  /* 动态结论摘要 */
+  var note = document.getElementById('cbh-note');
+  if (note) {
+    var below = H.filter(function (r) { return r.dl130 < 15; }).length;
+    var span = H.length > 1 && H[0].date !== last.date ? '（' + H[0].date + ' 至 ' + last.date + '）' : '';
+    note.textContent = '说明：横轴为历史运行日期。价格中位数反映市场整体贵贱；双低<130 标的数量反映可选机会多少，数量越多，市场越便宜。'
+      + '双低<130 低于 15 只阈值的情况' + span + '共出现 ' + below + '/' + H.length + ' 天'
+      + (last.empty === '触发' ? '，空仓信号当前持续触发。' : '。');
   }
 })();
 </script>

@@ -78,7 +78,7 @@
 
   <!-- 今日结论与操作建议 -->
   <section class="section">
-    <div class="section-head"><h2>今日结论与操作建议</h2><span class="sub">每日北京 22:00 更新</span></div>
+    <div class="section-head"><h2>今日结论与操作建议</h2><span class="sub" id="cb-updated">每日北京 22:00 更新</span></div>
     <div class="rule danger" id="cb-advice-box">
       <h3 id="cb-advice-h3">操作建议</h3>
       <p id="cb-advice-p">—</p>
@@ -213,6 +213,8 @@ window.CB_FALLBACK = {
 
   /* Hero + 大卡 */
   $('cb-date').textContent = D.date;
+  var cbUp = document.getElementById('cb-updated');
+  if (cbUp && D.generatedAt) cbUp.textContent = '每日北京 22:00 · 更新于 ' + D.generatedAt;
   $('cb-lead').textContent = '双低 + 安全债底 + 估值水位总开关。' + (D.verdict || '') + (triggered ? ' 当前双低<130 的合格标的不足 15 只，市场整体偏贵，双低策略暂时失效。' : ' 双低<130 的合格标的已回到阈值附近，可关注候选池机会。');
   $('cb-big-lab').textContent = '今日结论 · ' + D.badge;
   $('cb-big-amt').innerHTML = (triggered ? '空仓' : '可出手') + '<small> / ' + (triggered ? '不新建仓' : '分批关注候选池') + '</small>';
