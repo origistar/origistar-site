@@ -37,6 +37,7 @@
   .sc.hi{background:rgba(248,113,113,.14);color:#f87171}
   .sc.md{background:rgba(148,163,184,.14);color:#94a3b8}
   .sc.lo{background:rgba(52,211,153,.14);color:#34d399}
+  .sc.old{background:rgba(96,165,250,.16);color:#93c5fd}
   .up{color:#f87171} .down{color:#34d399} .mut{color:var(--muted)}
   .chips{display:flex;gap:6px;flex-wrap:wrap;margin:10px 0 4px}
   .chips button{border:1px solid var(--border);background:transparent;color:var(--muted);font-size:12px;padding:5px 12px;border-radius:20px;font-weight:600;cursor:pointer}
@@ -91,6 +92,7 @@
       <button data-c="bull">🐂 牛</button>
       <button data-c="demon">👹 妖</button>
       <button data-c="flat">😐 平</button>
+      <button data-c="old">🕓 老股</button>
     </div>
     <div class="card">
       <div class="scroll-x">
@@ -100,7 +102,7 @@
         </table>
       </div>
     </div>
-    <p class="note">点击任意行展开详情（地位 / 保荐 / 基石 / 建议 / 多维度评分 / 综合评分）。现价与上市以来涨幅为腾讯财经实时行情，红涨绿跌。</p>
+    <p class="note">点击任意行展开详情（地位 / 保荐 / 基石 / 建议 / 多维度评分 / 综合评分）。老股（2025-12-31 前上市，行标🕓老股）不显示保荐 / 基石 / 上市以来 / 锁定期 / 解禁日，点「🕓老股」可单独查看。现价与上市以来涨幅为腾讯财经实时行情，红涨绿跌。</p>
   </section>
 
   <!-- 速查表：按解禁日 -->
@@ -187,7 +189,7 @@
   }
 
   function renderTable() {
-    var arr = ALL.filter(function (s) { return cur === 'all' || s.category === cur; });
+    var arr = ALL.filter(function (s) { return cur === 'all' || (cur === 'old' ? !!s.isOld : s.category === cur); });
     var ord = { bull: 0, demon: 1, flat: 2 };
     arr.sort(function (a, b) { return (ord[a.category] - ord[b.category]) || ((b.score || 0) - (a.score || 0)); });
     var h = '';
@@ -195,14 +197,14 @@
       var chg = s._chgFromIpo, cc = chg == null ? 'mut' : (chg >= 0 ? 'up' : 'down');
       h += '<tr onclick="document.getElementById(\'d_' + s.code + '\').style.display=document.getElementById(\'d_' + s.code + '\').style.display===\'none\'?\'table-row\':\'none\'">' +
         '<td><span class="nm">' + esc(s.name) + '</span><br><span class="sub">' + esc(s.code) + '</span></td>' +
-        '<td class="cat-tx"><span class="dotc" style="background:' + (DOT[s.category] || '#94a3b8') + '"></span>' + (TX[s.category] || '—') + (s.risk ? ' <span class="sc md">⚠️避雷</span>' : '') + '</td>' +
+        '<td class="cat-tx"><span class="dotc" style="background:' + (DOT[s.category] || '#94a3b8') + '"></span>' + (TX[s.category] || '—') + (s.risk ? ' <span class="sc md">⚠️避雷</span>' : '') + (s.isOld ? ' <span class="sc old">老股</span>' : '') + '</td>' +
         '<td class="num">' + (s._price != null ? fmt(s._price, 2) : '—') + '</td>' +
         '<td class="num ' + cc + '">' + (chg == null ? '—' : pct(chg)) + '</td>' +
         '<td class="num">' + (s.cornerstonePct != null ? fmt(s.cornerstonePct, 0) : '—') + '</td>' +
         '<td style="font-size:10px;line-height:1.3">' + esc(s.connectDate || '—') + '</td></tr>' + detailRow(s);
     });
     tbody.innerHTML = h || '<tr><td colspan="6" class="mut">无匹配标的</td></tr>';
-    document.getElementById('listMeta').textContent = '更新 ' + UPD + ' · 共 ' + ALL.length + ' 只';
+    document.getElementById('listMeta').textContent = '更新 ' + UPD + ' · 共 ' + ALL.length + ' 只' + (cur === 'old' ? '（仅老股 ' + arr.length + '）' : '');
   }
 
   function rankRow(s, byScore) {

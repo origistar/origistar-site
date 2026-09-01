@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const FILE = path.join(ROOT, 'low-risk', 'hk-data.json');
-const OLD_THRESHOLD = '2025-01-01';
+const OLD_THRESHOLD = '2025-12-31';
 
 function get(url) {
   return new Promise((r) => {
@@ -39,14 +39,19 @@ async function main() {
   let oldCount = 0, filled = 0;
   for (const s of listed) {
     const code = s.code.replace('.HK', '');
-    const meta = await fetchMeta(code);
-    await sleep(150);
-    if (!meta) { console.log('未查到 ' + s.code); continue; }
-    if (meta.listDate) s.listDate = meta.listDate;
-    if (!s.industry && meta.industry) { s.industry = meta.industry; filled++; }
+    let meta = null;
+    if (!s.listDate) {
+      meta = await fetchMeta(code);
+      await sleep(150);
+      if (!meta) { console.log('未查到 ' + s.code); }
+    }
+    if (meta) {
+      if (meta.listDate) s.listDate = meta.listDate;
+      if (!s.industry && meta.industry) { s.industry = meta.industry; filled++; }
+    }
     s.isOld = s.listDate && s.listDate < OLD_THRESHOLD;
     if (s.isOld) oldCount++;
-    console.log(s.code, s.name, '上市日', meta.listDate, s.isOld ? '【老股】' : '【次新】', '行业', meta.industry);
+    console.log(s.code, s.name, '上市日', s.listDate, s.isOld ? '【老股】' : '【次新】', '行业', s.industry);
   }
   fs.writeFileSync(FILE, JSON.stringify(data, null, 2));
   console.log('\n老股:', oldCount, '只 | 次新:', listed.length - oldCount, '只 | 补行业:', filled, '只');
