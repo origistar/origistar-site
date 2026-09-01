@@ -1,7 +1,10 @@
 // 港股打新 / 待入通 数据自动刷新
 // 数据源：腾讯财经 gtimg（港股+A股实时行情，免鉴权）+ 新浪财经（HKD/CNY 汇率）
 // 产物：low-risk/hk-data.json 内的 _price / _chgFromIpo / _aPrice / _ahPremium / _ahPotential / updated
-// 说明：研究字段（基石/保荐/入通规则/解禁日/评分/建议）为人工维护，本脚本只回填行情，绝不覆盖人工内容
+// 说明：保荐 / 锁定期 / 解禁日 / 评分 / 建议 均为「系统生成字段」，并非人工笔记：
+//   · 保荐人/基石/评分/建议 来自招股披露/研究库（旧 hk-ipo-tracker 的 data.json 自动填充，再由 enrich-hk.mjs 继承）
+//   · 锁定期/解禁日 由 enrich-hk.mjs 按港股 IPO 标准规则推算（基石6个月/控股股东12个月，自上市日）
+//   本脚本只回填行情，绝不覆盖上述系统字段。仅「待入通 listed 清单」本身来自活报告手工维护。
 // 用法：node scripts/fetch-hk.mjs
 
 import fs from 'node:fs';
@@ -184,7 +187,13 @@ function normCode(code) {
   return n ? n.padStart(5, '0') : null;
 }
 
-// 合并：保留全部人工研究字段，只更新自动字段；新发现的标的研究字段留空待人工补
+// 排除清单：自动发现的干扰源（非真实招股 IPO）
+// 02913「天成控股」= 02110 天成控股（老仙股，曾用名裕勤控股）股本重组（十合一+股本削减）后换码上市（2026-09-03），
+// 东财 IPO 日历误判为新股（LISTING_DATE 未来值），无发行价/无保荐人/无公开发售，严禁进打新池。
+// 判定依据：与 02110 同名同股本（432,000,000 股）同董事长同注册地；腾讯行情 0 价格壳；etnet 无资料。
+const AUTO_SKIP_CODES = new Set(['02913']);
+
+// 合并：保留全部系统/研究字段，只更新自动字段；新发现标的的研究字段留空，由 enrich-hk.mjs 补全（标准锁定期自动推算、保荐等从研究库继承）
 // 新股上市后仍保留在打新页的天数（可看首日 / 上市以来表现），超期才移除
 const IPO_KEEP_DAYS = 7;
 function isoMinusDays(iso, n) {
@@ -202,6 +211,12 @@ function mergeDiscovered(stocks, discovered, today, errors) {
   const seen = new Set();
   for (const d of discovered) {
     const k = d.code;
+    // 排除干扰源（股本重组换码等非 IPO），已入库的标记忆移除
+    if (AUTO_SKIP_CODES.has(k)) {
+      const ex = byCode.get(k);
+      if (ex && ex._autoAdded) ex._markRemove = true;
+      continue;
+    }
     seen.add(k);
     let board = (d.listDate && d.listDate > today) ? 'ipo'
       : (d.listDate && d.listDate >= grace) ? 'ipo' : 'listed';
@@ -215,7 +230,7 @@ function mergeDiscovered(stocks, discovered, today, errors) {
         existing._markRemove = true;
         continue;
       }
-      // 已存在：只更新自动可得字段，人工研究字段一律不动
+      // 已存在：只更新自动可得字段，系统/研究字段一律不动
       existing.listDate = d.listDate || existing.listDate;
       if (!existing.industry && d.industry) existing.industry = d.industry;
       if (!existing.name || existing.name === existing.code) existing.name = d.name;
@@ -242,6 +257,7 @@ function mergeDiscovered(stocks, discovered, today, errors) {
       sponsor: null, leader: null, advice: null,
       connectDate: null, unlockDate: null, floatShares: null,
       lockup: null, score: null, riskLevel: null, risk: false,
+      // 注：上面这些「系统字段」留空，enrich 阶段会补全——标准锁定期自动推算、保荐等从研究库继承，无需人工填
       raiseCap: null, toConnectPct: null, totalShares: null,
       _autoAdded: true
     };
