@@ -32,7 +32,7 @@
   <!-- Hero -->
   <section class="hero">
     <h1 class="section-title">纳指定投历史 <span class="grad">v5.1</span></h1>
-    <p class="lead">数据每日自动更新 · 来源：蛋卷 PE + yfinance VIX/NDX。记录每日 PE、VIX、回撤、评分与实际定投金额。</p>
+    <p class="lead"><span id="ndxSrc">数据每日自动更新 · 来源：蛋卷 PE + Yahoo VIX/NDX</span>。记录每日 PE、VIX、回撤、评分与实际定投金额。</p>
   </section>
 
   <!-- 区间切换 -->
@@ -142,7 +142,12 @@
 
   fetch('state.json?t=' + Date.now())
     .then(function (r) { return r.json(); })
-    .then(function (d) { ALL = d.history || []; render(30); if (window.origistarSetUpdated) window.origistarSetUpdated('定投记录·手动维护'); })
+    .then(function (d) {
+      ALL = d.history || []; render(30);
+      // 时间戳与数据源随每日抓取同步（fetch-ndx-history.mjs 写入 state.json）
+      if (d.dataSource) document.getElementById('ndxSrc').textContent = '数据每日自动更新 · 来源：' + d.dataSource;
+      if (window.origistarSetUpdated) window.origistarSetUpdated(d.generatedAt || '定投记录·手动维护');
+    })
     .catch(function (e) { tbody.innerHTML = '<tr><td colspan="11">加载失败：' + esc(e.message) + '</td></tr>'; });
 })();
 </script>
