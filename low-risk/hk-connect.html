@@ -169,7 +169,7 @@
       '<div class="mini">' +
       (s.leader ? '<div><span>地位</span><span>' + esc(s.leader) + '</span></div>' : '') +
       (isOld ? '' : '<div><span>保荐</span><span>' + esc(s.sponsor || '—') + '</span></div>') +
-      (s.cornerN ? '<div><span>基石</span><span>' + s.cornerN + '家·' + (s.cornerstonePct != null ? fmt(s.cornerstonePct, 0) + '%' : '') + ' ' + esc((s.corners || []).slice(0, 3).join('、')) + '</span></div>' : '') +
+      (isOld ? '' : (s.cornerN ? '<div><span>基石</span><span>' + s.cornerN + '家·' + (s.cornerstonePct != null ? fmt(s.cornerstonePct, 0) + '%' : '') + ' ' + esc((s.corners || []).slice(0, 3).join('、')) + '</span></div>' : '')) +
       (s._ahPremium != null ? '<div><span>AH 溢价</span><span class="' + (s._ahPremium >= 0 ? 'up' : 'down') + '">' + pct(s._ahPremium) + '</span></div>' : '') +
       '</div>' +
       '<div class="mut" style="font-size:11px;margin:4px 0">行业：' + esc(s.industry || '—') + (isOld ? ' · 老股（不显示保荐/基石）' : '') + (s.greyMarket != null ? ' · 暗盘 ' + (s.greyMarket > 0 ? '+' : '') + s.greyMarket + '%' : '') + '</div>' +
