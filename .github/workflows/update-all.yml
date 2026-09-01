@@ -54,6 +54,11 @@ jobs:
         continue-on-error: true
         run: node scripts/enrich-hk.mjs
 
+      - name: 可转债双低（旧站每日筛选数据同步）
+        id: cb
+        continue-on-error: true
+        run: node scripts/fetch-cb.mjs
+
       - name: 汇总各数据源结果
         run: |
           echo "进取仓: ${{ steps.aggressive.outcome }}"
@@ -61,13 +66,14 @@ jobs:
           echo "大盘BTC: ${{ steps.market.outcome }}"
           echo "港股:   ${{ steps.hk.outcome }}"
           echo "港股补全: ${{ steps.hk-enrich.outcome }}"
+          echo "可转债: ${{ steps.cb.outcome }}"
 
       # 单一提交 + 单一 push，彻底避免多工作流并发推送冲突
       - name: 提交并推送（带 rebase 重试）
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add -A assets/aggressive-live.js assets/defensive-live.js assets/market-live.js low-risk/hk-data.json
+          git add -A assets/aggressive-live.js assets/defensive-live.js assets/market-live.js assets/cb-live.js low-risk/hk-data.json
           if git diff --cached --quiet; then
             echo "无变化，跳过提交"
             exit 0
