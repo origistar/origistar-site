@@ -20,20 +20,40 @@ function beijingNow() {
 const p2 = (n) => String(n).padStart(2, '0');
 
 /* ---------- 通用 GET（带超时，失败返回空串，绝不抛错） ---------- */
-function httpGet(url, headers = {}) {
+// enc: 'gbk' 用于腾讯 gtimg（GBK 编码），'utf8' 用于东财/新浪
+function httpGet(url, headers = {}, enc = 'utf8') {
   return new Promise((resolve) => {
     const req = https.get(
       url,
       { timeout: 8000, headers: { 'User-Agent': 'Mozilla/5.0', ...headers } },
       (res) => {
-        let buf = '';
-        res.on('data', (d) => (buf += d));
-        res.on('end', () => resolve(buf));
+        const chunks = [];
+        res.on('data', (d) => chunks.push(d));
+        res.on('end', () => {
+          const buf = Buffer.concat(chunks);
+          if (enc === 'gbk') {
+            try { return resolve(new TextDecoder('gbk').decode(buf)); } catch (_) { /* 回退 */ }
+          }
+          resolve(buf.toString('utf8'));
+        });
       }
     );
     req.on('error', () => resolve(''));
     req.on('timeout', () => { req.destroy(); resolve(''); });
   });
+}
+
+/* ---------- 港股通入通门槛（亿港元） ----------
+   · A+H 股：H 股自动纳入，无市值门槛
+   · 同股不同权（-W）：上市满 6 个月 + 20 个交易日，且市值 ≥ 200 亿、成交额 ≥ 60 亿
+   · 一般新股：走恒生综合指数半年度检讨（3 月 / 9 月生效），小型股门槛约 100 亿
+   门槛随指数检讨浮动，此处取用户速查表沿用值，脚本只负责算出「当前市值距门槛多远」。 */
+const CONNECT_NEED_WVR = 200;
+const CONNECT_NEED_NORMAL = 100;
+function connectNeed(s) {
+  if (s.isAH) return 0;
+  if (/-W\b|-W$/.test(String(s.name || ''))) return CONNECT_NEED_WVR;
+  return CONNECT_NEED_NORMAL;
 }
 
 /* ---------- HKD/CNY 汇率（新浪） ---------- */
@@ -50,13 +70,15 @@ async function fetchRate(prev) {
 }
 
 /* ---------- 腾讯 gtimg 批量行情 ---------- */
-// 返回 { sym: {price, prev, chgPct, name} }
+// 返回 { sym: {price, prev, chgPct, name, floatCap, totalCap} }
+// gtimg 港股字段下标（实测 00700 / 09988 / 03690 三只校验通过）：
+//   [3] 现价  [4] 昨收  [33] 涨跌幅%  [44] 流通市值(亿港元)  [45] 总市值(亿港元)
 async function fetchQuotes(syms) {
   const out = {};
   // 每批 30 个，避免 URL 过长
   for (let i = 0; i < syms.length; i += 30) {
     const batch = syms.slice(i, i + 30);
-    const raw = await httpGet('https://qt.gtimg.cn/q=' + batch.join(','));
+    const raw = await httpGet('https://qt.gtimg.cn/q=' + batch.join(','), { Referer: 'https://gu.qq.com/' }, 'gbk');
     if (!raw) continue;
     for (const line of raw.split(';')) {
       const m = line.match(/v_([a-z0-9]+)="([^"]*)"/i);
@@ -64,10 +86,168 @@ async function fetchQuotes(syms) {
       const a = m[2].split('~');
       const price = +a[3];
       if (!price || isNaN(price)) continue;
-      out[m[1]] = { name: a[1], price, prev: +a[4], chgPct: +a[33] };
+      const item = { name: a[1], price, prev: +a[4], chgPct: +a[33] };
+      if (m[1].startsWith('hk')) {
+        const fc = +a[44], tc = +a[45];
+        if (fc > 0) item.floatCap = fc;   // 亿港元
+        if (tc > 0) item.totalCap = tc;   // 亿港元
+      }
+      out[m[1]] = item;
     }
   }
   return out;
+}
+
+/* ---------- 港股新股自动发现（东财港股资料表） ---------- */
+// 数据源 RPT_HKF10_INFO_ORGPROFILE 的 LISTING_DATE 字段可查未来日期，
+// 因此上市日 > 今天 = 招股中/待上市，<= 今天 = 已上市次新。
+// 这解决了"新上市的不会自动出现、老的不自动移除"的问题。
+const EM_DC = 'https://datacenter-web.eastmoney.com/api/data/v1/get';
+
+// 噪音 1：供股 / 拆股 / 合股临时代码 / 债券（如「高地股份(四千)」= 每手 4000 股的合股代码）
+const NOISE_RE = /(旧|股权|RTS|债权|票据|优先股|FRN)/;
+// 噪音 2：中文数字括号或后缀（(四千) / -二万 / -八千…）一律是临时交易代码
+const TEMP_CODE_RE = /\((?:[一二三四五六七八九十百千万零两]+)\)/;
+const TEMP_SUFFIX_RE = /[-－]\s*(?:[一二三四五六七八九十百千万零两]{1,4})\s*$/;
+// 噪音 3：公司简介里提到「股票代码 01803.HK」「股份代号:1218」= 老公司换代码，非新股
+const RECODE_RE = /(?:股票代码|股份代号|股份代码|证券代码|股票代号)\s*[:：]?\s*(\d{4,5})/;
+
+function isRealNewListing(code, name, row) {
+  if (!/^\d{5}$/.test(code)) return false;          // 排除 85160 这类债券代码
+  if (parseInt(code, 10) >= 40000) return false;    // 4xxxx 债务证券、8xxxx 债券
+  if (NOISE_RE.test(name || '')) return false;      // 供股/拆股/债券
+  if (TEMP_CODE_RE.test(name || '')) return false;    // (四千)/(二万) 临时代码
+  if (TEMP_SUFFIX_RE.test(name || '')) return false;  // 阿尔法企业-二万（无括号的临时代码）
+  if (/^[A-Z0-9\s.\-]+$/.test(name || '')) return false; // 纯英文数字名（如 "EFN 3.00 2808"）
+  // 港股通标的不含创业板，打新也不看 GEM
+  if (row && row.BELONG_MARKET && row.BELONG_MARKET !== '香港主板') return false;
+  // 简介里出现别的股票代码 → 老股换代码（如驴迹 02900 实为 01745、北京体育文化 02908 实为 01803）
+  if (row) {
+    const prof = `${row.ORG_PROFILE || ''} ${row.ORG_NAME || ''}`;
+    const m = prof.match(RECODE_RE);
+    if (m && m[1].padStart(5, '0') !== code) return false;
+  }
+  return true;
+}
+
+async function discoverHK(backDays = 120, fwdDays = 60) {
+  const now = new Date();
+  const fmt = (d) => `${d.getFullYear()}-${p2(d.getMonth() + 1)}-${p2(d.getDate())}`;
+  const from = fmt(new Date(now.getTime() - backDays * 864e5));
+  const to = fmt(new Date(now.getTime() + fwdDays * 864e5));
+  const filter = `(LISTING_DATE>'${from}')(LISTING_DATE<'${to}')`;
+  const cols = 'SECURITY_CODE,SECURITY_NAME_ABBR,LISTING_DATE,BELONG_INDUSTRY,BELONG_MARKET,ORG_PROFILE';
+
+  const rows = [];
+  try {
+    for (let page = 1; page <= 5; page++) {
+      const url = `${EM_DC}?reportName=RPT_HKF10_INFO_ORGPROFILE&columns=${cols}`
+        + `&sortColumns=LISTING_DATE&sortTypes=-1&pageSize=200&pageNumber=${page}`
+        + `&filter=${encodeURIComponent(filter)}`;
+      const j = await httpGetJson(url);
+      const data = (j && j.result && j.result.data) || [];
+      rows.push(...data);
+      if (data.length < 200) break;   // 已取完
+    }
+  } catch (e) {
+    return { ok: false, error: e.message || String(e), list: [], total: 0 };
+  }
+
+  const rejected = [];
+  const list = rows
+    .filter((r) => {
+      const ok = isRealNewListing(r.SECURITY_CODE, r.SECURITY_NAME_ABBR, r);
+      if (!ok) rejected.push(`${r.SECURITY_CODE} ${r.SECURITY_NAME_ABBR}`);
+      return ok;
+    })
+    .map((r) => ({
+      code: r.SECURITY_CODE,
+      name: r.SECURITY_NAME_ABBR,
+      listDate: String(r.LISTING_DATE || '').slice(0, 10) || null,
+      industry: r.BELONG_INDUSTRY || null,
+      market: r.BELONG_MARKET || null
+    }));
+  if (rejected.length) console.log('过滤噪音 ' + rejected.length + ' 条：' + rejected.slice(0, 12).join('、') + (rejected.length > 12 ? ' …' : ''));
+  return { ok: true, list, total: rows.length };
+}
+
+function httpGetJson(url) {
+  return httpGet(url).then((raw) => {
+    if (!raw || !raw.trim()) throw new Error('空响应');
+    return JSON.parse(raw);
+  });
+}
+
+// 代码规范化：hk-data.json 用 "09615.HK"，东财用 "09615" → 统一 5 位数字
+function normCode(code) {
+  const n = String(code || '').replace(/[^\d]/g, '');
+  return n ? n.padStart(5, '0') : null;
+}
+
+// 合并：保留全部人工研究字段，只更新自动字段；新发现的标的研究字段留空待人工补
+function mergeDiscovered(stocks, discovered, today, errors) {
+  const byCode = new Map();
+  stocks.forEach((s) => { const k = normCode(s.code); if (k) byCode.set(k, s); });
+
+  const seen = new Set();
+  for (const d of discovered) {
+    const k = d.code;
+    seen.add(k);
+    const existing = byCode.get(k);
+    if (existing) {
+      // 已存在：只更新自动可得字段，人工研究字段一律不动
+      existing.listDate = d.listDate || existing.listDate;
+      if (!existing.industry && d.industry) existing.industry = d.industry;
+      if (!existing.name || existing.name === existing.code) existing.name = d.name;
+      existing.board = (existing.listDate && existing.listDate > today) ? 'ipo' : 'listed';
+      if (existing.board === 'ipo' && !existing.category) existing.category = 'ipo';
+      existing._autoUpdated = true;
+    } else {
+      // 新增：研究字段留 null，页面显示 —
+      const board = (d.listDate && d.listDate > today) ? 'ipo' : 'listed';
+      const item = {
+        board: board,
+        category: board === 'ipo' ? 'ipo' : 'flat',
+        code: k + '.HK',
+        name: d.name,
+        industry: d.industry,
+        listDate: d.listDate,
+        ipoPrice: null, ipoDate: null, deadline: null,
+        isAH: false, aCode: null, ahRule: '',
+        cornerstonePct: null, cornerN: null, corners: [],
+        sponsor: null, leader: null, advice: null,
+        connectDate: null, unlockDate: null, floatShares: null,
+        lockup: null, score: null, riskLevel: null, risk: false,
+        raiseCap: null, toConnectPct: null, totalShares: null,
+        _autoAdded: true
+      };
+      byCode.set(k, item);
+      stocks.push(item);
+    }
+  }
+
+  // 移除：已不在发现窗口内、且未标记人工保留的（解决"老的未移除"）
+  const removed = [];
+  for (let i = stocks.length - 1; i >= 0; i--) {
+    const s = stocks[i];
+    const k = normCode(s.code);
+    if (!k) continue;                    // 无代码的人工条目（潜在标的）保留
+    if (seen.has(k)) continue;           // 在窗口内，保留
+    if (s.manual === true) continue;     // 人工标记保留
+    // 有实质研究内容的也保留，避免误删用户心血
+    if (s.advice || s.connectDate || (s.corners && s.corners.length)) continue;
+    removed.push(`${s.name}(${s.code})`);
+    stocks.splice(i, 1);
+  }
+  if (removed.length) {
+    console.log('自动移出过期标的 ' + removed.length + ' 只：' + removed.join('、'));
+  }
+  return { removed };
+}
+
+function todayISO() {
+  const now = new Date();
+  return `${now.getFullYear()}-${p2(now.getMonth() + 1)}-${p2(now.getDate())}`;
 }
 
 /* ---------- 代码 → gtimg 符号 ---------- */
@@ -101,6 +281,17 @@ async function main() {
 
   const errors = [];
 
+  /* 0) 自动发现新股（东财港股资料表按上市日期筛选，可查未来日期 → 含招股中） */
+  const discover = await discoverHK(120, 60);
+  if (discover.ok) {
+    const before = stocks.length;
+    mergeDiscovered(stocks, discover.list, todayISO(), errors);
+    console.log(`自动发现：候选 ${discover.total} 条 → 真实新股 ${discover.list.length} 只；合并后 ${before} → ${stocks.length} 只`);
+  } else {
+    console.log('自动发现失败（保留既有名单）：' + discover.error);
+    errors.push('自动发现失败：' + discover.error);
+  }
+
   /* 1) 汇率 */
   const rate = await fetchRate(data.hkdCnyRate);
   data.hkdCnyRate = +rate.toFixed(6);
@@ -110,19 +301,22 @@ async function main() {
   const listed = stocks.filter((s) => s.board === 'listed' && hkSym(s.code));
   const hkSyms = [...new Set(listed.map((s) => hkSym(s.code)))];
   const hkQ = await fetchQuotes(hkSyms);
-  let ok = 0, fail = 0;
+  let ok = 0, fail = 0, capOk = 0;
   for (const s of listed) {
     const q = hkQ[hkSym(s.code)];
     if (q) {
       s._price = q.price;
       if (s.ipoPrice) s._chgFromIpo = +((q.price / s.ipoPrice - 1) * 100).toFixed(2);
+      s._floatCap = q.floatCap != null ? +q.floatCap.toFixed(2) : null;   // 亿港元
+      s._mktCap = q.totalCap != null ? +q.totalCap.toFixed(2) : null;     // 亿港元
+      if (s._mktCap) capOk++;
       ok++;
     } else {
       fail++;
       errors.push(s.name + '(' + s.code + ') 行情缺失');
     }
   }
-  console.log(`港股行情 成功 ${ok} / 失败 ${fail}`);
+  console.log(`港股行情 成功 ${ok} / 失败 ${fail}（其中市值 ${capOk} 只）`);
 
   /* 3) AH 股：拉 A 股价，算真实溢价 / 潜在溢价 */
   const ahList = stocks.filter((s) => s.isAH && aSym(s.aCode));
@@ -151,9 +345,44 @@ async function main() {
     }
   }
 
+  /* 4.5) 入通测算：当前市值是硬数据，入通资格随市值浮动，必须每日重算 */
+  let capMeet = 0, capShort = 0;
+  for (const s of stocks) {
+    // 是否已有人工研究内容（页面据此区分「已研究」与「自动发现待研究」）
+    s._researched = !!(s.advice || s.connectDate || s.score != null || (s.corners && s.corners.length));
+    s._connectNeed = connectNeed(s);                       // 亿港元，0 = 免门槛
+    if (s._connectNeed === 0) {
+      s._connectStatus = 'A+H · 免市值门槛';
+      s._connectGapPct = null;
+      continue;
+    }
+    if (!s._mktCap) { s._connectStatus = null; s._connectGapPct = null; continue; }
+    const gap = (s._mktCap / s._connectNeed - 1) * 100;
+    s._connectGapPct = +gap.toFixed(1);
+    s._connectStatus = gap >= 0 ? '已达标' : `差 ${Math.abs(gap).toFixed(0)}%`;
+    if (gap >= 0) capMeet++; else capShort++;
+  }
+  console.log(`入通门槛测算：达标 ${capMeet} 只 / 未达标 ${capShort} 只（门槛：WVR 200 亿、一般 100 亿、A+H 免）`);
+
+  /* 4.6) 入通日进度：已过入通日 → 标记已入通，不再算「待入通」 */
+  let connected = 0, soon = 0;
+  for (const s of stocks) {
+    const cd = String(s.connectDate || '');
+    const m = cd.match(/(\d{4})-(\d{2})-(\d{2})/);
+    s._connectDone = false; s._connectDays = null;
+    if (!m) continue;
+    const dnum = Date.parse(`${m[1]}-${m[2]}-${m[3]}T00:00:00Z`);
+    if (isNaN(dnum)) continue;
+    const tnum = Date.parse(`${today}T00:00:00Z`);
+    s._connectDays = Math.round((dnum - tnum) / 864e5);
+    if (s._connectDays < 0) { s._connectDone = true; connected++; }
+    else if (s._connectDays <= 14) soon++;
+  }
+  console.log(`入通进度：已生效 ${connected} 只 / 14 天内待生效 ${soon} 只`);
+
   /* 5) 时间戳（北京时间） */
   data.updated = `${today} ${p2(bj.getHours())}:${p2(bj.getMinutes())}`;
-  data.dataSource = '腾讯财经 gtimg（行情）+ 新浪财经（汇率）；研究字段人工维护';
+  data.dataSource = '腾讯 gtimg（行情/市值）+ 东财港股资料表（新股发现）+ 新浪（汇率）；研究字段人工维护';
   data.updateFreq = '每日 3 次（北京时间 08:30 / 16:30 / 23:00）';
   data.errors = errors;
 
