@@ -84,7 +84,7 @@
         </table>
       </div>
     </div>
-    <p class="note">DD% 为距 52 周高点回撤（红色 = 低于 -5%）。阶段 ① 日常 / ② 熊市 / ③ 长熊。日投为当日实际定投金额。数据来自 state.json，与决策面板同源。<a href="ndx-dca.html">← 返回决策面板</a></p>
+    <p class="note">DD% 为距 52 周高点回撤（红色 = 低于 -5%）。阶段 ① 日常 / ② 熊市 / ③ 长熊。日投为当日实际定投金额。<b>日期后带 ≈</b> 表示当日为补齐的历史K线重建值（NDX/VIX 为实际收盘，PE/PE分位/溢价按模型估算），非当日实采。数据来自 state.json，与决策面板同源。<a href="ndx-dca.html">← 返回决策面板</a></p>
   </section>
 </div>
 
@@ -119,7 +119,7 @@
       var ddCls = r.dd_pct < -5 ? 'down' : 'up';
       var phCls = r.phase === '①' ? 'ph1' : r.phase === '②' ? 'ph2' : r.phase === '③' ? 'ph3' : '';
       return '<tr>' +
-        '<td class="lb">' + esc(r.date) + '</td>' +
+        '<td class="lb">' + esc(r.date) + (r._est ? ' <span style="opacity:.55;font-weight:400" title="该日为历史K线重建：NDX/VIX 取实际收盘，PE/PE分位/溢价按模型估算">≈</span>' : '') + '</td>' +
         '<td>' + (r.pe != null ? r.pe : '—') + '</td>' +
         '<td>' + (r.pe_pct != null ? r.pe_pct + '%' : '—') + '</td>' +
         '<td>' + (r.vix != null ? r.vix : '—') + '</td>' +
