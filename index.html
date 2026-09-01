@@ -15,6 +15,19 @@
 <body>
 <script src="assets/data.js"></script>
 <script src="assets/market-live.js"></script>
+<script src="assets/defensive-live.js"></script>
+<script src="assets/cb-live.js"></script>
+<script src="assets/aggressive-live.js"></script>
+<script>
+(function () {
+  var d = window.ORIGISTAR; if (!d || !d.updated) return;
+  var dates = [d.updated];
+  [window.MARKET_LIVE, window.DEFENSIVE_LIVE, window.CB_LIVE, window.AGGRESSIVE_LIVE].forEach(function (L) {
+    if (L && L.generatedAt) dates.push(L.generatedAt);
+  });
+  d.updated = dates.reduce(function (a, b) { return a > b ? a : b; });
+})();
+</script>
 <script src="assets/nav.js" data-system="home"></script>
 
 <div class="wrap">
