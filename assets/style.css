@@ -314,6 +314,8 @@ table.matrix td.hi  { background: color-mix(in srgb, var(--warn) 16%, transparen
 table.matrix td.hot { background: color-mix(in srgb, var(--up) 14%, transparent); color: var(--up); font-weight:800; }
 table.matrix td.cool{ background: color-mix(in srgb, var(--down) 14%, transparent); color: var(--down); font-weight:800; }
 table.matrix td.dim { color: var(--muted); }
+table.matrix tr.now { background: color-mix(in srgb, var(--accent) 12%, transparent); }
+table.matrix tr.now td { box-shadow: inset 4px 0 0 var(--accent); }
 table.matrix caption { caption-side: bottom; text-align:left; color: var(--muted); font-size: var(--fs-xs); padding-top:8px; }
 @media (min-width: 720px) {
   table.matrix { font-size: var(--fs-sm); }
