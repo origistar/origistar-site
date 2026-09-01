@@ -88,7 +88,12 @@ img { max-width: 100%; }
   border-bottom: 1px solid var(--border);
 }
 .brand { display: flex; align-items: center; gap: 9px; font-weight: 800; letter-spacing: .3px; }
-.brand .logo-img { height: 30px; width: auto; display: block; }
+.brand .logo {
+  width: 30px; height: 30px; border-radius: 9px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-2));
+  display: grid; place-items: center; color: #fff; font-weight: 900; font-size: var(--fs-base);
+  box-shadow: 0 4px 12px rgba(79,70,229,.35);
+}
 .brand b { font-size: var(--fs-md); }
 .nav-sys { display: none; margin-left: 10px; gap: 2px; }
 .nav-sys > .ni {
