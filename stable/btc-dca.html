@@ -74,11 +74,19 @@
 
   <!-- 今日决策大卡 -->
   <section class="section">
-    <div class="bigcard">
-      <div class="lab" id="btcLab">今日定投 · 🟢 0.45-1.2</div>
-      <div class="amt" id="btcAmt">¥3,000<small> / 周</small></div>
-      <div class="calc" id="btcCalc">AHR999 = 0.5358 · 价格/200MA = 1.15</div>
-      <span class="stage" id="btcStage">定投区间 · 正常定投</span>
+    <div class="bigcard btc">
+      <div class="lab" id="btcLab">今日定投 · AHR999<0.45</div>
+      <div class="bigrow">
+        <div>
+          <div class="bigval"><span id="btcAhr">—</span></div>
+          <div class="bigsub">AHR999 · 九神拟合式</div>
+        </div>
+        <div style="text-align:right">
+          <div class="amt" id="btcAmt">¥3,000<small> / 周</small></div>
+          <div class="bigsub">本周 IBIT 操作</div>
+        </div>
+      </div>
+      <span class="stage" id="btcStage">当前位于抄底加仓区间</span>
     </div>
   </section>
 
@@ -224,10 +232,7 @@
     set('mstrMeta', mh + md);
   }
   if (b.mnav != null) set('btcMnav', b.mnav.toFixed(2) + 'x' + (b.mnav >= 1 ? ' 溢价' : ' 折价'));
-  if (b.ahr999 != null) {
-    var calc = document.getElementById('btcCalc');
-    if (calc) calc.textContent = 'AHR999 = ' + b.ahr999.toFixed(4) + ' · 价格/200MA = ' + (b.p200ma != null ? b.p200ma.toFixed(3) : '—');
-  }
+  if (b.ahr999 != null) set('btcAhr', b.ahr999.toFixed(4));
   // IBIT 现价（live）用于折算股数；取不到时回退静态 $45.29
   var ibitPx = (b.ibit != null) ? b.ibit : 45.29;
   function sharesOf(a) { return a > 0 ? ('~' + Math.round(a / 7.1 / ibitPx) + ' 股') : '0'; }
@@ -247,7 +252,13 @@
     e.className = (r === tier) ? 'now' : '';
   });
   set('btcLab', lab);
-  set('btcStage', zone + (amt > 0 ? ' · ¥' + amt.toLocaleString('zh-CN') + '/周' : ' · 停止'));
+  // stage 描述：当前 AHR999 所在区间（避免与 lab 的"档位+操作"重复）
+  var stageMsg = '';
+  if (price != null && price < 50000) stageMsg = '当前位于应急加速区间';
+  else if (ahr != null && ahr < 0.45) stageMsg = '当前位于抄底加仓区间';
+  else if (ahr != null && ahr <= 1.2) stageMsg = '当前位于定投参考区间';
+  else stageMsg = '当前位于高估暂停区间';
+  set('btcStage', stageMsg);
   setHTML('btcAmt', amt > 0 ? '¥' + amt.toLocaleString('zh-CN') + '<small> / 周</small>' : '暂停定投');
   // 本周操作随决策动态（IBIT 股数用 live 价）
   set('btcOpTitle', '本周操作 · ' + (amt > 0 ? '¥' + amt.toLocaleString('zh-CN') + ' / 周' : '暂停'));
