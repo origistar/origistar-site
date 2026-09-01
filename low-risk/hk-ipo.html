@@ -210,6 +210,7 @@
       });
       var nNew = stocks.filter(function (s) { return !s._justListed; }).length;
       if (cntEl) cntEl.textContent = '更新 ' + (d.updated || '') + ' · 招股中 ' + nNew + ' 只 · 已上市 ' + (stocks.length - nNew) + ' 只';
+      if (window.origistarSetUpdated) window.origistarSetUpdated(d.updated || '');
       if (!stocks.length) { list.innerHTML = '<p class="note">暂无待上市新股</p>'; return; }
       list.innerHTML = stocks.map(ipoCard).join('');
       // AH 股拉 A 股行情算潜在溢价
