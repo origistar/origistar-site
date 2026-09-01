@@ -43,11 +43,11 @@
     return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
 
-  // BTC：AHR999 档位（周定投基数 × 档位）
-  function btcTier(ahr) {
-    if (ahr < 0.45) return { mult: 3,   label: '抄底区 ×3' };
+  // BTC：AHR999 档位（周定投基数 × 档位，与稳健仓 btc-dca 页统一）
+  function btcTier(ahr, price) {
+    if (price != null && price < 50000) return { mult: 4, label: '应急加速 ×4' };
+    if (ahr < 0.45) return { mult: 2,   label: '抄底区 ×2' };
     if (ahr < 1.2)  return { mult: 1,   label: '定投区 ×1' };
-    if (ahr < 3)    return { mult: 0.5, label: '观望区 ×0.5' };
     return { mult: 0, label: '停止定投' };
   }
 
@@ -71,7 +71,7 @@
 
   // 2) BTC 定投（每周 × AHR999 档位）
   var btcBase = d.btc.weeklyBase || d.btc.weeklyDCA || 0;
-  var btcT = btcTier(d.btc.ahr999);
+  var btcT = btcTier(d.btc.ahr999, d.btc.price);
   var btcAmt = Math.round(btcBase * btcT.mult);
   rows.push({
     name: 'BTC 定投',
