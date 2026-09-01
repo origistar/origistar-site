@@ -257,6 +257,7 @@
       document.getElementById('kTotal').textContent = ALL.length;
       document.getElementById('kCat').textContent = c.bull + ' / ' + c.demon + ' / ' + c.flat;
       document.getElementById('listMeta').textContent = '更新 ' + UPD + ' · 共 ' + ALL.length + ' 只';
+      if (window.origistarSetUpdated) window.origistarSetUpdated(UPD);
       renderTable(); renderRanks(); return refreshLive();
     })
     .catch(function (e) { tbody.innerHTML = '<tr><td colspan="6" class="mut">数据加载失败：' + esc(e.message) + '</td></tr>'; });
