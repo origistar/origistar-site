@@ -92,10 +92,6 @@
       <button data-c="demon">👹 妖</button>
       <button data-c="flat">😐 平</button>
     </div>
-    <div class="chips" id="scopeFilters" style="margin-top:8px">
-      <button class="on" data-s="research">🎯 埋伏池(已研究)</button>
-      <button data-s="all">🌐 含自动发现</button>
-    </div>
     <div class="card">
       <div class="scroll-x">
         <table class="conn-tbl" id="tbl">
@@ -139,7 +135,7 @@
 
 <script>
 (function () {
-  var RATE = 0.92, ALL = [], cur = 'all', scope = 'research', UPD = '';
+  var RATE = 0.92, ALL = [], cur = 'all', UPD = '';
   var tbody = document.getElementById('tbody');
   var DOT = { bull: '#3b82f6', demon: '#a855f7', flat: '#94a3b8' };
   var TX = { bull: '牛', demon: '妖', flat: '平' };
@@ -190,23 +186,22 @@
   }
 
   function renderTable() {
-    var arr = ALL.filter(function (s) { return (cur === 'all' || s.category === cur) && (scope === 'all' || s._researched === true); });
+    var arr = ALL.filter(function (s) { return cur === 'all' || s.category === cur; });
     var ord = { bull: 0, demon: 1, flat: 2 };
-    arr.sort(function (a, b) { if (!!b._researched !== !!a._researched) return (b._researched ? 1 : 0) - (a._researched ? 1 : 0); return (ord[a.category] - ord[b.category]) || ((b.score || 0) - (a.score || 0)); });
+    arr.sort(function (a, b) { return (ord[a.category] - ord[b.category]) || ((b.score || 0) - (a.score || 0)); });
     var h = '';
     arr.forEach(function (s) {
       var chg = s._chgFromIpo, cc = chg == null ? 'mut' : (chg >= 0 ? 'up' : 'down');
-      var autoTag = s._researched ? '' : ' <span style="color:#94a3b8;font-size:10px">🔍自动</span>';
       h += '<tr onclick="document.getElementById(\'d_' + s.code + '\').style.display=document.getElementById(\'d_' + s.code + '\').style.display===\'none\'?\'table-row\':\'none\'">' +
         '<td><span class="nm">' + esc(s.name) + '</span><br><span class="sub">' + esc(s.code) + '</span></td>' +
-        '<td class="cat-tx"><span class="dotc" style="background:' + (DOT[s.category] || '#94a3b8') + '"></span>' + (TX[s.category] || '—') + (s.risk ? ' <span class="sc md">⚠️避雷</span>' : '') + autoTag + '</td>' +
+        '<td class="cat-tx"><span class="dotc" style="background:' + (DOT[s.category] || '#94a3b8') + '"></span>' + (TX[s.category] || '—') + (s.risk ? ' <span class="sc md">⚠️避雷</span>' : '') + '</td>' +
         '<td class="num">' + (s._price != null ? fmt(s._price, 2) : '—') + '</td>' +
         '<td class="num ' + cc + '">' + (chg == null ? '—' : pct(chg)) + '</td>' +
         '<td class="num">' + (s.cornerstonePct != null ? fmt(s.cornerstonePct, 0) : '—') + '</td>' +
         '<td style="font-size:10px;line-height:1.3">' + esc(s.connectDate || '—') + '</td></tr>' + detailRow(s);
     });
     tbody.innerHTML = h || '<tr><td colspan="6" class="mut">无匹配标的</td></tr>';
-    document.getElementById('listMeta').textContent = '更新 ' + UPD + ' · 显示 ' + arr.length + ' / 共 ' + ALL.length + ' 只' + (scope === 'research' ? '（埋伏池）' : '（含自动发现）');
+    document.getElementById('listMeta').textContent = '更新 ' + UPD + ' · 共 ' + ALL.length + ' 只';
   }
 
   function rankRow(s, byScore) {
@@ -242,12 +237,6 @@
     Array.prototype.forEach.call(this.querySelectorAll('button'), function (x) { x.classList.toggle('on', x === b); });
     renderTable();
   });
-  document.getElementById('scopeFilters').addEventListener('click', function (e) {
-    var b = e.target.closest('button'); if (!b) return;
-    scope = b.dataset.s;
-    Array.prototype.forEach.call(this.querySelectorAll('button'), function (x) { x.classList.toggle('on', x === b); });
-    renderTable();
-  });
 
   fetch('hk-data.json?t=' + Date.now())
     .then(function (r) { return r.json(); })
@@ -256,10 +245,9 @@
       UPD = d.updated || '';
       var c = { bull: 0, demon: 0, flat: 0 };
       ALL.forEach(function (s) { if (c[s.category] != null) c[s.category]++; });
-      var researched = ALL.filter(function (s) { return s._researched; }).length;
-      document.getElementById('kTotal').textContent = researched;
+      document.getElementById('kTotal').textContent = ALL.length;
       document.getElementById('kCat').textContent = c.bull + ' / ' + c.demon + ' / ' + c.flat;
-      document.getElementById('listMeta').textContent = '更新 ' + UPD + ' · 共 ' + ALL.length + ' 只（埋伏池 ' + researched + '）';
+      document.getElementById('listMeta').textContent = '更新 ' + UPD + ' · 共 ' + ALL.length + ' 只';
       renderTable(); renderRanks(); return refreshLive();
     })
     .catch(function (e) { tbody.innerHTML = '<tr><td colspan="6" class="mut">数据加载失败：' + esc(e.message) + '</td></tr>'; });

@@ -153,7 +153,7 @@
     return '<div class="ipo-card">' +
       '<div class="ipo-top"><div><div class="ipo-nm">' + esc(s.name) + '</div>' +
       '<div class="ipo-cd">' + esc(s.code) + ' · ' + esc(s.industry || '') + '</div></div>' +
-      (s._researched ? '<span class="tag acc">🎯 打新</span>' : '<span class="tag mut" style="background:rgba(148,163,184,.16);color:#94a3b8">🔍 自动发现</span>') + '</div>' +
+      '<span class="tag acc">🎯 打新</span></div>' +
       '<div class="ipo-price"><span class="now">' + (s.ipoPrice != null ? '发售价 ' + fmt(s.ipoPrice) : '招股中') + '</span></div>' +
       '<div class="mini">' +
       '<div><span>IPO 价</span><span>' + fmt(s.ipoPrice) + '</span></div>' +

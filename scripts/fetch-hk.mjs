@@ -185,6 +185,8 @@ function normCode(code) {
 }
 
 // 合并：保留全部人工研究字段，只更新自动字段；新发现的标的研究字段留空待人工补
+// 方案A 约束：待入通清单由用户从活报告手工维护，本函数只自动发现「招股中」IPO；
+// 一旦 IPO 上市，自动移除，不再自动转入 listed（避免污染待入通人工池）。
 function mergeDiscovered(stocks, discovered, today, errors) {
   const byCode = new Map();
   stocks.forEach((s) => { const k = normCode(s.code); if (k) byCode.set(k, s); });
@@ -193,45 +195,59 @@ function mergeDiscovered(stocks, discovered, today, errors) {
   for (const d of discovered) {
     const k = d.code;
     seen.add(k);
+    const board = (d.listDate && d.listDate > today) ? 'ipo' : 'listed';
     const existing = byCode.get(k);
+
     if (existing) {
+      if (existing._autoAdded && board === 'listed') {
+        // 机器发现的 IPO 已上市：从打新页移除，待入通由用户手工维护
+        existing._markRemove = true;
+        continue;
+      }
       // 已存在：只更新自动可得字段，人工研究字段一律不动
       existing.listDate = d.listDate || existing.listDate;
       if (!existing.industry && d.industry) existing.industry = d.industry;
       if (!existing.name || existing.name === existing.code) existing.name = d.name;
-      existing.board = (existing.listDate && existing.listDate > today) ? 'ipo' : 'listed';
+      existing.board = board;
       if (existing.board === 'ipo' && !existing.category) existing.category = 'ipo';
       existing._autoUpdated = true;
-    } else {
-      // 新增：研究字段留 null，页面显示 —
-      const board = (d.listDate && d.listDate > today) ? 'ipo' : 'listed';
-      const item = {
-        board: board,
-        category: board === 'ipo' ? 'ipo' : 'flat',
-        code: k + '.HK',
-        name: d.name,
-        industry: d.industry,
-        listDate: d.listDate,
-        ipoPrice: null, ipoDate: null, deadline: null,
-        isAH: false, aCode: null, ahRule: '',
-        cornerstonePct: null, cornerN: null, corners: [],
-        sponsor: null, leader: null, advice: null,
-        connectDate: null, unlockDate: null, floatShares: null,
-        lockup: null, score: null, riskLevel: null, risk: false,
-        raiseCap: null, toConnectPct: null, totalShares: null,
-        _autoAdded: true
-      };
-      byCode.set(k, item);
-      stocks.push(item);
+      continue;
     }
+
+    // 新增：只加入仍在招股中的 IPO，不自动加入已上市标的
+    if (board !== 'ipo') continue;
+
+    const item = {
+      board: 'ipo',
+      category: 'ipo',
+      code: k + '.HK',
+      name: d.name,
+      industry: d.industry,
+      listDate: d.listDate,
+      ipoPrice: null, ipoDate: null, deadline: null,
+      isAH: false, aCode: null, ahRule: '',
+      cornerstonePct: null, cornerN: null, corners: [],
+      sponsor: null, leader: null, advice: null,
+      connectDate: null, unlockDate: null, floatShares: null,
+      lockup: null, score: null, riskLevel: null, risk: false,
+      raiseCap: null, toConnectPct: null, totalShares: null,
+      _autoAdded: true
+    };
+    byCode.set(k, item);
+    stocks.push(item);
   }
 
-  // 移除：已不在发现窗口内、且未标记人工保留的（解决"老的未移除"）
+  // 移除：已不在发现窗口内、已上市的自动 IPO、或未标记人工保留的过期标的
   const removed = [];
   for (let i = stocks.length - 1; i >= 0; i--) {
     const s = stocks[i];
     const k = normCode(s.code);
     if (!k) continue;                    // 无代码的人工条目（潜在标的）保留
+    if (s._markRemove) {                 // 自动 IPO 已上市
+      removed.push(`${s.name}(${s.code})`);
+      stocks.splice(i, 1);
+      continue;
+    }
     if (seen.has(k)) continue;           // 在窗口内，保留
     if (s.manual === true) continue;     // 人工标记保留
     // 有实质研究内容的也保留，避免误删用户心血
@@ -281,12 +297,13 @@ async function main() {
 
   const errors = [];
 
-  /* 0) 自动发现新股（东财港股资料表按上市日期筛选，可查未来日期 → 含招股中） */
+  /* 0) 自动发现新股（东财港股资料表按上市日期筛选，可查未来日期 → 仅招股中 IPO）
+     待入通 listed 清单由用户从活报告手工维护，本步骤不再自动追加已上市标的。 */
   const discover = await discoverHK(120, 60);
   if (discover.ok) {
     const before = stocks.length;
     mergeDiscovered(stocks, discover.list, todayISO(), errors);
-    console.log(`自动发现：候选 ${discover.total} 条 → 真实新股 ${discover.list.length} 只；合并后 ${before} → ${stocks.length} 只`);
+    console.log(`自动发现 IPO：候选 ${discover.total} 条 → 真实 ${discover.list.length} 只；合并后 ${before} → ${stocks.length} 只`);
   } else {
     console.log('自动发现失败（保留既有名单）：' + discover.error);
     errors.push('自动发现失败：' + discover.error);
@@ -382,7 +399,7 @@ async function main() {
 
   /* 5) 时间戳（北京时间） */
   data.updated = `${today} ${p2(bj.getHours())}:${p2(bj.getMinutes())}`;
-  data.dataSource = '腾讯 gtimg（行情/市值）+ 东财港股资料表（新股发现）+ 新浪（汇率）；研究字段人工维护';
+  data.dataSource = '腾讯 gtimg（行情/市值）+ 东财港股资料表（仅 IPO 发现）+ 新浪（汇率）；待入通清单来自活报告人工维护';
   data.updateFreq = '每日 3 次（北京时间 08:30 / 16:30 / 23:00）';
   data.errors = errors;
 
