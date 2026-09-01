@@ -1,12 +1,12 @@
 {
-  "updated": "2026-08-31 23:37",
+  "updated": "2026-09-01 08:47",
   "threshold": 100,
   "stocks": [
     {
       "code": "09615.HK",
       "name": "梅卡曼德机器人",
-      "board": "ipo",
-      "category": "ipo",
+      "board": "listed",
+      "category": "flat",
       "ipoPrice": 101.7,
       "ipoDate": "2026-08-24~08-27",
       "deadline": "2026-08-27 09:00",
@@ -39,8 +39,8 @@
     {
       "code": "00625.HK",
       "name": "希音─W",
-      "board": "ipo",
-      "category": "ipo",
+      "board": "listed",
+      "category": "flat",
       "ipoPrice": 49.5,
       "ipoDate": "2026-08-24~08-27",
       "deadline": "2026-08-27 09:00",
@@ -102,7 +102,7 @@
       "_ahPotential": 8.818223580391038,
       "_price": 101.5,
       "_chgFromIpo": -1.26,
-      "_ahPremium": 18.2002
+      "_ahPremium": 18.2033
     },
     {
       "code": "06656.HK",
@@ -789,7 +789,7 @@
       "score": 48
     }
   ],
-  "hkdCnyRate": 0.857258,
+  "hkdCnyRate": 0.85728,
   "dataSource": "腾讯财经 gtimg（行情）+ 新浪财经（汇率）；研究字段人工维护",
   "updateFreq": "每日 3 次（北京时间 08:30 / 16:30 / 23:00）",
   "errors": []
