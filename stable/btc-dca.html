@@ -75,10 +75,10 @@
   <!-- 今日决策大卡 -->
   <section class="section">
     <div class="bigcard">
-      <div class="lab">今日定投 · 🟢 0.45-1.2</div>
-      <div class="amt">¥3,000<small> / 周</small></div>
+      <div class="lab" id="btcLab">今日定投 · 🟢 0.45-1.2</div>
+      <div class="amt" id="btcAmt">¥3,000<small> / 周</small></div>
       <div class="calc" id="btcCalc">AHR999 = 0.5358 · 价格/200MA = 1.15</div>
-      <span class="stage">定投区间 · 正常定投</span>
+      <span class="stage" id="btcStage">定投区间 · 正常定投</span>
     </div>
   </section>
 
@@ -87,12 +87,12 @@
     <div class="section-head"><h2 id="sec-rule">定投规则</h2><span class="sub">AHR999 分档</span></div>
     <div class="card">
       <div class="scroll-x">
-        <table class="matrix">
-          <tr><th>条件</th><th>区间</th><th>周投金额</th><th>IBIT 股数</th><th>状态</th></tr>
-          <tr><td class="lb">BTC &lt; $50,000</td><td>应急加速</td><td class="hi">¥12,000</td><td>~37 股</td><td>未触发</td></tr>
-          <tr><td class="lb">0.5358（当前）</td><td>&lt; 0.45 抄底</td><td>¥6,000</td><td>~18 股</td><td class="dim">—</td></tr>
-          <tr><td class="lb">0.45 ~ 1.2</td><td class="hi">定投区间</td><td class="hi">¥3,000</td><td>~9 股</td><td class="hi">← 现在</td></tr>
-          <tr><td class="lb">&gt; 1.2</td><td>高估暂停</td><td class="dim">¥0</td><td class="dim">0</td><td class="dim">暂停</td></tr>
+        <table class="matrix" id="btcTierTbl">
+          <tr><th>触发条件</th><th>区间</th><th>周投金额</th><th>IBIT 股数</th><th>状态</th></tr>
+          <tr id="t-emerg"><td class="lb">BTC &lt; $50,000</td><td>应急加速</td><td class="hi">¥12,000</td><td>~37 股</td><td class="dim">待触发</td></tr>
+          <tr id="t-dip"><td class="lb">AHR999 &lt; 0.45</td><td>抄底加仓</td><td class="hi">¥6,000</td><td>~18 股</td><td class="dim">待触发</td></tr>
+          <tr id="t-dca"><td class="lb">0.45 ~ 1.2</td><td class="hi">定投区间</td><td class="hi">¥3,000</td><td>~9 股</td><td class="dim">待触发</td></tr>
+          <tr id="t-stop"><td class="lb">AHR999 &gt; 1.2</td><td>高估暂停</td><td class="dim">¥0</td><td class="dim">0</td><td class="dim">待触发</td></tr>
         </table>
       </div>
     </div>
@@ -146,8 +146,8 @@
   <section class="section">
     <div class="section-head"><h2>本周操作与退出条件</h2><span class="sub">执行纪律</span></div>
     <div class="rule ok">
-      <h3>本周操作 · ¥3,000 / 周</h3>
-      <p>IBIT $45.29 × 9 股 · <b>正常定投</b></p>
+      <h3 id="btcOpTitle">本周操作 · ¥3,000 / 周</h3>
+      <p id="btcOpBody">IBIT $45.29 × 9 股 · <b>正常定投</b></p>
     </div>
     <div class="rule danger" style="margin-top:10px">
       <h3>退出条件 · 投完即止</h3>
@@ -203,10 +203,11 @@
 <script>
 // 比特币行情覆盖：market-live.js（Yahoo 自动拉取，每日 3 次）回填关键数字
 (function () {
-  var L = window.MARKET_LIVE; var b = L && L.btc; if (!b) return;
+  var L = window.MARKET_LIVE; var b = L && L.btc;
   function set(id, v) { var e = document.getElementById(id); if (e && v != null) e.textContent = v; }
   // 更新时间与数据源随自动抓取同步，避免顶部时间戳陈旧
-  if (L.generatedAt) set('btcUpd', '更新：' + L.generatedAt + ' · 数据源：' + (b.dataSource || L.source || 'Yahoo Finance'));
+  if (L && L.generatedAt) set('btcUpd', '更新：' + L.generatedAt + ' · 数据源：' + ((b && b.dataSource) || (L && L.source) || 'Yahoo Finance'));
+  if (!b) return;
   if (b.price != null) set('btcPrice', '$' + b.price.toLocaleString('en-US'));
   if (b.dd52w != null) set('btcDd', '-' + b.dd52w.toFixed(1) + '%');
   if (b.p200ma != null) set('btcP200', '价格 / 200MA = ' + b.p200ma.toFixed(3));
@@ -214,6 +215,28 @@
   if (b.ahr999 != null) {
     var calc = document.getElementById('btcCalc');
     if (calc) calc.textContent = 'AHR999 = ' + b.ahr999.toFixed(4) + ' · 价格/200MA = ' + (b.p200ma != null ? b.p200ma.toFixed(3) : '—');
+  }
+  // ---------- 实时决策（按本页档位表，避免静态 ¥3,000 卡死） ----------
+  var ahr = b.ahr999, price = b.price, tier, amt, zone, lab;
+  if (price != null && price < 50000) { tier = 't-emerg'; amt = 12000; zone = '应急加速'; lab = '今日定投 · BTC<$50K · 应急加速'; }
+  else if (ahr != null && ahr < 0.45) { tier = 't-dip'; amt = 6000; zone = '抄底加仓'; lab = '今日定投 · AHR999<0.45 · 抄底加仓'; }
+  else if (ahr != null && ahr <= 1.2) { tier = 't-dca'; amt = 3000; zone = '定投区间'; lab = '今日定投 · 0.45-1.2 · 定投区间'; }
+  else { tier = 't-stop'; amt = 0; zone = '高估暂停'; lab = '今日定投 · AHR999>1.2 · 高估暂停'; }
+  ['t-emerg', 't-dip', 't-dca', 't-stop'].forEach(function (r) {
+    var e = document.getElementById(r); if (!e) return;
+    var st = e.querySelector('td:last-child'); if (st) st.textContent = (r === tier) ? '← 现在' : '待触发';
+    e.className = (r === tier) ? 'now' : '';
+  });
+  set('btcLab', lab);
+  set('btcAmt', amt > 0 ? '¥' + amt.toLocaleString('zh-CN') + '<small> / 周</small>' : '暂停定投');
+  set('btcStage', zone + (amt > 0 ? ' · ¥' + amt.toLocaleString('zh-CN') + '/周' : ' · 停止'));
+  // 本周操作随决策动态
+  set('btcOpTitle', '本周操作 · ' + (amt > 0 ? '¥' + amt.toLocaleString('zh-CN') + ' / 周' : '暂停'));
+  if (amt > 0) {
+    var sh = Math.round(amt / 7.1 / 45.29); // CNY→USD 7.1；IBIT 现价 $45.29（静态，待接 live）
+    set('btcOpBody', 'IBIT $45.29 × ' + sh + ' 股 · <b>' + zone + '</b>');
+  } else {
+    set('btcOpBody', '<b>暂停定投</b> · 等 AHR999 回落至 1.2 以下再启动');
   }
 })();
 </script>
