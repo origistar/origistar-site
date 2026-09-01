@@ -185,9 +185,17 @@ function normCode(code) {
 }
 
 // 合并：保留全部人工研究字段，只更新自动字段；新发现的标的研究字段留空待人工补
+// 新股上市后仍保留在打新页的天数（可看首日 / 上市以来表现），超期才移除
+const IPO_KEEP_DAYS = 7;
+function isoMinusDays(iso, n) {
+  const d = new Date(Date.parse(iso + 'T00:00:00Z') - n * 86400000);
+  return `${d.getUTCFullYear()}-${p2(d.getUTCMonth() + 1)}-${p2(d.getUTCDate())}`;
+}
+
 // 方案A 约束：待入通清单由用户从活报告手工维护，本函数只自动发现「招股中」IPO；
-// 一旦 IPO 上市，自动移除，不再自动转入 listed（避免污染待入通人工池）。
+// 上市后 IPO_KEEP_DAYS 天内仍留在打新页（可看首日表现），超期自动移除，不转入 listed（避免污染待入通人工池）。
 function mergeDiscovered(stocks, discovered, today, errors) {
+  const grace = isoMinusDays(today, IPO_KEEP_DAYS);
   const byCode = new Map();
   stocks.forEach((s) => { const k = normCode(s.code); if (k) byCode.set(k, s); });
 
@@ -195,8 +203,11 @@ function mergeDiscovered(stocks, discovered, today, errors) {
   for (const d of discovered) {
     const k = d.code;
     seen.add(k);
-    const board = (d.listDate && d.listDate > today) ? 'ipo' : 'listed';
+    let board = (d.listDate && d.listDate > today) ? 'ipo'
+      : (d.listDate && d.listDate >= grace) ? 'ipo' : 'listed';
     const existing = byCode.get(k);
+    // 上市宽限期只适用于「自动发现」的打新标的；人工维护的待入通标的绝不改判为 ipo
+    if (board === 'ipo' && existing && !existing._autoAdded) board = existing.board;
 
     if (existing) {
       if (existing._autoAdded && board === 'listed') {
@@ -210,6 +221,7 @@ function mergeDiscovered(stocks, discovered, today, errors) {
       if (!existing.name || existing.name === existing.code) existing.name = d.name;
       existing.board = board;
       if (existing.board === 'ipo' && !existing.category) existing.category = 'ipo';
+      if (board === 'ipo' && d.listDate && d.listDate <= today) existing._justListed = true;
       existing._autoUpdated = true;
       continue;
     }
@@ -225,7 +237,7 @@ function mergeDiscovered(stocks, discovered, today, errors) {
       industry: d.industry,
       listDate: d.listDate,
       ipoPrice: null, ipoDate: null, deadline: null,
-      isAH: false, aCode: null, ahRule: '',
+      isAH: null, aCode: null, ahRule: '',   // 留空，由 enrich-hk.mjs 自动识别 A+H
       cornerstonePct: null, cornerN: null, corners: [],
       sponsor: null, leader: null, advice: null,
       connectDate: null, unlockDate: null, floatShares: null,
@@ -261,9 +273,10 @@ function mergeDiscovered(stocks, discovered, today, errors) {
   return { removed };
 }
 
+// 全站统一北京时间（CI 跑 UTC，直接取本地日期会错 8 小时）
 function todayISO() {
-  const now = new Date();
-  return `${now.getFullYear()}-${p2(now.getMonth() + 1)}-${p2(now.getDate())}`;
+  const bj = new Date(Date.now() + 8 * 3600 * 1000);
+  return `${bj.getUTCFullYear()}-${p2(bj.getUTCMonth() + 1)}-${p2(bj.getUTCDate())}`;
 }
 
 /* ---------- 代码 → gtimg 符号 ---------- */
@@ -314,8 +327,11 @@ async function main() {
   data.hkdCnyRate = +rate.toFixed(6);
   console.log(`汇率 HKD/CNY = ${data.hkdCnyRate}`);
 
-  /* 2) 港股行情：已上市标的 */
-  const listed = stocks.filter((s) => s.board === 'listed' && hkSym(s.code));
+  /* 2) 港股行情：已上市标的（含刚上市、仍在打新页宽限期内的新股） */
+  const today0 = todayISO();
+  const isLive = (s) => s.board === 'listed'
+    || (s.board === 'ipo' && s.listDate && String(s.listDate).slice(0, 10) <= today0);
+  const listed = stocks.filter((s) => isLive(s) && hkSym(s.code));
   const hkSyms = [...new Set(listed.map((s) => hkSym(s.code)))];
   const hkQ = await fetchQuotes(hkSyms);
   let ok = 0, fail = 0, capOk = 0;
@@ -351,15 +367,22 @@ async function main() {
     console.log(`AH 股 A 股价 成功 ${ahOk} / ${ahList.length}`);
   }
 
-  /* 4) 转板：招股中标的若上市日已过，自动转入 listed */
+  /* 4) 上市宽限期：招股中标的上市后仍留打新页 IPO_KEEP_DAYS 天（可看首日 / 上市以来表现），超期移除 */
   const bj = beijingNow();
   const today = `${bj.getFullYear()}-${p2(bj.getMonth() + 1)}-${p2(bj.getDate())}`;
+  const grace = isoMinusDays(today, IPO_KEEP_DAYS);
   for (const s of stocks.filter((x) => x.board === 'ipo')) {
-    if (s.listDate && String(s.listDate).slice(0, 10) <= today) {
-      s.board = 'listed';
-      s.category = s.risk ? 'demon' : 'flat';
-      console.log(`转板：${s.name}(${s.code}) 已于 ${s.listDate} 上市 → listed`);
+    const ld = s.listDate ? String(s.listDate).slice(0, 10) : null;
+    if (!ld || ld > today) { s._justListed = false; continue; }
+    s._justListed = true;
+    if (ld < grace) {
+      // 上市已超宽限期：自动移出打新页，不转入待入通（避免污染人工池）
+      s._markRemove = true;
+      console.log(`移出打新页：${s.name}(${s.code}) 已于 ${ld} 上市满 ${IPO_KEEP_DAYS} 天`);
     }
+  }
+  for (let i = stocks.length - 1; i >= 0; i--) {
+    if (stocks[i]._markRemove) { stocks.splice(i, 1); }
   }
 
   /* 4.5) 入通测算：当前市值是硬数据，入通资格随市值浮动，必须每日重算 */

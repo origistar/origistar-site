@@ -49,12 +49,18 @@ jobs:
         continue-on-error: true
         run: node scripts/fetch-hk.mjs
 
+      - name: 港股打新事实字段补全（东财发行价/每手/市值 + A+H 识别 + 标准锁定期规则）
+        id: hk-enrich
+        continue-on-error: true
+        run: node scripts/enrich-hk.mjs
+
       - name: 汇总各数据源结果
         run: |
           echo "进取仓: ${{ steps.aggressive.outcome }}"
           echo "防守仓: ${{ steps.defensive.outcome }}"
           echo "大盘BTC: ${{ steps.market.outcome }}"
           echo "港股:   ${{ steps.hk.outcome }}"
+          echo "港股补全: ${{ steps.hk-enrich.outcome }}"
 
       # 单一提交 + 单一 push，彻底避免多工作流并发推送冲突
       - name: 提交并推送（带 rebase 重试）
