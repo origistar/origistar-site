@@ -133,13 +133,9 @@
     var stocks = L.stocks || [];
     var bonds = L.bonds || [];
 
-    // 分组口径：
-    //   可打 = 申购日 >= 今天（今天能下手的 + 即将开放申购的）
-    //   待上市 = 已过申购日、但尚未上市（等开板 / 等中签结果）
-    var sUp = stocks.filter(function (s) { return s.date >= today; });
-    var sPend = stocks.filter(function (s) { return s.date < today && (!s.listingDate || s.listingDate >= today); });
-    var bUp = bonds.filter(function (b) { return b.date >= today; });
-    var bPend = bonds.filter(function (b) { return b.date < today && (!b.listingDate || b.listingDate >= today); });
+    // 只显示「当天」可申购的标的（申购日 == 今天）；过去的待上市、未来的预约均不展示
+    var sUp = stocks.filter(function (s) { return s.date === today; });
+    var bUp = bonds.filter(function (b) { return b.date === today; });
 
     function diffDays(d) {
       if (!d || !today) return null;
@@ -211,48 +207,24 @@
     var html = '';
     // 待办的排前面：可打新股 → 可打新债 → 待上市
     if (sUp.length) {
-      html += '<div class="ipo-grp">A股新股 · 可申购 ' + sUp.length + '</div>' + sUp.map(stockRow).join('');
+      html += '<div class="ipo-grp">A股新股 · 今日可申购 ' + sUp.length + '</div>' + sUp.map(stockRow).join('');
     }
     if (bUp.length) {
-      html += '<div class="ipo-grp">可转债 · 可申购 ' + bUp.length + '</div>' + bUp.map(bondRow).join('');
+      html += '<div class="ipo-grp">可转债 · 今日可申购 ' + bUp.length + '</div>' + bUp.map(bondRow).join('');
     }
-    // 待上市（已申购、等开板）：信息价值低但会堆很长，默认折叠
-    var pendTotal = sPend.length + bPend.length;
-    if (pendTotal) {
-      var pendTxt = [];
-      if (sPend.length) pendTxt.push('新股 ' + sPend.length);
-      if (bPend.length) pendTxt.push('新债 ' + bPend.length);
-      var inner = '';
-      sPend.slice(-6).forEach(function (it) {
-        inner += '<div class="ipo-row mini"><div class="ipo-l"><div class="ipo-d">' + mmdd(it.date) + '</div></div>' +
-          '<div class="ipo-r"><div class="ipo-t"><span class="ipo-name">' + esc(it.name) + '</span>' +
-          '<span class="ipo-board ' + (BOARD_CLS[it.board] || 'b-sh') + '">' + esc(it.board) + '</span></div>' +
-          '<div class="ipo-m">' + esc(it.code) + ' · ' +
-          (it.listingDate ? '预计 ' + mmdd(it.listingDate) + ' 上市' : '上市日待定') + '</div></div></div>';
-      });
-      bPend.slice(-6).forEach(function (it) {
-        inner += '<div class="ipo-row mini"><div class="ipo-l"><div class="ipo-d">' + mmdd(it.date) + '</div></div>' +
-          '<div class="ipo-r"><div class="ipo-t"><span class="ipo-name">' + esc(it.name) + '</span>' +
-          '<span class="ipo-board b-cb">可转债</span></div>' +
-          '<div class="ipo-m">申购 ' + esc(it.applyCode) + ' · ' +
-          (it.listingDate ? '预计 ' + mmdd(it.listingDate) + ' 上市' : '上市日待定') + '</div></div></div>';
-      });
-      html += '<details class="ipo-fold"><summary>待上市 ' + pendTxt.join(' · ') + '</summary>' + inner + '</details>';
-    }
-    if (!html) html = '<p class="muted">近期无新股 / 新债申购</p>';
+    if (!html) html = '<p class="muted">今日无新股 / 新债申购</p>';
     host.innerHTML = html;
 
-    // 顶部统计
+    // 顶部统计（仅当日）
     if (statsHost) {
-      var sToday = sUp.filter(function (s) { return s.date === today; }).length;
-      var bToday = bUp.filter(function (b) { return b.date === today; }).length;
-      var upTotal = sUp.length + bUp.length;
+      var sToday = sUp.length;
+      var bToday = bUp.length;
       var bjTotal = sUp.filter(function (s) { return s.isBJ; }).length;
       var cells = [
-        { n: sToday + bToday, t: '今日可打', hi: (sToday + bToday) > 0 },
-        { n: upTotal, t: '待申购' },
+        { n: sToday, t: '今日新股', hi: sToday > 0 },
+        { n: bToday, t: '今日新债', hi: bToday > 0 },
         { n: bjTotal, t: '其中北交所', hi: bjTotal > 0, bj: true },
-        { n: pendTotal, t: '待上市' },
+        { n: sToday + bToday, t: '今日可打', hi: (sToday + bToday) > 0 },
       ];
       statsHost.innerHTML = cells.map(function (c) {
         return '<div class="aipo-stat' + (c.hi ? ' hi' : '') + (c.bj ? ' bj' : '') + '">' +
