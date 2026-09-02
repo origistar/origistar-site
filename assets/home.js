@@ -43,11 +43,11 @@
     return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
   }
 
-  // BTC：AHR999 档位（周定投基数 × 档位，与稳健仓 btc-dca 页统一）
-  function btcTier(ahr, price) {
-    if (price != null && price < 50000) return { mult: 4, label: '应急加速 ×4' };
-    if (ahr < 0.45) return { mult: 2,   label: '抄底区 ×2' };
+  // BTC：AHR999 档位（周定投基数 × 档位）
+  function btcTier(ahr) {
+    if (ahr < 0.45) return { mult: 3,   label: '抄底区 ×3' };
     if (ahr < 1.2)  return { mult: 1,   label: '定投区 ×1' };
+    if (ahr < 3)    return { mult: 0.5, label: '观望区 ×0.5' };
     return { mult: 0, label: '停止定投' };
   }
 
@@ -71,7 +71,7 @@
 
   // 2) BTC 定投（每周 × AHR999 档位）
   var btcBase = d.btc.weeklyBase || d.btc.weeklyDCA || 0;
-  var btcT = btcTier(d.btc.ahr999, d.btc.price);
+  var btcT = btcTier(d.btc.ahr999);
   var btcAmt = Math.round(btcBase * btcT.mult);
   rows.push({
     name: 'BTC 定投',
@@ -117,6 +117,150 @@
         '<div class="s-val">' + esc(r.val) + '</div></div>';
     }).join('');
   }
+
+  // ---------- 打新日历（A股新股含北交所 + 可转债） ----------
+  (function renderAIPO() {
+    var L = window.AIPO_LIVE;
+    var host = document.getElementById('aipo-list');
+    var statsHost = document.getElementById('aipo-stats');
+    var dateHost = document.getElementById('aipo-date');
+    if (!host) return;
+    if (!L || (!L.stocks && !L.bonds)) {
+      host.innerHTML = '<p class="muted">打新数据暂不可用</p>';
+      return;
+    }
+    var today = L.today || '';
+    var stocks = L.stocks || [];
+    var bonds = L.bonds || [];
+
+    // 分组口径：
+    //   可打 = 申购日 >= 今天（今天能下手的 + 即将开放申购的）
+    //   待上市 = 已过申购日、但尚未上市（等开板 / 等中签结果）
+    var sUp = stocks.filter(function (s) { return s.date >= today; });
+    var sPend = stocks.filter(function (s) { return s.date < today && (!s.listingDate || s.listingDate >= today); });
+    var bUp = bonds.filter(function (b) { return b.date >= today; });
+    var bPend = bonds.filter(function (b) { return b.date < today && (!b.listingDate || b.listingDate >= today); });
+
+    function diffDays(d) {
+      if (!d || !today) return null;
+      return Math.round((new Date(d + 'T00:00:00') - new Date(today + 'T00:00:00')) / 86400000);
+    }
+    function dayLabel(d) {
+      var n = diffDays(d);
+      if (n == null) return '';
+      if (n === 0) return '今天';
+      if (n === 1) return '明天';
+      if (n === 2) return '后天';
+      if (n > 0) return n + ' 天后';
+      return '已申购';
+    }
+    function mmdd(d) { return d ? d.slice(5).replace('-', '/') : ''; }
+    function fmtWan(n) {
+      if (n == null || isNaN(n)) return '—';
+      if (n >= 10000) return (n / 10000).toFixed(2) + ' 亿元';
+      // 小于 100 万保留 1 位小数（申购常见 2.5 万 / 6.5 万，取整会失真）
+      if (n < 100) return Number(n.toFixed(1)) + ' 万元';
+      return Number(n).toLocaleString('zh-CN', { maximumFractionDigits: 0 }) + ' 万元';
+    }
+    var BOARD_CLS = { '北交所': 'b-bj', '科创板': 'b-kc', '创业板': 'b-cy', '沪主板': 'b-sh', '深主板': 'b-sz' };
+
+    function stockRow(s) {
+      var hot = (s.date === today);
+      var cls = BOARD_CLS[s.board] || 'b-sh';
+      var meta = [];
+      meta.push(esc(s.code));
+      if (s.applyCode && s.applyCode !== s.code) meta.push('申购 ' + esc(s.applyCode));
+      if (s.price != null) meta.push('¥' + s.price);
+      if (s.pe != null) meta.push('PE ' + s.pe);
+      if (s.listingDate) meta.push(mmdd(s.listingDate) + ' 上市');
+      // 北交所规则与沪深完全不同，单独给一行说明
+      var note = s.isBJ
+        ? '需全额缴款 · ' + s.topLabel + ' ' + fmtWan(s.topCap) + ' · 不占市值 · 比例配售'
+        : s.topLabel + ' ' + fmtWan(s.topCap) + ' · 中签后缴款';
+      return '<div class="ipo-row' + (s.isBJ ? ' is-bj' : '') + '">' +
+        '<div class="ipo-l"><div class="ipo-d">' + mmdd(s.date) + '</div>' +
+        '<div class="ipo-day' + (hot ? ' hot' : '') + '">' + dayLabel(s.date) + '</div></div>' +
+        '<div class="ipo-r">' +
+          '<div class="ipo-t"><span class="ipo-name">' + esc(s.name) + '</span>' +
+          '<span class="ipo-board ' + cls + '">' + esc(s.board) + '</span></div>' +
+          '<div class="ipo-m">' + meta.join(' · ') + '</div>' +
+          '<div class="ipo-note' + (s.isBJ ? ' bj' : '') + '">' + note + '</div>' +
+        '</div></div>';
+    }
+
+    function bondRow(b) {
+      var hot = (b.date === today);
+      var meta = [];
+      meta.push('申购 ' + esc(b.applyCode));
+      if (b.exchange) meta.push(esc(b.exchange));
+      if (b.scale != null) meta.push(b.scale + ' 亿');
+      if (b.rating) meta.push(esc(b.rating));
+      if (b.stockName) meta.push('正股 ' + esc(b.stockName));
+      if (b.transferValue != null) meta.push('转股价值 ' + b.transferValue);
+      if (b.listingDate) meta.push(mmdd(b.listingDate) + ' 上市');
+      return '<div class="ipo-row">' +
+        '<div class="ipo-l"><div class="ipo-d">' + mmdd(b.date) + '</div>' +
+        '<div class="ipo-day' + (hot ? ' hot' : '') + '">' + dayLabel(b.date) + '</div></div>' +
+        '<div class="ipo-r">' +
+          '<div class="ipo-t"><span class="ipo-name">' + esc(b.name) + '</span>' +
+          '<span class="ipo-board b-cb">可转债</span></div>' +
+          '<div class="ipo-m">' + meta.join(' · ') + '</div>' +
+        '</div></div>';
+    }
+
+    var html = '';
+    // 待办的排前面：可打新股 → 可打新债 → 待上市
+    if (sUp.length) {
+      html += '<div class="ipo-grp">A股新股 · 可申购 ' + sUp.length + '</div>' + sUp.map(stockRow).join('');
+    }
+    if (bUp.length) {
+      html += '<div class="ipo-grp">可转债 · 可申购 ' + bUp.length + '</div>' + bUp.map(bondRow).join('');
+    }
+    // 待上市（已申购、等开板）：信息价值低但会堆很长，默认折叠
+    var pendTotal = sPend.length + bPend.length;
+    if (pendTotal) {
+      var pendTxt = [];
+      if (sPend.length) pendTxt.push('新股 ' + sPend.length);
+      if (bPend.length) pendTxt.push('新债 ' + bPend.length);
+      var inner = '';
+      sPend.slice(-6).forEach(function (it) {
+        inner += '<div class="ipo-row mini"><div class="ipo-l"><div class="ipo-d">' + mmdd(it.date) + '</div></div>' +
+          '<div class="ipo-r"><div class="ipo-t"><span class="ipo-name">' + esc(it.name) + '</span>' +
+          '<span class="ipo-board ' + (BOARD_CLS[it.board] || 'b-sh') + '">' + esc(it.board) + '</span></div>' +
+          '<div class="ipo-m">' + esc(it.code) + ' · ' +
+          (it.listingDate ? '预计 ' + mmdd(it.listingDate) + ' 上市' : '上市日待定') + '</div></div></div>';
+      });
+      bPend.slice(-6).forEach(function (it) {
+        inner += '<div class="ipo-row mini"><div class="ipo-l"><div class="ipo-d">' + mmdd(it.date) + '</div></div>' +
+          '<div class="ipo-r"><div class="ipo-t"><span class="ipo-name">' + esc(it.name) + '</span>' +
+          '<span class="ipo-board b-cb">可转债</span></div>' +
+          '<div class="ipo-m">申购 ' + esc(it.applyCode) + ' · ' +
+          (it.listingDate ? '预计 ' + mmdd(it.listingDate) + ' 上市' : '上市日待定') + '</div></div></div>';
+      });
+      html += '<details class="ipo-fold"><summary>待上市 ' + pendTxt.join(' · ') + '</summary>' + inner + '</details>';
+    }
+    if (!html) html = '<p class="muted">近期无新股 / 新债申购</p>';
+    host.innerHTML = html;
+
+    // 顶部统计
+    if (statsHost) {
+      var sToday = sUp.filter(function (s) { return s.date === today; }).length;
+      var bToday = bUp.filter(function (b) { return b.date === today; }).length;
+      var upTotal = sUp.length + bUp.length;
+      var bjTotal = sUp.filter(function (s) { return s.isBJ; }).length;
+      var cells = [
+        { n: sToday + bToday, t: '今日可打', hi: (sToday + bToday) > 0 },
+        { n: upTotal, t: '待申购' },
+        { n: bjTotal, t: '其中北交所', hi: bjTotal > 0, bj: true },
+        { n: pendTotal, t: '待上市' },
+      ];
+      statsHost.innerHTML = cells.map(function (c) {
+        return '<div class="aipo-stat' + (c.hi ? ' hi' : '') + (c.bj ? ' bj' : '') + '">' +
+          '<b>' + c.n + '</b><span>' + c.t + '</span></div>';
+      }).join('');
+    }
+    if (dateHost) dateHost.textContent = '数据 ' + (L.generatedAt || '—');
+  })();
 
   // ---------- 观察仓触发（仅进取仓） ----------
   (function renderAggroAlerts() {

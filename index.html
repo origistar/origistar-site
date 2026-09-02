@@ -18,11 +18,12 @@
 <script src="assets/defensive-live.js"></script>
 <script src="assets/cb-live.js"></script>
 <script src="assets/aggressive-live.js"></script>
+<script src="assets/aipo-live.js"></script>
 <script>
 (function () {
   var d = window.ORIGISTAR; if (!d || !d.updated) return;
   var dates = [d.updated];
-  [window.MARKET_LIVE, window.DEFENSIVE_LIVE, window.CB_LIVE, window.AGGRESSIVE_LIVE].forEach(function (L) {
+  [window.MARKET_LIVE, window.DEFENSIVE_LIVE, window.CB_LIVE, window.AGGRESSIVE_LIVE, window.AIPO_LIVE].forEach(function (L) {
     if (L && L.generatedAt) dates.push(L.generatedAt);
   });
   d.updated = dates.reduce(function (a, b) { return a > b ? a : b; });
@@ -40,6 +41,22 @@
         <span class="dash-date" id="dash-date">更新中…</span>
       </div>
       <div id="signal-list" class="signal-list"></div>
+    </div>
+  </section>
+
+  <!-- 打新日历（A股新股含北交所 + 可转债） -->
+  <section class="section">
+    <div class="dash-card">
+      <div class="dash-head">
+        <span class="dash-title">打新日历</span>
+        <span class="dash-date" id="aipo-date">—</span>
+      </div>
+      <div id="aipo-stats" class="aipo-stats"></div>
+      <div id="aipo-list"></div>
+      <div class="aipo-legend">
+        <span><b class="lg-bj">北交所</b> 全额缴款 · 比例配售 · 不占市值</span>
+        <span><b class="lg-sh">沪深</b> 市值配号 · 中签后缴款</span>
+      </div>
     </div>
   </section>
 
