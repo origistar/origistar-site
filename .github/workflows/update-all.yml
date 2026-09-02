@@ -123,10 +123,12 @@ jobs:
             || curl -fsSL https://github.com/TencentCloud/coscli/releases/latest/download/coscli-linux-amd64 -o "$CLI"
           chmod +x "$CLI"
           "$CLI" --version
-          printf 'cos:\n  base:\n    secretid: %s\n    secretkey: %s\n    sessiontoken: ""\n    protocol: https\nbuckets:\n  - name: %s\n    alias: os\n    region: %s\n    endpoint: cos.%s.myqcloud.com\n    ofs: false\n' "$COS_SECRET_ID" "$COS_SECRET_KEY" "$COS_BUCKET" "$COS_REGION" "$COS_REGION" > ~/.cos.yaml
-          echo "===== 渲染后的 cos.yaml（密钥由 GitHub 自动打码）====="
-          cat ~/.cos.yaml
+          CFG="$RUNNER_TEMP/cos.yaml"
+          printf 'cos:\n  base:\n    secretid: %s\n    secretkey: %s\n    sessiontoken: ""\n    protocol: https\nbuckets:\n  - name: %s\n    alias: os\n    region: %s\n    endpoint: cos.%s.myqcloud.com\n    ofs: false\n' "$COS_SECRET_ID" "$COS_SECRET_KEY" "$COS_BUCKET" "$COS_REGION" "$COS_REGION" > "$CFG"
+          export COS_CONFIG="$CFG"
+          echo "===== cos.yaml（密钥已打码）====="
+          sed -E 's/(secretid|secretkey): .*/\1: ***masked***/' "$CFG"
           echo "同步到 cos://$COS_BUCKET ..."
           cd "$GITHUB_WORKSPACE/.."
-          "$CLI" sync origistar-site "cos://os/" -r --exclude ".git/**" --exclude ".github/**" --exclude "scripts/**" \
+          "$CLI" sync origistar-site "cos://os/" -r --config "$CFG" --exclude ".git/**" --exclude ".github/**" --exclude "scripts/**" \
           && echo "COS 同步完成 ✅" || echo "COS 同步失败 ⚠️（不影响数据更新，下次运行重试）"
