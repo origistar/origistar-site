@@ -106,3 +106,23 @@ jobs:
           done
           echo "::error::连续 5 次推送失败"
           exit 1
+
+      # 同步静态站到腾讯云 COS（国内免备案可访问；密钥来自 GitHub Secrets，不全文落库）
+      - name: 同步静态站到腾讯云 COS
+        id: cos
+        continue-on-error: true
+        env:
+          COS_SECRET_ID: ${{ secrets.COS_SECRET_ID }}
+          COS_SECRET_KEY: ${{ secrets.COS_SECRET_KEY }}
+          COS_BUCKET: ${{ secrets.COS_BUCKET }}
+          COS_REGION: ${{ secrets.COS_REGION }}
+        run: |
+          echo "下载 coscli ..."
+          curl -fsSL https://cosbrowser.cloud.tencent.com/software/coscli/coscli-linux-amd64 -o coscli \
+            || curl -fsSL https://github.com/TencentCloud/coscli/releases/latest/download/coscli-linux-amd64 -o coscli
+          chmod +x coscli
+          ./coscli --version
+          printf 'cos:\n  base:\n    secretid: %s\n    secretkey: %s\n    sessiontoken: ""\n    protocol: https\nbuckets:\n  - name: %s\n    alias: os\n    region: %s\n    endpoint: cos.%s.myqcloud.com\n    ofs: false\n' "$COS_SECRET_ID" "$COS_SECRET_KEY" "$COS_BUCKET" "$COS_REGION" "$COS_REGION" > ~/.cos.yaml
+          echo "同步到 cos://$COS_BUCKET ..."
+          ./coscli sync ./ "cos://os/" -r --exclude ".git/**" --exclude ".github/**" --exclude "scripts/**"
+          echo "COS 同步完成"
