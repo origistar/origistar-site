@@ -133,3 +133,7 @@ jobs:
           cd "$GITHUB_WORKSPACE/.."
           "$CLI" sync origistar-site "cos://os/" -r --exclude ".git/**" --exclude ".github/**" --exclude "scripts/**" \
           && { echo "COS 同步完成 ✅"; echo "===== 验证桶内文件（前 20 项）====="; "$CLI" ls "cos://os/" | head -20; } || echo "COS 同步失败 ⚠️（不影响数据更新，下次运行重试）"
+          echo "===== 公开访问验证（runner 侧探测，判定手机能否直开）====="
+          CODE=$(curl -s -o /dev/null -w "%{http_code}" "https://${COS_BUCKET}.cos.${COS_REGION}.myqcloud.com/index.html")
+          echo "GET /index.html HTTP=$CODE"
+          if [ "$CODE" = "200" ]; then echo "OK 桶已公共读，手机可直接打开 https://${COS_BUCKET}.cos.${COS_REGION}.myqcloud.com/index.html"; else echo "WARN 桶非公共读 HTTP=$CODE，需在 COS 控制台把桶访问权限设为公共读，否则手机打开会 403"; fi
