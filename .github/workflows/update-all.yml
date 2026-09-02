@@ -124,7 +124,7 @@ jobs:
           chmod +x "$CLI"
           "$CLI" --version
           CFG="$RUNNER_TEMP/cos.yaml"
-          printf 'cos:\n  base:\n    secretid: %s\n    secretkey: %s\n    sessiontoken: ""\n    protocol: https\nbuckets:\n  - name: %s\n    alias: os\n    region: %s\n    endpoint: cos.%s.myqcloud.com\n    ofs: false\n' "$COS_SECRET_ID" "$COS_SECRET_KEY" "$COS_BUCKET" "$COS_REGION" "$COS_REGION" > "$CFG"
+          printf 'cos:\n  base:\n    secretid: %s\n    secretkey: %s\n    sessiontoken: ""\n    protocol: https\n    disable_encryption: "true"\n  buckets:\n  - name: %s\n    alias: os\n    region: %s\n    endpoint: cos.%s.myqcloud.com\n    ofs: false\n' "$COS_SECRET_ID" "$COS_SECRET_KEY" "$COS_BUCKET" "$COS_REGION" "$COS_REGION" > "$CFG"
           export COS_CONFIG="$CFG"
           cp "$CFG" "$HOME/.cos.yaml"
           echo "===== cos.yaml（密钥已打码）====="
@@ -132,4 +132,4 @@ jobs:
           echo "同步到 cos://$COS_BUCKET ..."
           cd "$GITHUB_WORKSPACE/.."
           "$CLI" sync origistar-site "cos://os/" -r --exclude ".git/**" --exclude ".github/**" --exclude "scripts/**" \
-          && echo "COS 同步完成 ✅" || echo "COS 同步失败 ⚠️（不影响数据更新，下次运行重试）"
+          && { echo "COS 同步完成 ✅"; echo "===== 验证桶内文件（前 20 项）====="; "$CLI" ls "cos://os/" | head -20; } || echo "COS 同步失败 ⚠️（不影响数据更新，下次运行重试）"
