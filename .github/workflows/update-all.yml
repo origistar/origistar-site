@@ -124,6 +124,8 @@ jobs:
           chmod +x "$CLI"
           "$CLI" --version
           printf 'cos:\n  base:\n    secretid: %s\n    secretkey: %s\n    sessiontoken: ""\n    protocol: https\nbuckets:\n  - name: %s\n    alias: os\n    region: %s\n    endpoint: cos.%s.myqcloud.com\n    ofs: false\n' "$COS_SECRET_ID" "$COS_SECRET_KEY" "$COS_BUCKET" "$COS_REGION" "$COS_REGION" > ~/.cos.yaml
+          echo "===== 渲染后的 cos.yaml（密钥由 GitHub 自动打码）====="
+          cat ~/.cos.yaml
           echo "同步到 cos://$COS_BUCKET ..."
           cd "$GITHUB_WORKSPACE/.."
           "$CLI" sync origistar-site "cos://os/" -r --exclude ".git/**" --exclude ".github/**" --exclude "scripts/**" \
