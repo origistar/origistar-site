@@ -194,15 +194,16 @@ function normCode(code) {
 const AUTO_SKIP_CODES = new Set(['02913']);
 
 // 合并：保留全部系统/研究字段，只更新自动字段；新发现标的的研究字段留空，由 enrich-hk.mjs 补全（标准锁定期自动推算、保荐等从研究库继承）
-// 新股上市后仍保留在打新页的天数（可看首日 / 上市以来表现），超期才移除
-const IPO_KEEP_DAYS = 7;
+// 新股上市后仍保留在打新页的天数：0 = 仅保留「上市当日」（可看首日表现），上市次日即从打新页移除
+// （用户要求：港股打新页只用于提示招股阶段，留 7 天太久，没必要）
+const IPO_KEEP_DAYS = 0;
 function isoMinusDays(iso, n) {
   const d = new Date(Date.parse(iso + 'T00:00:00Z') - n * 86400000);
   return `${d.getUTCFullYear()}-${p2(d.getUTCMonth() + 1)}-${p2(d.getUTCDate())}`;
 }
 
 // 方案A 约束：待入通清单由用户从活报告手工维护，本函数只自动发现「招股中」IPO；
-// 上市后 IPO_KEEP_DAYS 天内仍留在打新页（可看首日表现），超期自动移除，不转入 listed（避免污染待入通人工池）。
+// 上市当日仍留在打新页（可看首日表现），上市次日自动移除，不转入 listed（避免污染待入通人工池）。
 function mergeDiscovered(stocks, discovered, today, errors) {
   const grace = isoMinusDays(today, IPO_KEEP_DAYS);
   const byCode = new Map();
@@ -383,7 +384,7 @@ async function main() {
     console.log(`AH 股 A 股价 成功 ${ahOk} / ${ahList.length}`);
   }
 
-  /* 4) 上市宽限期：招股中标的上市后仍留打新页 IPO_KEEP_DAYS 天（可看首日 / 上市以来表现），超期移除 */
+  /* 4) 上市宽限期：招股中标的上市当日仍留打新页（可看首日表现），上市次日即移除（IPO_KEEP_DAYS=0） */
   const bj = beijingNow();
   const today = `${bj.getFullYear()}-${p2(bj.getMonth() + 1)}-${p2(bj.getDate())}`;
   const grace = isoMinusDays(today, IPO_KEEP_DAYS);
@@ -394,7 +395,7 @@ async function main() {
     if (ld < grace) {
       // 上市已超宽限期：自动移出打新页，不转入待入通（避免污染人工池）
       s._markRemove = true;
-      console.log(`移出打新页：${s.name}(${s.code}) 已于 ${ld} 上市满 ${IPO_KEEP_DAYS} 天`);
+      console.log(`移出打新页：${s.name}(${s.code}) 已于 ${ld} 上市，上市次日移出打新页`);
     }
   }
   for (let i = stocks.length - 1; i >= 0; i--) {
