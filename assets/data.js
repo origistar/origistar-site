@@ -63,7 +63,7 @@ window.ORIGISTAR = {
       { name: "SK海力士", code: "000660.KS", market: "韩国", currency: "₩", status: "持有", weight: "重", lastPrice: null, atrPct: null, userSellWarn: 3000000, note: "长期看多" },
       { name: "三星电子", code: "005930.KS", market: "韩国", currency: "₩", status: "持有", weight: "轻", lastPrice: null, atrPct: null, userSellWarn: 380000, note: "长期看多，到2027年末" },
       { name: "灵宝黄金", code: "03330.HK", market: "港股", currency: "HK$", status: "持有", weight: "重", lastPrice: 22.24, atrPct: 0.082, userSellWarn: 30, note: "金价上行受益，ATR 较高" },
-      { name: "龙资源", code: "01712.HK", market: "港股", currency: "HK$", status: "停牌", weight: "中", lastPrice: null, atrPct: null, userSellWarn: 12, note: "停牌中，等待复牌" },
+      { name: "龙资源", code: "01712.HK", market: "港股", currency: "HK$", status: "持有", weight: "中", lastPrice: 8.305, atrPct: 0.081, userSellWarn: 12, note: "金矿股，2026-09-02 已复牌（停牌期间不更新，复牌后恢复自动抓取）" },
       { name: "潼关黄金", code: "00340.HK", market: "港股", currency: "HK$", status: "持有", weight: "中", lastPrice: 3.285, atrPct: 0.062, userSellWarn: 4, note: "金矿股，波动大" }
     ],
     // 观察仓：以用户买入预警为主；回踩买点 = 最新价 × (1 − 2×ATR%)，仅作价格参考，非买入建议
