@@ -124,5 +124,5 @@ jobs:
           ./coscli --version
           printf 'cos:\n  base:\n    secretid: %s\n    secretkey: %s\n    sessiontoken: ""\n    protocol: https\nbuckets:\n  - name: %s\n    alias: os\n    region: %s\n    endpoint: cos.%s.myqcloud.com\n    ofs: false\n' "$COS_SECRET_ID" "$COS_SECRET_KEY" "$COS_BUCKET" "$COS_REGION" "$COS_REGION" > ~/.cos.yaml
           echo "同步到 cos://$COS_BUCKET ..."
-          ./coscli sync ./ "cos://os/" -r --exclude ".git/**" --exclude ".github/**" --exclude "scripts/**"
-          echo "COS 同步完成"
+          ./coscli sync ./ "cos://os/" -r --fail-output /tmp/coscli_fail --exclude ".git/**" --exclude ".github/**" --exclude "scripts/**" --exclude "coscli" \
+          && echo "COS 同步完成 ✅" || echo "COS 同步失败 ⚠️（不影响数据更新，下次运行重试）"
