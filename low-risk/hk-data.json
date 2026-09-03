@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-03 16:43",
+  "updated": "2026-09-03 23:42",
   "threshold": 100,
   "stocks": [
     {
@@ -1917,7 +1917,7 @@
       "_chgFromIpo": -1.75,
       "_floatCap": 31.6,
       "_mktCap": 520.1,
-      "_ahPremium": 11.9678,
+      "_ahPremium": 11.9956,
       "_connectNeed": 0,
       "_connectStatus": "A+H · 免市值门槛",
       "_connectGapPct": null,
@@ -2075,7 +2075,7 @@
       "_tsSrc": "manual"
     }
   ],
-  "hkdCnyRate": 0.856788,
+  "hkdCnyRate": 0.857001,
   "dataSource": "腾讯 gtimg（行情/市值）；新浪（HKD/CNY 汇率）；东财港股 F10（发行价/上市日/行业/每手股数/发行股数/总股本/IPO 发现）；标准锁定期为规则推算（基石6个月/控股股东12个月）；保荐人/基石/评分/建议无免费公开 API，由研究库继承或人工维护",
   "updateFreq": "每日 3 次（北京时间 08:30 / 16:30 / 23:00）",
   "errors": [],
