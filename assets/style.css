@@ -665,3 +665,5 @@ a.rule h3 { display: flex; align-items: center; justify-content: space-between; 
 .ipo-fold summary::before { content: '▸ '; color: var(--accent); }
 .ipo-fold[open] summary::before { content: '▾ '; }
 .ipo-fold > .ipo-row:first-of-type { margin-top: 8px; }
+
+.site-slogan { margin: 6px 0 0; color: var(--muted); font-size: var(--fs-sm); letter-spacing: .08em; }

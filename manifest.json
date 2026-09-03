@@ -1,7 +1,7 @@
 {
-  "name": "origistar · 个人投资组合监测",
-  "short_name": "origistar",
-  "description": "防守 · 稳健 · 激进 · 低风险 · 策略——个人投资体系监测站",
+  "name": "Origistar",
+  "short_name": "Origistar",
+  "description": "防守 · 稳健 · 激进 · 低风险 · 策略——个人投资体系站",
   "start_url": "/origistar-site/index.html",
   "scope": "/origistar-site/",
   "display": "standalone",

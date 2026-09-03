@@ -201,7 +201,7 @@
   var nav = document.createElement('header');
   nav.className = 'topnav';
   nav.innerHTML =
-    '<a class="brand" href="' + base + 'index.html"><span class="logo">O</span><b>origistar</b></a>' +
+    '<a class="brand" href="' + base + 'index.html"><span class="logo">O</span><b>Origistar</b></a>' +
     '<nav class="nav-sys">' +
       '<a class="ni' + (SYS === 'home' ? ' active' : '') + '" href="' + base + 'index.html">首页</a>' +
       sysNav +
@@ -217,7 +217,7 @@
   drawer.className = 'drawer';
   drawer.id = 'drawer';
   var dPanel = '<div class="panel"><div style="display:flex;justify-content:space-between;align-items:center">' +
-    '<div class="brand"><span class="logo">O</span><b>origistar</b></div>' +
+    '<div class="brand"><span class="logo">O</span><b>Origistar</b></div>' +
     '<button class="menu-btn" id="closeBtn">✕</button></div>' +
     '<a href="' + base + 'index.html" style="margin-top:14px"><span class="di">' + svg('home') + '</span>首页</a>';
   ORDER.forEach(function (k) {
