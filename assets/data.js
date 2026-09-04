@@ -2,7 +2,7 @@
    更新方式：本地改此文件，或后续用任意云函数/定时脚本回写。
    当前为最近一次人工核对值（示意），页面会显示“更新于”日期。 */
 window.ORIGISTAR = {
-  updated: "2026-09-04 16:43 北京时间",
+  updated: "2026-09-03 08:47 北京时间",
 
   /* 稳健仓 · 纳指定投 (v5.1) */
   ndx: {
@@ -62,6 +62,7 @@ window.ORIGISTAR = {
       { name: "DRAM", code: "DRAM", market: "美股", currency: "$", status: "持有", weight: "重", lastPrice: 95.00, atrPct: 0.05, userSellWarn: 80, note: "DRAM ETF，半导体周期复苏主线" },
       { name: "SK海力士", code: "000660.KS", market: "韩国", currency: "₩", status: "持有", weight: "重", lastPrice: null, atrPct: null, userSellWarn: 3000000, note: "长期看多" },
       { name: "三星电子", code: "005930.KS", market: "韩国", currency: "₩", status: "持有", weight: "轻", lastPrice: null, atrPct: null, userSellWarn: 380000, note: "长期看多，到2027年末" },
+      { name: "博通", code: "AVGO", market: "美股", currency: "$", status: "持有", weight: "中", lastPrice: null, atrPct: null, userSellWarn: 600, note: "27和28年连续翻倍，远期PE19；300补仓" },
       { name: "灵宝黄金", code: "03330.HK", market: "港股", currency: "HK$", status: "持有", weight: "重", lastPrice: 22.24, atrPct: 0.082, userSellWarn: 30, note: "金价上行受益，ATR 较高" },
       { name: "龙资源", code: "01712.HK", market: "港股", currency: "HK$", status: "持有", weight: "中", lastPrice: 8.305, atrPct: 0.081, userSellWarn: 12, note: "金矿股，2026-09-02 已复牌（停牌期间不更新，复牌后恢复自动抓取）" },
       { name: "潼关黄金", code: "00340.HK", market: "港股", currency: "HK$", status: "持有", weight: "中", lastPrice: 3.285, atrPct: 0.062, userSellWarn: 4, note: "金矿股，波动大" }
@@ -75,7 +76,6 @@ window.ORIGISTAR = {
       { name: "谷歌", code: "GOOGL", market: "美股", currency: "$", status: "观察", weight: "中", lastPrice: null, atrPct: null, userBuyWarn: 330, userBuyWarn2: 300, note: "搜索垄断+Gemini，压舱石（金建成补锚）" },
       { name: "亚马逊", code: "AMZN", market: "美股", currency: "$", status: "观察", weight: "中", lastPrice: null, atrPct: null, userBuyWarn: 200, userBuyWarn2: 175, note: "云+电商压舱石，买二为金建成建议深档" },
       { name: "ARM", code: "ARM", market: "美股", currency: "$", status: "观察", weight: "中", lastPrice: null, atrPct: null, userBuyWarn: 230, userBuyWarn2: 210, note: "CPU 架构近垄断；买二为金建成建议深档" },
-      { name: "博通", code: "AVGO", market: "美股", currency: "$", status: "观察", weight: "轻", lastPrice: null, atrPct: null, userBuyWarn: 300, userBuyWarn2: 270, note: "备胎≤2.5%，300 以内才捞，270 再加" },
       { name: "英特尔", code: "INTC", market: "美股", currency: "$", status: "观察", weight: "轻", lastPrice: null, atrPct: null, userBuyWarn: 70, userBuyWarn2: 50, note: "美国半导体主权彩票≤2%，买二为金建成建议深档" },
       { name: "罕王黄金", code: "03788.HK", market: "港股", currency: "HK$", status: "观察", weight: "中", lastPrice: 3.415, atrPct: 0.063, userBuyWarn: 3.2, userBuyWarn2: 2.65, note: "2028-2030 年目标投产-达产 5-8 吨黄金，预计利润 15-30 亿+（按 4000 美金金价），3-5 年 150-300 亿市值，2-5 倍空间。核心管理层都有持股、紫金矿业入股（2026.1 月配售进入，每股 3.8 港元）。紫金矿业是成长-成熟期，罕王则是半风投型持股。" }
     ],
