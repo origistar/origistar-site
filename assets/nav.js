@@ -64,7 +64,7 @@
     strategy: { name: '策略库', icon: 'strategy', desc: '因子 / 顶级投资者 / 独立站精华', index: 'strategy/momentum.html', pages: [
       { id: 'momentum', name: 'SPMO & MTUM', file: 'strategy/momentum.html', desc: '动量轮动', icon: 'momentum' },
       { id: 'superinvestors', name: '13F 持仓', file: 'strategy/superinvestors.html', desc: '顶级投资者对比', icon: 'whale' },
-      { id: 'jinjiancheng', name: '金渐成（玑哥）', file: 'strategy/jinjiancheng.html', desc: '三仓体系 · 负成本打法', icon: 'strategy' },
+      { id: 'jinjiancheng', name: '金建成', file: 'strategy/jinjiancheng.html', desc: '三仓体系 · 负成本打法', icon: 'strategy' },
       { id: 'laolei', name: '老雷', file: 'strategy/laolei.html', desc: '全球配置 · 垄断定价权', icon: 'strategy' }
     ]},
     study: { name: '研习录', icon: 'study', desc: '读书纪要 · 研报重点', index: 'study/index.html', pages: [
@@ -150,7 +150,7 @@
         kv([
           { k: '动量', v: st.momentum.signal, sub: st.momentum.label },
           { k: '13F 跟踪', v: st.superinvestors.tracked + ' 位', sub: '超级投资者' },
-          { k: '金渐成', v: st.jinjiancheng.signal, sub: st.jinjiancheng.label },
+          { k: '金建成', v: st.jinjiancheng.signal, sub: st.jinjiancheng.label },
           { k: '老雷', v: st.laolei.signal, sub: st.laolei.label }
         ]) +
         sigRow('跟踪中', 'acc', '因子 + 顶级投资者 + 独立站精华');
