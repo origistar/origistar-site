@@ -1,0 +1,175 @@
+/* ============================================================
+   origistar · 人物体系页共用组件（金渐成 / 老雷）
+   依赖：assets/style.css（变量与基础组件）
+   主题色由页面覆盖：.pf-wrap { --p1: 主色; --p2: 辅色; }
+   ============================================================ */
+
+.pf-wrap { --p1: #818cf8; --p2: #f59e0b; }
+
+/* ---------------- Hero ---------------- */
+.pf-hero { position: relative; overflow: hidden; padding: 20px 0 4px; }
+.pf-hero::before {
+  content: ""; position: absolute; inset: -40% -20% auto; height: 220%;
+  background: radial-gradient(680px 300px at 12% -10%, color-mix(in srgb, var(--p1) 30%, transparent), transparent 62%),
+              radial-gradient(520px 260px at 95% 8%, color-mix(in srgb, var(--p2) 16%, transparent), transparent 62%);
+  pointer-events: none;
+}
+.pf-hero > * { position: relative; }
+.pf-badge { display: inline-flex; align-items: center; gap: 7px; font-size: var(--fs-xs); font-weight: 800;
+  color: var(--p1); background: var(--accent-soft); padding: 6px 12px; border-radius: 999px; margin-bottom: 12px; }
+.pf-hero h1 { font-size: var(--fs-xl); font-weight: 850; letter-spacing: -.4px; margin: 0 0 4px; }
+.pf-hero .pf-sub { font-size: var(--fs-sm); color: var(--muted); margin: 0 0 10px; }
+.pf-hero .pf-manna { font-size: var(--fs-md); color: var(--ink-soft); max-width: 680px; margin: 0; line-height: 1.75; }
+.pf-hero .pf-manna b { color: var(--p2); font-weight: 800; }
+
+/* ---------------- 身份卡（2×2 / 4 列） ---------------- */
+.pf-id { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 14px 0 4px; }
+@media (min-width: 720px) { .pf-id { grid-template-columns: repeat(4, 1fr); } }
+.pf-id .cell { background: var(--surface-2); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 11px 13px; }
+.pf-id .k { font-size: var(--fs-2xs); color: var(--muted); }
+.pf-id .v { font-size: var(--fs-sm); font-weight: 700; color: var(--ink); margin-top: 3px; line-height: 1.45; }
+
+/* ---------------- 核心信条 ---------------- */
+.pf-tenet { border: 1px solid var(--border-strong); border-left: 4px solid var(--p1);
+  background: linear-gradient(120deg, color-mix(in srgb, var(--p1) 12%, var(--surface)), var(--surface) 70%);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 16px 18px; margin: 14px 0; box-shadow: var(--shadow); }
+.pf-tenet .big { font-size: var(--fs-lg); font-weight: 850; line-height: 1.55; letter-spacing: -.2px;
+  background: linear-gradient(120deg, var(--p1), var(--p2));
+  -webkit-background-clip: text; background-clip: text; color: transparent; }
+.pf-tenet .exp { margin: 8px 0 0; font-size: var(--fs-base); color: var(--ink-soft); line-height: 1.65; }
+
+/* ---------------- 通用卡片网格 ---------------- */
+.pf-grid { display: grid; gap: 12px; grid-template-columns: 1fr; }
+@media (min-width: 720px) { .pf-grid.c2 { grid-template-columns: 1fr 1fr; } }
+.pf-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 14px 16px; box-shadow: var(--shadow); }
+.pf-card h4 { margin: 0 0 6px; font-size: var(--fs-md); font-weight: 800; color: var(--ink);
+  display: flex; align-items: center; gap: 8px; }
+.pf-card p { margin: 0; font-size: var(--fs-base); color: var(--ink-soft); line-height: 1.65; }
+.pf-card p + p { margin-top: 7px; }
+.pf-card.acc { border-left: 3px solid var(--p1); }
+.pf-card.warn { border-left: 3px solid var(--warn); }
+.pf-card.danger { border-left: 3px solid var(--up); }
+.pf-card.ok { border-left: 3px solid var(--down); }
+.pf-card .no { flex: none; width: 22px; height: 22px; border-radius: 7px; background: var(--accent-soft);
+  color: var(--p1); font-size: var(--fs-2xs); font-weight: 800; display: grid; place-items: center; }
+
+/* ---------------- 横向堆叠配置条 ---------------- */
+.pf-bar { display: flex; height: 30px; border-radius: 999px; overflow: hidden; margin: 12px 0 10px;
+  border: 1px solid var(--border); background: var(--surface-2); }
+.pf-bar > i { display: grid; place-items: center; font-size: var(--fs-2xs); font-weight: 800; color: #06111f;
+  overflow: hidden; white-space: nowrap; }
+/* 超窄屏（≤360px）：条内文字放不下，隐藏文字只留色块，比例由图例说明 */
+@media (max-width: 360px) { .pf-bar { height: 22px; } .pf-bar > i { font-size: 0; } }
+.pf-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: var(--fs-xs); color: var(--ink-soft); }
+.pf-legend span { display: inline-flex; align-items: center; gap: 5px; }
+.pf-legend i { width: 10px; height: 10px; border-radius: 3px; flex: none; }
+
+/* ---------------- 纵向层级（资金梯队 / 仓位层级） ---------------- */
+.pf-tiers { display: grid; gap: 8px; margin: 12px 0; }
+.pf-tier { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border); background: var(--surface); position: relative; overflow: hidden; }
+.pf-tier .lv { flex: none; width: 26px; height: 26px; border-radius: 8px; display: grid; place-items: center;
+  font-size: var(--fs-2xs); font-weight: 800; color: #06111f; }
+.pf-tier .tx { flex: 1; min-width: 0; }
+.pf-tier .tt { font-size: var(--fs-md); font-weight: 800; color: var(--ink); }
+.pf-tier .td { font-size: var(--fs-sm); color: var(--muted); margin-top: 2px; line-height: 1.5; }
+.pf-flownote { font-size: var(--fs-xs); color: var(--muted); margin-top: 8px; line-height: 1.6; }
+
+/* ---------------- 时间线 ---------------- */
+.pf-tl { margin: 12px 0; }
+.pf-tl .row { display: grid; grid-template-columns: 18px 1fr; gap: 12px; }
+.pf-tl .pt { position: relative; display: flex; justify-content: center; }
+.pf-tl .pt::before { content: ""; position: absolute; top: 6px; bottom: -6px; width: 2px; background: var(--border); }
+.pf-tl .row:last-child .pt::before { display: none; }
+.pf-tl .pt i { width: 9px; height: 9px; border-radius: 50%; background: var(--p1); margin-top: 7px; z-index: 1;
+  box-shadow: 0 0 0 3px var(--bg); }
+.pf-tl .row.hot .pt i { background: var(--p2); }
+.pf-tl .bd { padding-bottom: 16px; }
+.pf-tl .when { font-size: var(--fs-2xs); font-weight: 800; color: var(--p1); letter-spacing: .04em; }
+.pf-tl .row.hot .when { color: var(--p2); }
+.pf-tl .what { font-size: var(--fs-base); font-weight: 700; color: var(--ink); margin-top: 2px; line-height: 1.5; }
+.pf-tl .det { font-size: var(--fs-sm); color: var(--muted); margin-top: 3px; line-height: 1.6; }
+
+/* ---------------- 档案卡（标的 / 操作记录） ---------------- */
+.pf-recs { display: grid; gap: 10px; margin: 12px 0; }
+.pf-rec { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm);
+  padding: 13px 15px; box-shadow: var(--shadow); }
+.pf-rec .hd { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.pf-rec .nm { font-size: var(--fs-md); font-weight: 800; color: var(--ink); }
+.pf-rec .cd { font-size: var(--fs-2xs); color: var(--muted); font-weight: 700; }
+.pf-rec .bd { margin: 7px 0 0; font-size: var(--fs-base); color: var(--ink-soft); line-height: 1.65; }
+.pf-rec .nums { margin: 8px 0 0; font-size: var(--fs-sm); color: var(--muted); line-height: 1.6;
+  font-variant-numeric: tabular-nums; }
+.pf-rec .nums b { color: var(--ink-soft); font-weight: 700; }
+.pf-pos { font-size: var(--fs-2xs); font-weight: 800; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+.pf-pos.long { color: var(--up); background: color-mix(in srgb, var(--up) 14%, transparent); }
+.pf-pos.hold { color: var(--accent); background: var(--accent-soft); }
+.pf-pos.short { color: var(--down); background: color-mix(in srgb, var(--down) 14%, transparent); }
+.pf-pos.watch { color: var(--warn); background: color-mix(in srgb, var(--warn) 14%, transparent); }
+.pf-pos.neutral { color: var(--muted); background: var(--surface-2); }
+
+/* ---------------- 预测留痕 ---------------- */
+.pf-preds { display: grid; gap: 9px; margin: 12px 0; }
+.pf-pred { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: start;
+  background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius-sm); padding: 12px 14px; }
+.pf-flag { flex: none; font-size: var(--fs-2xs); font-weight: 800; padding: 3px 9px; border-radius: 999px;
+  white-space: nowrap; margin-top: 1px; }
+.pf-flag.y { color: var(--up); background: color-mix(in srgb, var(--up) 14%, transparent); }
+.pf-flag.w { color: var(--warn); background: color-mix(in srgb, var(--warn) 16%, transparent); }
+.pf-flag.n { color: var(--down); background: color-mix(in srgb, var(--down) 14%, transparent); }
+.pf-pred .wh { font-size: var(--fs-2xs); color: var(--muted); font-weight: 700; }
+.pf-pred .ct { font-size: var(--fs-base); color: var(--ink); line-height: 1.6; margin-top: 2px; }
+.pf-pred .rs { font-size: var(--fs-sm); color: var(--muted); line-height: 1.6; margin-top: 4px; }
+
+/* ---------------- 金句墙 ---------------- */
+.pf-quotes { display: grid; gap: 10px; margin: 12px 0; }
+.pf-q { position: relative; background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 13px 15px 13px 40px; }
+.pf-q::before { content: "\201C"; position: absolute; left: 13px; top: 8px; font-size: 26px; line-height: 1;
+  color: var(--p1); font-family: Georgia, serif; }
+.pf-q p { margin: 0; font-size: var(--fs-base); color: var(--ink); line-height: 1.7; }
+.pf-q .src { display: block; margin-top: 7px; font-size: var(--fs-2xs); color: var(--muted); }
+
+/* ---------------- 红线 / 清单 ---------------- */
+.pf-list { display: grid; gap: 8px; margin: 12px 0; }
+.pf-li { display: grid; grid-template-columns: auto 1fr; gap: 10px; align-items: start;
+  background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--p1);
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0; padding: 11px 14px; }
+.pf-li.no { border-left-color: var(--up); }
+.pf-li .ic { font-size: var(--fs-sm); font-weight: 800; color: var(--p1); margin-top: 1px; }
+.pf-li.no .ic { color: var(--up); }
+.pf-li .tx { font-size: var(--fs-base); color: var(--ink-soft); line-height: 1.6; }
+.pf-li .tx b { color: var(--ink); }
+
+/* ---------------- 编号步骤 ---------------- */
+.pf-steps { display: grid; gap: 0; margin: 12px 0; counter-reset: pfs; }
+.pf-steps .st { display: grid; grid-template-columns: 28px 1fr; gap: 12px; padding: 12px 0;
+  border-bottom: 1px solid var(--border); counter-increment: pfs; }
+.pf-steps .st:last-child { border-bottom: none; }
+.pf-steps .st::before { content: counter(pfs); width: 28px; height: 28px; border-radius: 50%;
+  background: var(--accent-soft); color: var(--p1); font-weight: 850; font-size: var(--fs-sm);
+  display: grid; place-items: center; }
+.pf-steps .st h4 { margin: 3px 0 3px; font-size: var(--fs-md); color: var(--ink); }
+.pf-steps .st p { margin: 0; font-size: var(--fs-base); color: var(--ink-soft); line-height: 1.6; }
+
+/* ---------------- 轻量两列表（不横滚） ---------------- */
+.pf-tbl { display: grid; gap: 0; margin: 12px 0; border: 1px solid var(--border);
+  border-radius: var(--radius-sm); overflow: hidden; background: var(--surface); }
+.pf-tbl .r { display: grid; grid-template-columns: 92px 1fr; gap: 10px; padding: 10px 13px;
+  border-bottom: 1px solid var(--border); font-size: var(--fs-sm); }
+.pf-tbl .r:last-child { border-bottom: none; }
+.pf-tbl .r .a { font-weight: 800; color: var(--ink); }
+.pf-tbl .r .b { color: var(--ink-soft); line-height: 1.6; }
+@media (min-width: 720px) { .pf-tbl .r { grid-template-columns: 140px 1fr; } }
+
+/* ---------------- 关系与收尾 ---------------- */
+.pf-rel { border: 1px solid var(--border); border-left: 4px solid var(--p1); border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  background: var(--surface); padding: 15px 17px; box-shadow: var(--shadow); }
+.pf-rel h4 { margin: 0 0 8px; font-size: var(--fs-md); color: var(--ink); }
+.pf-rel p { margin: 0; font-size: var(--fs-base); color: var(--ink-soft); line-height: 1.75; }
+.pf-rel p b { color: var(--ink); }
+.pf-note { font-size: var(--fs-xs); color: var(--muted); margin-top: 10px; line-height: 1.7; }
+.pf-sec-h { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; margin: 0 0 6px; }
+.pf-sec-h h2 { font-size: var(--fs-lg); margin: 0; letter-spacing: .2px; }
+.pf-sec-h .sub { font-size: var(--fs-sm); color: var(--muted); }

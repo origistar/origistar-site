@@ -2,7 +2,7 @@
    更新方式：本地改此文件，或后续用任意云函数/定时脚本回写。
    当前为最近一次人工核对值（示意），页面会显示“更新于”日期。 */
 window.ORIGISTAR = {
-  updated: "2026-09-04 08:46 北京时间",
+  updated: "2026-09-03 08:47 北京时间",
 
   /* 稳健仓 · 纳指定投 (v5.1) */
   ndx: {
@@ -116,8 +116,8 @@ window.ORIGISTAR = {
   strategy: {
     momentum: { label: "SPMO / MTUM 动量", signal: "跟踪中", signalType: "acc" },
     superinvestors: { label: "13F 顶级投资者", tracked: 8, signal: "季度更新", signalType: "acc" },
-    jinjiancheng: { label: "金渐成（玑哥）", signal: "三仓体系 · 负成本", signalType: "acc" },
-    laolei: { label: "老雷", signal: "全球配置 · 垄断", signalType: "acc" }
+    jinjiancheng: { label: "金渐成（玑哥）", signal: "三仓体系 · 负成本打法", signalType: "acc" },
+    laolei: { label: "老雷", signal: "全球配置 · 垄断定价权", signalType: "acc" }
   },
 
   /* 系统配置追踪（3:3:4） */
