@@ -137,6 +137,7 @@ img { max-width: 100%; }
   .nav-sys { display: flex; margin-left: 0; }
   .nav-right { margin-left: 0; }
   .menu-btn { display: none; }
+  .brand-slogan { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
 }
 @media (max-width: 520px) {
   .nav-right .pill { display: none; }
