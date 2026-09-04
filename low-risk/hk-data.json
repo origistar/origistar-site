@@ -1,5 +1,5 @@
 {
-  "updated": "2026-09-04 16:43",
+  "updated": "2026-09-04 21:58",
   "threshold": 100,
   "stocks": [
     {
@@ -1917,7 +1917,7 @@
       "_chgFromIpo": -2.72,
       "_floatCap": 31.29,
       "_mktCap": 514.95,
-      "_ahPremium": 8.841899999999999,
+      "_ahPremium": 8.8428,
       "_connectNeed": 0,
       "_connectStatus": "A+H · 免市值门槛",
       "_connectGapPct": null,
@@ -1987,7 +1987,7 @@
       "name": "江波龙",
       "industry": "半导体",
       "listDate": "2026-09-08",
-      "ipoPrice": null,
+      "ipoPrice": 236,
       "ipoDate": null,
       "deadline": "2026-09-03 09:00",
       "isAH": true,
@@ -2027,7 +2027,8 @@
       "secType": "H股",
       "_ahChecked": true,
       "_aPrice": 347,
-      "_justListed": false
+      "_justListed": false,
+      "entryFee": 11927
     },
     {
       "board": "ipo",
@@ -2075,7 +2076,7 @@
       "_tsSrc": "manual"
     }
   ],
-  "hkdCnyRate": 0.855945,
+  "hkdCnyRate": 0.855952,
   "dataSource": "腾讯 gtimg（行情/市值）；新浪（HKD/CNY 汇率）；东财港股 F10（发行价/上市日/行业/每手股数/发行股数/总股本/IPO 发现）；标准锁定期为规则推算（基石6个月/控股股东12个月）；保荐人/基石/评分/建议无免费公开 API，由研究库继承或人工维护",
   "updateFreq": "每日 3 次（北京时间 08:30 / 16:30 / 23:00）",
   "errors": [],
