@@ -45,7 +45,7 @@
   // 系统配置：index = 聚合首页；pages = 具体子页
   var S = {
     defensive: { name: '防守仓', icon: 'defensive', desc: 'SCHD & 伯克希尔 + 黄金', index: 'defensive/schd-brk.html', pages: [
-      { id: 'schd-brk', name: 'SCHD & BRK.B + 黄金', file: 'defensive/schd-brk.html', desc: '便宜价定投 + 黄金提示', icon: 'schd' }
+      { id: 'schd-brk', name: 'SCHD & BRK.B', file: 'defensive/schd-brk.html', desc: '便宜价定投 + 黄金提示', icon: 'schd' }
     ]},
     stable: { name: '稳健仓', icon: 'stable', desc: '纳指100 / 比特币 长期定投', index: 'stable/ndx-dca.html', pages: [
       { id: 'ndx-dca', name: '纳指定投', file: 'stable/ndx-dca.html', desc: 'PE/DD/网格决策 v5.1', icon: 'stable' },
