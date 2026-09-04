@@ -145,8 +145,8 @@ img { max-width: 100%; }
 .drawer { position: fixed; inset: 0; z-index: 60; display: none; }
 .drawer.show { display: block; }
 .drawer .mask { position: absolute; inset: 0; background: rgba(5,10,20,.45); }
-.drawer .panel { position: absolute; top: 0; right: 0; bottom: 0; width: 70%; max-width: 280px;
-  background: var(--surface); padding: 14px; overflow: auto; box-shadow: var(--shadow-lg); }
+.drawer .panel { position: absolute; top: 0; right: 0; bottom: 0; width: 64%; max-width: 240px;
+  background: var(--surface); padding: 12px; overflow: auto; box-shadow: var(--shadow-lg); }
 .drawer .panel h4 { margin: 14px 0 6px; font-size: var(--fs-xs); letter-spacing: .12em; color: var(--muted); text-transform: uppercase; font-weight: 500; }
 .drawer .panel a { display: flex; align-items: center; gap: 9px; padding: 7px 10px; border-radius: 10px; font-weight: 500; font-size: 13px; }
 .drawer .panel a:hover { background: var(--surface-2); }
