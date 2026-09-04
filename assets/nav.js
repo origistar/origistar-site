@@ -65,7 +65,8 @@
       { id: 'momentum', name: 'SPMO & MTUM', file: 'strategy/momentum.html', desc: '动量轮动', icon: 'momentum' },
       { id: 'superinvestors', name: '13F 持仓', file: 'strategy/superinvestors.html', desc: '顶级投资者对比', icon: 'whale' },
       { id: 'jinjiancheng', name: '金建成', file: 'strategy/jinjiancheng.html', desc: '三仓体系 · 负成本打法', icon: 'strategy' },
-      { id: 'laolei', name: '老雷', file: 'strategy/laolei.html', desc: '全球配置 · 垄断定价权', icon: 'strategy' }
+      { id: 'laolei', name: '老雷', file: 'strategy/laolei.html', desc: '全球配置 · 垄断定价权', icon: 'strategy' },
+      { id: 'laolei-notes', name: '老雷笔记', file: 'strategy/laolei-notes.html', desc: '直播汇总 · 5月起', icon: 'history' }
     ]},
     study: { name: '研习录', icon: 'study', desc: '读书纪要 · 研报重点', index: 'study/index.html', pages: [
       { id: 'index', name: '研习录', file: 'study/index.html', desc: '读书纪要 · 研报重点', icon: 'study' },
