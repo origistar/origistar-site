@@ -228,6 +228,7 @@
       dPanel += '<a href="' + base + s.index + '"><span class="di">' + svg(s.icon) + '</span>概览</a>';
     }
     s.pages.forEach(function (p) {
+      if (k === 'study' && p.id !== 'index') return; // 研习录抽屉只显示主条目
       dPanel += '<a href="' + base + p.file + '"><span class="di">' + svg(p.icon) + '</span>' + p.name + '</a>';
     });
   });
