@@ -87,14 +87,22 @@ img { max-width: 100%; }
   -webkit-backdrop-filter: saturate(180%) blur(14px);
   border-bottom: 1px solid var(--border);
 }
-.brand { display: flex; align-items: center; gap: 9px; font-weight: 800; letter-spacing: .3px; }
+.brand { display: flex; align-items: baseline; gap: 9px; font-weight: 800; letter-spacing: .3px; }
 .brand .logo {
   width: 30px; height: 30px; border-radius: 9px;
   background: linear-gradient(135deg, var(--accent), var(--accent-2));
   display: grid; place-items: center; color: #fff; font-weight: 900; font-size: var(--fs-base);
   box-shadow: 0 4px 12px rgba(79,70,229,.35);
 }
-.brand b { font-size: var(--fs-md); }
+.brand b { font-size: 19px; letter-spacing: .3px; }
+.brand .brand-slogan {
+  margin-left: 6px;
+  font-size: 14px;
+  font-weight: 400;
+  color: var(--muted);
+  letter-spacing: .14em;
+  white-space: nowrap;
+}
 .nav-sys { display: none; margin-left: 10px; gap: 2px; }
 .nav-sys > .ni {
   position: relative; padding: 8px 12px; border-radius: 10px;
