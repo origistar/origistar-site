@@ -201,13 +201,13 @@
   var nav = document.createElement('header');
   nav.className = 'topnav';
   nav.innerHTML =
-    '<a class="brand" href="' + base + 'index.html"><span class="logo">O</span><b>Origistar</b><span class="brand-slogan">长坡厚雪，守拙日拱</span></a>' +
+    '<a class="brand" href="' + base + 'index.html"><span class="logo">O</span><b>Origistar</b></a>' +
     '<nav class="nav-sys">' +
       '<a class="ni' + (SYS === 'home' ? ' active' : '') + '" href="' + base + 'index.html">首页</a>' +
       sysNav +
     '</nav>' +
+    '<span class="brand-slogan">长坡厚雪，守拙日拱</span>' +
     '<div class="nav-right">' +
-      '<span class="pill" id="nav-updated">数据更新中…</span>' +
       '<button class="menu-btn" id="menuBtn" aria-label="菜单">' + svg('menu') + '</button>' +
     '</div>';
   document.body.prepend(nav);
@@ -217,7 +217,7 @@
   drawer.className = 'drawer';
   drawer.id = 'drawer';
   var dPanel = '<div class="panel"><div style="display:flex;justify-content:space-between;align-items:center">' +
-    '<div class="brand"><span class="logo">O</span><b>Origistar</b><span class="brand-slogan">长坡厚雪，守拙日拱</span></div>' +
+    '<div class="brand"><span class="logo">O</span><b>Origistar</b></div>' +
     '<button class="menu-btn" id="closeBtn">✕</button></div>' +
     '<a href="' + base + 'index.html" style="margin-top:14px"><span class="di">' + svg('home') + '</span>首页</a>';
   ORDER.forEach(function (k) {
@@ -328,7 +328,7 @@
   // ---------- 数据时间戳 ----------
   try {
     if (window.ORIGISTAR && window.ORIGISTAR.updated) {
-      document.getElementById('nav-updated').textContent = '更新于 ' + window.ORIGISTAR.updated;
+      // pill 已删除，首栏不再显示更新时间
     }
   } catch (e) {}
 
