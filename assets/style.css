@@ -133,11 +133,10 @@ img { max-width: 100%; }
   border: 1px solid var(--border); background: var(--surface); color: var(--ink); cursor: pointer; }
 @media (min-width: 880px) {
   .topnav { justify-content: flex-start; }
-  .brand { flex: 1; }
-  .nav-sys { display: flex; margin-left: 0; }
+  .brand { flex: 0 0 auto; }
+  .nav-sys { display: flex; margin-left: 0; position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
   .nav-right { margin-left: 0; }
   .menu-btn { display: none; }
-  .brand-slogan { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
 }
 @media (max-width: 520px) {
   .nav-right .pill { display: none; }
