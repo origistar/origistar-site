@@ -21,11 +21,12 @@
     };
   }
   if (window.AGGRESSIVE_LIVE && d.aggressive) {
-    var ai = window.AGGRESSIVE_LIVE.items || {};
+    // live 两个桶（items=持仓 / watchItems=观察）的 key 均为中文名(name)；按 name 匹配，code 兜底
+    var ai = Object.assign({}, window.AGGRESSIVE_LIVE.items || {}, window.AGGRESSIVE_LIVE.watchItems || {});
     function applyAggro(list) {
       if (!list) return;
       list.forEach(function (it) {
-        var live = ai[it.code];
+        var live = ai[it.name] || ai[it.code];
         if (!live) return;
         if (live.price != null) it.lastPrice = live.price;
         if (live.atrPct != null) it.atrPct = live.atrPct;
