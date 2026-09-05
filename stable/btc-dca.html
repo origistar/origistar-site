@@ -102,7 +102,7 @@
   <section class="section">
     <div class="chart-box">
       <h3>四年减半周期 · 价格走势</h3>
-      <div class="csub">对数坐标 · 红点标记减半年（2012 / 2016 / 2020 / 2024）· 虚线为 2026 预测底部 $52,000</div>
+      <div class="csub">对数坐标 · 红色贯穿竖虚线 = 减半年（2012 / 2016 / 2020 / 2024）· 短虚线为 2026 预测底部 $52,000</div>
       <div class="cv"><canvas id="cycle"></canvas></div>
     </div>
   </section>
@@ -172,6 +172,30 @@
   // 2026 预测底部
   var bottom = [null,null,null,null,null,null,null,null,null,null,null,null,null,null,null,52000];
 
+  // 减半年贯穿竖虚线 plugin（chartjs 无原生 markLine，自定义 afterDatasetsDraw 在 4 个减半年 X 坐标画贯穿红色 dashed 线）
+  var halvingPlugin = {
+    id: 'halvingLines',
+    afterDatasetsDraw: function (chart) {
+      var x = chart.scales.x;
+      if (!x) return;
+      var top = chart.chartArea.top, bot = chart.chartArea.bottom;
+      var ctx = chart.ctx;
+      ctx.save();
+      ctx.lineWidth = 1.2;
+      ctx.strokeStyle = '#ef4444';
+      ctx.setLineDash([5, 4]);
+      [1, 5, 9, 13].forEach(function (i) {  // labels 索引：2012/2016/2020/2024
+        var px = x.getPixelForValue(i);
+        if (isNaN(px)) return;
+        ctx.beginPath();
+        ctx.moveTo(px, top);
+        ctx.lineTo(px, bot);
+        ctx.stroke();
+      });
+      ctx.restore();
+    }
+  };
+
   if (window.Chart && document.getElementById('cycle')) {
     new Chart(document.getElementById('cycle').getContext('2d'), {
       type: 'line',
@@ -195,7 +219,8 @@
                ticks: { font: { size: 9 }, color: '#8b97ab', callback: function (v) { return '$' + v; } } },
           x: { grid: { display: false }, ticks: { font: { size: 9 }, color: '#8b97ab', maxRotation: 60, minRotation: 45 } }
         }
-      }
+      },
+      plugins: [halvingPlugin]
     });
   }
 })();
