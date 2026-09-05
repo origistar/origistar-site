@@ -47,6 +47,13 @@
         <tbody></tbody>
       </table>
     </div>
+    <!-- 操作备忘：仓位分层 / 卖出纪律 / 关键日历 / 执行记录 -->
+    <div class="watch-memo" style="margin-top:14px;background:var(--surface,#0d1526);border:1px solid var(--border,#1f2a40);border-radius:14px;padding:14px 16px;font-size:13.5px;line-height:1.8;color:var(--ink-soft,#c2cbd9)">
+      <p style="margin:0 0 10px">中仓博弹性（AVGO）、重仓等错误（GOOGL/MSFT/TSM）、彩票封顶（INTC/ARM）。</p>
+      <p style="margin:0 0 10px"><b style="color:var(--ink,#eef2f9)">卖出纪律：</b>2-3年持有看逻辑破坏不看价格：AVGO盯FY28指引与毛利率73%；MSFT盯Azure增速15%；GOOGL盯反垄断裁决与云增速30%；NVDA盯云厂商capex指引与ASIC份额侵蚀；TSM盯台海与2nm爬坡；AMZN盯AA评级下调；LLY盯Foundayo放量拐点与retatrutide申报（2027Q1），竞品看诺和口服Wegovy/CagriSema。</p>
+      <p style="margin:0 0 10px"><b style="color:var(--ink,#eef2f9)">关键日历：</b>9/11美国CPI（预期3.4%）→ 9/16 FOMC（加息概率约60%）；11月初 LLY Q3财报（Foundayo数据，1050/900的主要催化）；11月底 NVDA财报；12月初 AVGO Q4财报（Q4指引348亿的兑现验证）。</p>
+      <p style="margin:0"><b style="color:var(--ink,#eef2f9)">执行记录：</b>全部限价单GTC挂单等成交，不追价、不手动撤改；只有“逻辑破坏”才撤单，价格波动不构成撤单理由。</p>
+    </div>
   </section>
   <!-- 趋势止盈规则 -->
   <section class="section">
@@ -106,7 +113,7 @@
         '<td><b>' + esc(h.name) + '</b><br><small class="muted">' + esc(codeShow) + ' · ' + esc(h.market||'') + '</small></td>' +
         '<td><span class="tag ' + weightCls(h.weight) + '">' + esc(h.weight||'—') + '</span></td>' +
         '<td class="num">' + priceFmt(h.currency, price) + '</td>' +
-        '<td class="num">' + (h.userSellWarn==null ? '待设' : priceFmt(h.currency, h.userSellWarn)) + '</td>' +
+        '<td class="num">' + (h.userSellWarn==null ? '—' : priceFmt(h.currency, h.userSellWarn)) + '</td>' +
         '<td class="num"><span class="tag acc">' + priceFmt(h.currency, trendStop) + '</span></td>' +
         '<td>' + renderStage(lv) + '</td>' +
         '<td>' + esc(h.note||'') + '</td>' +
@@ -144,13 +151,13 @@
       var rowCls = trig==='buy2' ? ' trig-buy2' : trig==='buy1' ? ' trig-buy1' : '';
       var pill = trig==='buy1' ? '<span class="pill pill-buy1">● 触发买一</span>'
                : trig==='buy2' ? '<span class="pill pill-buy2">● 触发买二</span>' : '';
-      var buy1cell = (w.userBuyWarn==null ? '待设' : priceFmt(w.currency, w.userBuyWarn)) + pill;
+      var buy1cell = (w.userBuyWarn==null ? '—' : priceFmt(w.currency, w.userBuyWarn)) + pill;
       return '<tr class="' + rowCls + '">' +
         '<td><b>' + esc(w.name) + '</b><br><small class="muted">' + esc(codeShow) + ' · ' + esc(w.market||'') + '</small></td>' +
         '<td><span class="tag ' + weightCls(w.weight) + '">' + esc(w.weight||'—') + '</span></td>' +
         '<td class="num">' + priceFmt(w.currency, price) + '</td>' +
         '<td class="num">' + buy1cell + '</td>' +
-        '<td class="num">' + (w.userBuyWarn2==null ? '待设' : priceFmt(w.currency, w.userBuyWarn2)) + '</td>' +
+        '<td class="num">' + (w.userBuyWarn2==null ? '—' : priceFmt(w.currency, w.userBuyWarn2)) + '</td>' +
         (function(){ var di = fmtDistPct(watchDistBuy1(price, w)); return '<td class="num"><span class="tag ' + di.cls + '">' + di.txt + '</span></td>'; })() +
         '<td>' + esc(w.note||'') + '</td>' +
       '</tr>';

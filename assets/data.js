@@ -2,7 +2,7 @@
    更新方式：本地改此文件，或后续用任意云函数/定时脚本回写。
    当前为最近一次人工核对值（示意），页面会显示“更新于”日期。 */
 window.ORIGISTAR = {
-  updated: "2026-09-05 16:41 北京时间",
+  updated: "2026-09-03 08:47 北京时间",
 
   /* 稳健仓 · 纳指定投 (v5.1) */
   ndx: {
@@ -62,21 +62,21 @@ window.ORIGISTAR = {
       { name: "DRAM", code: "DRAM", market: "美股", currency: "$", status: "持有", weight: "重", lastPrice: 95.00, atrPct: 0.05, userSellWarn: 80, note: "DRAM ETF，半导体周期复苏主线" },
       { name: "SK海力士", code: "000660.KS", market: "韩国", currency: "₩", status: "持有", weight: "重", lastPrice: null, atrPct: null, userSellWarn: 3000000, note: "长期看多" },
       { name: "三星电子", code: "005930.KS", market: "韩国", currency: "₩", status: "持有", weight: "轻", lastPrice: null, atrPct: null, userSellWarn: 380000, note: "长期看多，到2027年末" },
-      { name: "博通", code: "AVGO", market: "美股", currency: "$", status: "持有", weight: "中", lastPrice: null, atrPct: null, userSellWarn: 600, note: "27和28年连续翻倍，远期PE19；300补仓" },
+      { name: "博通", code: "AVGO", market: "美股", currency: "$", status: "持有", weight: "中", lastPrice: null, atrPct: null, userSellWarn: 600, note: "AI收入27/28年连续翻倍（1150亿→2300亿），远期PE19（FY27口径）。300补2%、280补2%，另留1份机动（仅当FY28指引下修砸至260-270）；满仓均摊约319≈10.6x FY28；目标600=20x FY28" },
       { name: "灵宝黄金", code: "03330.HK", market: "港股", currency: "HK$", status: "持有", weight: "重", lastPrice: 22.24, atrPct: 0.082, userSellWarn: 30, note: "金价上行受益，ATR 较高" },
       { name: "龙资源", code: "01712.HK", market: "港股", currency: "HK$", status: "持有", weight: "中", lastPrice: 8.305, atrPct: 0.081, userSellWarn: 12, note: "金矿股，2026-09-02 已复牌（停牌期间不更新，复牌后恢复自动抓取）" },
       { name: "潼关黄金", code: "00340.HK", market: "港股", currency: "HK$", status: "持有", weight: "中", lastPrice: 3.285, atrPct: 0.062, userSellWarn: 4, note: "金矿股，波动大" }
     ],
     // 观察仓：以用户买入预警为主；回踩买点 = 最新价 × (1 − 2×ATR%)，仅作价格参考，非买入建议
     watch: [
-      { name: "英伟达", code: "NVDA", market: "美股", currency: "$", status: "观察", weight: "重", lastPrice: null, atrPct: null, userBuyWarn: 200, userBuyWarn2: 190, note: "AI 算力垄断，最看多；买一先底仓，买二加" },
-      { name: "台积电", code: "TSM", market: "美股", currency: "$", status: "观察", weight: "重", lastPrice: null, atrPct: null, userBuyWarn: 360, userBuyWarn2: 330, note: "先进制程 70% 市占，信仰；补纳指空白" },
-      { name: "礼来", code: "LLY", market: "美股", currency: "$", status: "观察", weight: "重", lastPrice: null, atrPct: null, userBuyWarn: 1100, userBuyWarn2: 1000, note: "GLP-1 垄断，金建成\"矛\"；补纳指空白（金建成补锚）" },
-      { name: "微软", code: "MSFT", market: "美股", currency: "$", status: "观察", weight: "中", lastPrice: null, atrPct: null, userBuyWarn: 400, userBuyWarn2: 360, note: "压舱石，深折让等回调" },
-      { name: "谷歌", code: "GOOGL", market: "美股", currency: "$", status: "观察", weight: "中", lastPrice: null, atrPct: null, userBuyWarn: 330, userBuyWarn2: 300, note: "搜索垄断+Gemini，压舱石（金建成补锚）" },
-      { name: "亚马逊", code: "AMZN", market: "美股", currency: "$", status: "观察", weight: "中", lastPrice: null, atrPct: null, userBuyWarn: 200, userBuyWarn2: 175, note: "云+电商压舱石，买二为金建成建议深档" },
-      { name: "ARM", code: "ARM", market: "美股", currency: "$", status: "观察", weight: "中", lastPrice: null, atrPct: null, userBuyWarn: 230, userBuyWarn2: 210, note: "CPU 架构近垄断；买二为金建成建议深档" },
-      { name: "英特尔", code: "INTC", market: "美股", currency: "$", status: "观察", weight: "轻", lastPrice: null, atrPct: null, userBuyWarn: 70, userBuyWarn2: 50, note: "美国半导体主权彩票≤2%，买二为金建成建议深档" },
+      { name: "英伟达", code: "NVDA", market: "美股", currency: "$", status: "观察", weight: "重", lastPrice: null, atrPct: null, userBuyWarn: 200, userBuyWarn2: 180, note: "AI 算力垄断，最看多；180=19.1x，才是“AI capex下修”接货的位置" },
+      { name: "台积电", code: "TSM", market: "美股", currency: "$", status: "观察", weight: "重", lastPrice: null, atrPct: null, userBuyWarn: 360, userBuyWarn2: 330, note: "先进制程 70% 市占，信仰；16.5x / 15.1x已在历史底部区" },
+      { name: "礼来", code: "LLY", market: "美股", currency: "$", status: "观察", weight: "重", lastPrice: null, atrPct: null, userBuyWarn: 1050, userBuyWarn2: 900, note: "900=25x才真便宜（PEG约0.65）。11月初Q3财报（Foundayo口服放量数据）是最可能砸出这俩价位的催化" },
+      { name: "微软", code: "MSFT", market: "美股", currency: "$", status: "观察", weight: "中", lastPrice: null, atrPct: null, userBuyWarn: 400, userBuyWarn2: 360, note: "压舱石，深折让等回调，19.6x是2016年以来未见水平，17.6x近十年极值" },
+      { name: "谷歌", code: "GOOGL", market: "美股", currency: "$", status: "观察", weight: "重", lastPrice: null, atrPct: null, userBuyWarn: 300, userBuyWarn2: 270, note: "搜索垄断+Gemini，压舱石；300=20.2x历史底部区上沿；270=18.2x是2022年10月大底水平，只有反垄断重锤或加息超预期给得到" },
+      { name: "亚马逊", code: "AMZN", market: "美股", currency: "$", status: "观察", weight: "中", lastPrice: null, atrPct: null, userBuyWarn: 200, userBuyWarn2: 175, note: "云+电商压舱石，买二为金建成建议深档；19.7x / 17.3x已是近年最低区，只需盯AA评级风险" },
+      { name: "ARM", code: "ARM", market: "美股", currency: "$", status: "观察", weight: "轻", lastPrice: null, atrPct: null, userBuyWarn: 180, userBuyWarn2: null, note: "彩票股≤2%；CPU 架构近垄断；孙正义投资" },
+      { name: "英特尔", code: "INTC", market: "美股", currency: "$", status: "观察", weight: "轻", lastPrice: null, atrPct: null, userBuyWarn: 50, userBuyWarn2: null, note: "彩票≤2%；美国半导体主权彩票" },
       { name: "罕王黄金", code: "03788.HK", market: "港股", currency: "HK$", status: "观察", weight: "中", lastPrice: 3.415, atrPct: 0.063, userBuyWarn: 3.2, userBuyWarn2: 2.65, note: "2028-2030 年目标投产-达产 5-8 吨黄金，预计利润 15-30 亿+（按 4000 美金金价），3-5 年 150-300 亿市值，2-5 倍空间。核心管理层都有持股、紫金矿业入股（2026.1 月配售进入，每股 3.8 港元）。紫金矿业是成长-成熟期，罕王则是半风投型持股。" }
     ],
     // 5 层趋势止盈规则（分层定性 + 个股独立校准）
