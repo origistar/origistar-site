@@ -1,5 +1,5 @@
 window.AGGRESSIVE_LIVE = {
-  "generatedAt": "2026-09-05 16:40 北京时间",
+  "generatedAt": "2026-09-05 22:23 北京时间",
   "updateFreq": "每日 3 次（08:30 / 16:30 / 23:00 北京时间）",
   "source": "Yahoo Finance 主力 + 腾讯 gtimg 兜底",
   "fetchNote": "全部标的已更新",
@@ -114,7 +114,7 @@ window.AGGRESSIVE_LIVE = {
       "trendStop": 437.7005876305459,
       "dataSource": "Yahoo",
       "error": null,
-      "note": "27和28年连续翻倍，远期PE19；300补仓"
+      "note": "AI收入27/28年连续翻倍（1150亿→2300亿），远期PE19（FY27口径）。300补2%、280补2%，另留1份机动（仅当FY28指引下修砸至260-270）；满仓均摊约319≈10.6x FY28；目标600=20x FY28"
     },
     "灵宝黄金": {
       "name": "灵宝黄金",
@@ -220,7 +220,7 @@ window.AGGRESSIVE_LIVE = {
       "stageLabel": "—",
       "dataSource": "Yahoo",
       "error": null,
-      "note": "AI 算力垄断，最看多；买一先底仓，买二加"
+      "note": "AI 算力垄断，最看多；180=19.1x，才是“AI capex下修”接货的位置"
     },
     "台积电": {
       "name": "台积电",
@@ -240,7 +240,7 @@ window.AGGRESSIVE_LIVE = {
       "stageLabel": "—",
       "dataSource": "Yahoo",
       "error": null,
-      "note": "先进制程 70% 市占，信仰；补纳指空白"
+      "note": "先进制程 70% 市占，信仰；16.5x / 15.1x已在历史底部区"
     },
     "礼来": {
       "name": "礼来",
@@ -254,13 +254,13 @@ window.AGGRESSIVE_LIVE = {
       "price": 1149.36,
       "atrPct": 0.03172423320012158,
       "buyPoint": 1210.6333399077257,
-      "distBuy1": 0.04487272727272718,
+      "distBuy1": 0.09462857142857134,
       "trigger": "none",
       "stage": 0,
       "stageLabel": "—",
       "dataSource": "Yahoo",
       "error": null,
-      "note": "GLP-1 垄断，金建成\"矛\"；补纳指空白（金建成补锚）"
+      "note": "900=25x才真便宜（PEG约0.65）。11月初Q3财报（Foundayo口服放量数据）是最可能砸出这俩价位的催化"
     },
     "微软": {
       "name": "微软",
@@ -280,7 +280,7 @@ window.AGGRESSIVE_LIVE = {
       "stageLabel": "—",
       "dataSource": "Yahoo",
       "error": null,
-      "note": "压舱石，深折让等回调"
+      "note": "压舱石，深折让等回调，19.6x是2016年以来未见水平，17.6x近十年极值"
     },
     "谷歌": {
       "name": "谷歌",
@@ -294,13 +294,13 @@ window.AGGRESSIVE_LIVE = {
       "price": 338.46,
       "atrPct": 0.02587955132759625,
       "buyPoint": 387.46071306406185,
-      "distBuy1": 0.025636363636363575,
+      "distBuy1": 0.12819999999999993,
       "trigger": "none",
       "stage": 0,
       "stageLabel": "—",
       "dataSource": "Yahoo",
       "error": null,
-      "note": "搜索垄断+Gemini，压舱石（金建成补锚）"
+      "note": "搜索垄断+Gemini，压舱石；300=20.2x历史底部区上沿；270=18.2x是2022年10月大底水平，只有反垄断重锤或加息超预期给得到"
     },
     "亚马逊": {
       "name": "亚马逊",
@@ -320,7 +320,7 @@ window.AGGRESSIVE_LIVE = {
       "stageLabel": "—",
       "dataSource": "Yahoo",
       "error": null,
-      "note": "云+电商压舱石，买二为金建成建议深档"
+      "note": "云+电商压舱石，买二为金建成建议深档；19.7x / 17.3x已是近年最低区，只需盯AA评级风险"
     },
     "ARM": {
       "name": "ARM",
@@ -334,13 +334,13 @@ window.AGGRESSIVE_LIVE = {
       "price": 252.09,
       "atrPct": 0.07339305583345179,
       "buyPoint": 386.24992724839274,
-      "distBuy1": 0.09604347826086958,
+      "distBuy1": 0.4005,
       "trigger": "none",
       "stage": 0,
       "stageLabel": "—",
       "dataSource": "Yahoo",
       "error": null,
-      "note": "CPU 架构近垄断；买二为金建成建议深档"
+      "note": "彩票股≤2%；CPU 架构近垄断；孙正义投资"
     },
     "英特尔": {
       "name": "英特尔",
@@ -354,13 +354,13 @@ window.AGGRESSIVE_LIVE = {
       "price": 95.8,
       "atrPct": 0.05988004685820354,
       "buyPoint": 125.30215065946945,
-      "distBuy1": 0.36857142857142855,
+      "distBuy1": 0.9159999999999999,
       "trigger": "none",
       "stage": 0,
       "stageLabel": "—",
       "dataSource": "Yahoo",
       "error": null,
-      "note": "美国半导体主权彩票≤2%，买二为金建成建议深档"
+      "note": "彩票≤2%；美国半导体主权彩票"
     },
     "罕王黄金": {
       "name": "罕王黄金",
