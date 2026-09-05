@@ -234,7 +234,7 @@
     if (dateHost) dateHost.textContent = '数据 ' + (L.generatedAt || '—');
   })();
 
-  // ---------- 观察仓触发（仅进取仓） ----------
+  // ---------- 观察仓触发（仅进取仓 · 首页多一层 5% 预警） ----------
   (function renderAggroAlerts() {
     var a = d.aggressive; if (!a) return;
     var host = document.getElementById('aggro-alerts'); if (!host) return;
@@ -242,27 +242,47 @@
       if (n == null || isNaN(n)) return '—';
       return esc((item.currency || '') + Number(n).toFixed(2));
     }
+    // 分级：买二 / 预警买二 / 买一 / 预警买一；进取页保留 buy1/buy2 不变
+    function trigOf(tp, w) {
+      if (w.userBuyWarn2 != null && tp <= w.userBuyWarn2) return 'buy2';
+      if (w.userBuyWarn2 != null && tp <= w.userBuyWarn2 * 1.05) return 'preBuy2';
+      if (tp <= w.userBuyWarn) return 'buy1';
+      if (tp <= w.userBuyWarn * 1.05) return 'preBuy1';
+      return null;
+    }
+    function targetOf(trig, w) {
+      if (trig === 'buy2' || trig === 'preBuy2') return w.userBuyWarn2;
+      return w.userBuyWarn;
+    }
     var rows = [];
     (a.watch || []).forEach(function (w) {
       if (w.lastPrice == null || w.userBuyWarn == null) return;
-      var trig = null;
-      if (w.lastPrice <= w.userBuyWarn) trig = 'buy1';
-      else if (w.userBuyWarn2 != null && w.lastPrice <= w.userBuyWarn2) trig = 'buy2';
+      var trig = trigOf(w.lastPrice, w);
       if (!trig) return;
-      rows.push({ item: w, trig: trig });
+      rows.push({ item: w, trig: trig, target: targetOf(trig, w) });
     });
     if (!rows.length) {
       host.innerHTML = '<p class="muted">观察仓无触发</p>';
       return;
     }
-    var trigLabel = { buy1: '买一触发', buy2: '买二触发' };
+    var trigLabel = {
+      buy1: '买一触发', buy2: '买二触发',
+      preBuy1: '预警·买一', preBuy2: '预警·买二'
+    };
+    var trigCls = {
+      buy1: 'up', buy2: 'acc',
+      preBuy1: 'warn', preBuy2: 'warn'
+    };
     host.innerHTML = '<div class="alert-list">' + rows.map(function (r) {
       var it = r.item;
-      var cls = (r.trig === 'buy1') ? 'up' : 'acc';
+      var cls = trigCls[r.trig];
+      var tgt = price(it, r.target);
       return '<div class="alert-row">' +
         '<span class="a-name">' + esc(it.name) + '</span>' +
         '<span class="a-tag tag ' + cls + '">' + trigLabel[r.trig] + '</span>' +
-        '<span class="muted">现价 ' + price(it, it.lastPrice) + '</span>' +
+        '<span class="a-warn">现 ' + price(it, it.lastPrice) +
+          '<small>触发 ' + tgt + '</small>' +
+        '</span>' +
         '</div>';
     }).join('') + '</div>';
   })();
