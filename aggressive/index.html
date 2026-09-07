@@ -42,7 +42,7 @@
     <div class="table-wrap">
       <table class="tbl tbl-compact" id="tbl-watch">
         <thead><tr>
-          <th>标的</th><th>仓位</th><th>最新价</th><th title="用户买一价；最新价≤买一=触发买一（行底色+药丸）">买一价</th><th>买二价</th><th title="距买一 = (最新价−买一价)/买一价；≤0 即触发买一">距买一</th><th>备注</th>
+          <th>标的</th><th>仓位</th><th title="星级评级：★越多确定性越高，☆为半星">星级</th><th>最新价</th><th title="用户买一价；最新价≤买一=触发买一（行底色+药丸）">买一价</th><th>买二价</th><th title="距买一 = (最新价−买一价)/买一价；≤0 即触发买一">距买一</th><th>评星理由</th><th>备注</th>
         </tr></thead>
         <tbody></tbody>
       </table>
@@ -157,15 +157,17 @@
       return '<tr class="' + rowCls + '">' +
         '<td><b>' + esc(w.name) + '</b><br><small class="muted">' + esc(codeShow) + ' · ' + esc(w.market||'') + '</small></td>' +
         '<td><span class="tag ' + weightCls(w.weight) + '">' + esc(w.weight||'—') + '</span></td>' +
+        '<td style="white-space:nowrap;color:#f59e0b;font-size:13px;letter-spacing:.06em">' + esc(w.star||'—') + '</td>' +
         '<td class="num">' + priceFmt(w.currency, price) + '</td>' +
         '<td class="num">' + buy1cell + '</td>' +
         '<td class="num">' + (w.userBuyWarn2==null ? '—' : priceFmt(w.currency, w.userBuyWarn2)) + '</td>' +
         (function(){ var di = fmtDistPct(watchDistBuy1(price, w)); return '<td class="num"><span class="tag ' + di.cls + '">' + di.txt + '</span></td>'; })() +
+        '<td style="font-size:12.5px;line-height:1.55;color:var(--ink-soft,#c2cbd9)">' + esc(w.starNote||'—') + '</td>' +
         '<td>' + esc(w.note||'') + '</td>' +
       '</tr>';
     }
     function groupRow(g, n){
-      return '<tr style="border:0"><td colspan="7" style="padding:14px 2px 4px;border:0;font-weight:700;font-size:13px;color:var(--ink,#eef2f9);letter-spacing:.14em">' + esc(g) +
+      return '<tr style="border:0"><td colspan="9" style="padding:14px 2px 4px;border:0;font-weight:700;font-size:13px;color:var(--ink,#eef2f9);letter-spacing:.14em">' + esc(g) +
              ' <span style="font-weight:400;color:var(--ink-soft,#c2cbd9);letter-spacing:.02em">· ' + n + '</span></td></tr>';
     }
     var watchAll = a.watch || [];
