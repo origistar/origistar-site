@@ -141,7 +141,9 @@
   }
   var wBody = document.querySelector('#tbl-watch tbody');
   if(wBody){
-    wBody.innerHTML = (a.watch||[]).map(function(w){
+    // 观察仓分组渲染：组内按 data.js 顺序；未标 group 的标的兜底进"其他"
+    var GROUPS = ['科技成长', '红利价值', '周期资源'];
+    function watchRow(w){
       var lv = liveOf(w.name, 'watchItems');
       var price = (lv && lv.price!=null) ? lv.price : w.lastPrice;
       var buy = (lv && lv.buyPoint!=null) ? lv.buyPoint
@@ -161,7 +163,21 @@
         (function(){ var di = fmtDistPct(watchDistBuy1(price, w)); return '<td class="num"><span class="tag ' + di.cls + '">' + di.txt + '</span></td>'; })() +
         '<td>' + esc(w.note||'') + '</td>' +
       '</tr>';
-    }).join('');
+    }
+    function groupRow(g, n){
+      return '<tr style="border:0"><td colspan="7" style="padding:14px 2px 4px;border:0;font-weight:700;font-size:13px;color:var(--ink,#eef2f9);letter-spacing:.14em">' + esc(g) +
+             ' <span style="font-weight:400;color:var(--ink-soft,#c2cbd9);letter-spacing:.02em">· ' + n + '</span></td></tr>';
+    }
+    var watchAll = a.watch || [];
+    var rest = watchAll.filter(function(w){ return GROUPS.indexOf(w.group) === -1; });
+    var html = '';
+    GROUPS.forEach(function(g){
+      var list = watchAll.filter(function(w){ return w.group === g; });
+      if(!list.length) return;
+      html += groupRow(g, list.length) + list.map(watchRow).join('');
+    });
+    if(rest.length) html += groupRow('其他', rest.length) + rest.map(watchRow).join('');
+    wBody.innerHTML = html;
   }
 
   // 规则表
