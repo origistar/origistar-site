@@ -2,7 +2,7 @@
    更新方式：本地改此文件，或后续用任意云函数/定时脚本回写。
    当前为最近一次人工核对值（示意），页面会显示“更新于”日期。 */
 window.ORIGISTAR = {
-  updated: "2026-09-07 13:06 北京时间",
+  updated: "2026-09-03 08:47 北京时间",
 
   /* 稳健仓 · 纳指定投 (v5.1) */
   ndx: {
@@ -77,7 +77,8 @@ window.ORIGISTAR = {
       { name: "亚马逊", code: "AMZN", market: "美股", currency: "$", status: "观察", weight: "中", lastPrice: null, atrPct: null, userBuyWarn: 200, userBuyWarn2: 175, note: "云+电商压舱石，买二为金建成建议深档；19.7x / 17.3x已是近年最低区，只需盯AA评级风险" },
       { name: "ARM", code: "ARM", market: "美股", currency: "$", status: "观察", weight: "轻", lastPrice: null, atrPct: null, userBuyWarn: 180, userBuyWarn2: null, note: "彩票股≤2%；CPU 架构近垄断；孙正义投资" },
       { name: "英特尔", code: "INTC", market: "美股", currency: "$", status: "观察", weight: "轻", lastPrice: null, atrPct: null, userBuyWarn: 50, userBuyWarn2: null, note: "彩票≤2%；美国半导体主权彩票" },
-      { name: "罕王黄金", code: "03788.HK", market: "港股", currency: "HK$", status: "观察", weight: "中", lastPrice: 3.415, atrPct: 0.063, userBuyWarn: 3.2, userBuyWarn2: 2.65, note: "2028-2030 年目标投产-达产 5-8 吨黄金，预计利润 15-30 亿+（按 4000 美金金价），3-5 年 150-300 亿市值，2-5 倍空间。核心管理层都有持股、紫金矿业入股（2026.1 月配售进入，每股 3.8 港元）。紫金矿业是成长-成熟期，罕王则是半风投型持股。" }
+      { name: "罕王黄金", code: "03788.HK", market: "港股", currency: "HK$", status: "观察", weight: "中", lastPrice: 3.415, atrPct: 0.063, userBuyWarn: 2.8, userBuyWarn2: 2.3, note: "2028-2030 年目标投产-达产 5-8 吨黄金，预计利润 15-30 亿+（按 4000 美金金价），3-5 年 150-300 亿市值，2-5 倍空间。核心管理层都有持股、紫金矿业入股（2026.1 月配售进入，每股 3.8 港元）。紫金矿业是成长-成熟期，罕王则是半风投型持股。" },
+      { name: "澜起科技", code: "688008.SS", market: "A股", currency: "¥", status: "观察", weight: "中", lastPrice: null, atrPct: null, userBuyWarn: 150, userBuyWarn2: 120, note: "全球内存互连双寡头（DDR5 RCD 全球唯二、JEDEC 标准牵头），A股稀缺的“全球卖铲人”；买点锚：150≈2027E 扣非 45x、120≈35x。仓位≤5%" }
     ],
     // 5 层趋势止盈规则（分层定性 + 个股独立校准）
     stopRules: [
