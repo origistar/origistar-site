@@ -1,7 +1,7 @@
 // 自动生成：稳健仓市场快照（NDX / VIX / BTC / AHR999）
-// 生成时间：2026-09-07 13:05 北京时间
+// 生成时间：2026-09-07 14:18 北京时间
 window.MARKET_LIVE = {
-  "generatedAt": "2026-09-07 13:05 北京时间",
+  "generatedAt": "2026-09-07 14:18 北京时间",
   "updateFreq": "每日 3 次（08:30 / 16:30 / 23:00 北京时间）",
   "source": "Yahoo Finance",
   "errors": [],
@@ -12,8 +12,8 @@ window.MARKET_LIVE = {
     "dataSource": "Yahoo Finance"
   },
   "btc": {
-    "price": 79750.17,
-    "ahr999": 0.5245,
+    "price": 79727.89,
+    "ahr999": 0.5242,
     "p200ma": 1.143,
     "ma200": 69751,
     "hi52w": 126198,
@@ -30,71 +30,71 @@ window.MARKET_LIVE = {
       {
         "code": "513100",
         "name": "纳指ETF国泰",
-        "price": 2.233,
+        "price": 2.235,
         "nav": 1.9925,
         "navDate": "2026-09-03",
-        "adjNav": 1.9991,
-        "premium": 11.7,
-        "premiumRaw": 12.07,
-        "basis": "净值 1.9925 × 指数 1.0021 × 汇率 1.0012",
+        "adjNav": 1.9993,
+        "premium": 11.79,
+        "premiumRaw": 12.17,
+        "basis": "净值 1.9925 × 指数 1.0021 × 汇率 1.0013",
         "signal": "溢价>8% · 换回场外",
         "dataSource": "腾讯 gtimg 现价 + 东财基金净值 + Yahoo NDX/CNY 修正"
       },
       {
         "code": "159941",
         "name": "纳指ETF广发",
-        "price": 1.67,
+        "price": 1.671,
         "nav": 1.4918,
         "navDate": "2026-09-03",
-        "adjNav": 1.4967,
-        "premium": 11.58,
-        "premiumRaw": 11.95,
-        "basis": "净值 1.4918 × 指数 1.0021 × 汇率 1.0012",
+        "adjNav": 1.4969,
+        "premium": 11.63,
+        "premiumRaw": 12.01,
+        "basis": "净值 1.4918 × 指数 1.0021 × 汇率 1.0013",
         "signal": "溢价>8% · 换回场外",
         "dataSource": "腾讯 gtimg 现价 + 东财基金净值 + Yahoo NDX/CNY 修正"
       },
       {
         "code": "513300",
         "name": "纳斯达克ETF华夏",
-        "price": 2.705,
+        "price": 2.711,
         "nav": 2.4657,
         "navDate": "2026-09-03",
-        "adjNav": 2.4739,
-        "premium": 9.34,
-        "premiumRaw": 9.71,
-        "basis": "净值 2.4657 × 指数 1.0021 × 汇率 1.0012",
+        "adjNav": 2.4741,
+        "premium": 9.57,
+        "premiumRaw": 9.95,
+        "basis": "净值 2.4657 × 指数 1.0021 × 汇率 1.0013",
         "signal": "溢价>8% · 换回场外",
         "dataSource": "腾讯 gtimg 现价 + 东财基金净值 + Yahoo NDX/CNY 修正"
       },
       {
         "code": "159632",
         "name": "纳斯达克ETF华安",
-        "price": 2.477,
+        "price": 2.482,
         "nav": 2.2629,
         "navDate": "2026-09-03",
-        "adjNav": 2.2704,
-        "premium": 9.1,
-        "premiumRaw": 9.46,
-        "basis": "净值 2.2629 × 指数 1.0021 × 汇率 1.0012",
+        "adjNav": 2.2706,
+        "premium": 9.31,
+        "premiumRaw": 9.68,
+        "basis": "净值 2.2629 × 指数 1.0021 × 汇率 1.0013",
         "signal": "溢价>8% · 换回场外",
         "dataSource": "腾讯 gtimg 现价 + 东财基金净值 + Yahoo NDX/CNY 修正"
       },
       {
         "code": "513390",
         "name": "纳指科技ETF博时",
-        "price": 2.448,
+        "price": 2.449,
         "nav": 2.2365,
         "navDate": "2026-09-03",
-        "adjNav": 2.2439,
-        "premium": 9.1,
-        "premiumRaw": 9.46,
-        "basis": "净值 2.2365 × 指数 1.0021 × 汇率 1.0012",
+        "adjNav": 2.2441,
+        "premium": 9.13,
+        "premiumRaw": 9.5,
+        "basis": "净值 2.2365 × 指数 1.0021 × 汇率 1.0013",
         "signal": "溢价>8% · 换回场外",
         "dataSource": "腾讯 gtimg 现价 + 东财基金净值 + Yahoo NDX/CNY 修正"
       }
     ],
     "note": "溢价率经指数与汇率修正；QDII 净值 T+2~T+3 滞后，未经修正的 raw 值仅供对照",
-    "updateAt": "2026-09-07 13:05 北京时间"
+    "updateAt": "2026-09-07 14:19 北京时间"
   },
   "fetchNote": "全部成功"
 };
