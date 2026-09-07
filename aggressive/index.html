@@ -157,8 +157,8 @@
       return '<tr class="' + rowCls + '">' +
         '<td><b>' + esc(w.name) + '</b><br><small class="muted">' + esc(codeShow) + ' · ' + esc(w.market||'') + '</small></td>' +
         '<td><span class="tag ' + weightCls(w.weight) + '">' + esc(w.weight||'—') + '</span></td>' +
-        '<td style="width:48px;min-width:48px;color:#f59e0b;font-size:13px;letter-spacing:.06em;line-height:1.25;word-break:break-all">' + esc(w.star||'—') + '</td>' +
-        '<td><div style="max-width:150px;font-size:12.5px;line-height:1.5;color:var(--ink-soft,#c2cbd9);word-break:break-word">' + esc(w.starNote||'—') + '</div></td>' +
+        '<td style="width:48px;min-width:48px;color:#f59e0b;font-size:13px;letter-spacing:.06em;line-height:1.25;white-space:normal;word-break:break-all">' + esc(w.star||'—') + '</td>' +
+        '<td><div style="max-width:150px;font-size:12.5px;line-height:1.5;color:var(--ink-soft,#c2cbd9);white-space:normal;word-break:break-word">' + esc(w.starNote||'—') + '</div></td>' +
         '<td class="num">' + priceFmt(w.currency, price) + '</td>' +
         '<td class="num">' + buy1cell + '</td>' +
         '<td class="num">' + (w.userBuyWarn2==null ? '—' : priceFmt(w.currency, w.userBuyWarn2)) + '</td>' +
