@@ -57,16 +57,6 @@ window.ORIGISTAR = {
     target: 40,          // 占系统目标权重 %
     cap: 45,             // 上限 %
     updateFreq: "每日 3 次（08:30 / 16:30 / 23:00 北京时间）",
-    // 持仓标的：仓位档位(重/中/轻) + 最新价 + ATR% + 预设卖出价；趋势止盈价按 3×ATR 公式算（对应第④层清仓线）
-    holdings: [
-      { name: "DRAM", code: "DRAM", market: "美股", currency: "$", status: "持有", weight: "重", lastPrice: 95.00, atrPct: 0.05, userSellWarn: 80, note: "DRAM ETF，半导体周期复苏主线" },
-      { name: "SK海力士", code: "000660.KS", market: "韩国", currency: "₩", status: "持有", weight: "重", lastPrice: null, atrPct: null, userSellWarn: 3000000, note: "长期看多" },
-      { name: "三星电子", code: "005930.KS", market: "韩国", currency: "₩", status: "持有", weight: "轻", lastPrice: null, atrPct: null, userSellWarn: 380000, note: "长期看多，到2027年末" },
-      { name: "博通", code: "AVGO", market: "美股", currency: "$", status: "持有", weight: "中", lastPrice: null, atrPct: null, userSellWarn: 600, note: "AI收入27/28年连续翻倍（1150亿→2300亿），远期PE19（FY27口径）。300补2%、280补2%，另留1份机动（仅当FY28指引下修砸至260-270）；满仓均摊约319≈10.6x FY28；目标600=20x FY28" },
-      { name: "灵宝黄金", code: "03330.HK", market: "港股", currency: "HK$", status: "持有", weight: "重", lastPrice: 22.24, atrPct: 0.082, userSellWarn: 30, note: "金价上行受益，ATR 较高" },
-      { name: "龙资源", code: "01712.HK", market: "港股", currency: "HK$", status: "持有", weight: "中", lastPrice: 8.305, atrPct: 0.081, userSellWarn: 12, note: "金矿股，2026-09-02 已复牌（停牌期间不更新，复牌后恢复自动抓取）" },
-      { name: "潼关黄金", code: "00340.HK", market: "港股", currency: "HK$", status: "持有", weight: "中", lastPrice: 3.285, atrPct: 0.062, userSellWarn: 4, note: "金矿股，波动大" }
-    ],
     // 观察仓：以用户买入预警为主；回踩买点 = 最新价 × (1 − 2×ATR%)，仅作价格参考，非买入建议
     watch: [
       // ── 科技成长 ──
@@ -98,7 +88,6 @@ window.ORIGISTAR = {
     ],
     // 趋势止盈价/距买一 计算口径（脚本自动拉行情后按此公式生成）
     warnFormula: {
-      holdings: "峰值(52周最高) × (1 - 3×ATR%) = 趋势止盈价（第④层清仓线，ratchet 高点止损）",
       watch: "距买一 = (最新价 − 买一价) / 买一价；≤0 即触发买一；≤买二价即触发买二"
     },
     decisionLog: {

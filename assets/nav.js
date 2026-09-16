@@ -158,14 +158,12 @@
     }
     if (k === 'aggressive') {
       var ag = d.aggressive;
-      var holdCount = (ag.holdings || []).length;
       var watchCount = (ag.watch || []).length;
-      var activeWarn = (ag.holdings || []).filter(function(h){ return h.userSellWarn != null || h.userBuyWarn != null; }).length +
-                       (ag.watch || []).filter(function(w){ return w.userBuyWarn != null; }).length;
+      var activeWarn = (ag.watch || []).filter(function(w){ return w.userBuyWarn != null; }).length;
       return sectionHead('重点概览') +
         kv([
           { k: '目标占比', v: ag.target + '%', sub: '上限 ' + ag.cap + '%' },
-          { k: '持仓标的', v: holdCount + ' 支', sub: '高弹性' },
+          { k: '止盈规则', v: '5 层', sub: '①预警→⑤负成本' },
           { k: '观察池', v: watchCount + ' 支', sub: '待触发' },
           { k: '已设预警', v: activeWarn + ' 条', sub: '用户预设' }
         ]) +

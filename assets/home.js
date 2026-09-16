@@ -21,8 +21,8 @@
     };
   }
   if (window.AGGRESSIVE_LIVE && d.aggressive) {
-    // live 两个桶（items=持仓 / watchItems=观察）的 key 均为中文名(name)；按 name 匹配，code 兜底
-    var ai = Object.assign({}, window.AGGRESSIVE_LIVE.items || {}, window.AGGRESSIVE_LIVE.watchItems || {});
+    // live 桶（watchItems=观察仓）的 key 为中文名(name)；按 name 匹配，code 兜底
+    var ai = Object.assign({}, window.AGGRESSIVE_LIVE.watchItems || {});
     function applyAggro(list) {
       if (!list) return;
       list.forEach(function (it) {
@@ -32,7 +32,6 @@
         if (live.atrPct != null) it.atrPct = live.atrPct;
       });
     }
-    applyAggro(d.aggressive.holdings);
     applyAggro(d.aggressive.watch);
   }
   var base = (window.ORIGISTAR_NAV && window.ORIGISTAR_NAV.base) || '';
