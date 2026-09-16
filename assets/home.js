@@ -287,29 +287,6 @@
     }).join('') + '</div>';
   })();
 
-  // ---------- 系统配置 · 当前仓位 ----------
-  (function renderConfig() {
-    var cfg = d.config; if (!cfg) return;
-    var host = document.getElementById('config-track');
-    if (!host) return;
-    var dt = document.getElementById('cfg-date');
-    if (dt) dt.textContent = '更新于 ' + (cfg.updated || d.updated);
-    var c = cfg.current || {};
-    var keys = ['defensive', 'stable', 'aggressive'];
-    var names = { defensive: '防守仓', stable: '稳健仓', aggressive: '进取仓' };
-    var colors = { defensive: '#0ea5e9', stable: '#4f46e5', aggressive: '#ef4444' };
-    var rowsHtml = keys.map(function (k) {
-      var cur = c[k];
-      var fillW = (cur == null) ? 0 : Math.min(Math.max(cur, 0), 100);
-      return '<div class="cfg-row">' +
-        '<div class="cfg-name">' + names[k] + '</div>' +
-        '<div class="cfg-bar"><div class="cfg-fill" style="width:' + fillW + '%;background:' + colors[k] + '"></div></div>' +
-        '<div class="cfg-num"><span class="cfg-cur">' + (cur == null ? '—' : cur + '%') + '</span></div>' +
-        '</div>';
-    }).join('');
-    host.innerHTML = rowsHtml;
-  })();
-
   // ---------- 顶部时间 ----------
   var dashDate = document.getElementById('dash-date');
   if (dashDate) dashDate.textContent = '更新于 ' + d.updated;

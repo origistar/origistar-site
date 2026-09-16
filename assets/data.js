@@ -123,7 +123,6 @@ window.ORIGISTAR = {
     updated: "2026-08-30",
     target: { defensive: 30, stable: 30, aggressive: 40 },
     cap:    { defensive: 35, stable: 35, aggressive: 45 },
-    current: { defensive: 5, stable: 10, aggressive: 70 },  // 当前实际仓位占比（%）
     cashOutside: true,    // 现金仓在体系外，不计入
     rebalance: {
       stages: [
