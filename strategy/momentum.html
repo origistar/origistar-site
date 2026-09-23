@@ -35,8 +35,8 @@
   <!-- Hero -->
   <section class="hero">
     <h1 class="section-title">动量 ETF 前十进出跟踪</h1>
-    <p class="lead">SPMO（半年度调仓 · 9/19 重构生效）· MTUM（季度调仓 · 8/31 生效）· 近期 5 期（含最新官方持仓）· 生成 2026-09-19</p>
-    <p class="note">左列 = 各调仓节点<b>方法重建</b>（标普 500 时点成分 + 12 个月动量，仅看轮动趋势）；<b>最右列 = 最新官方实际持仓</b>（基金公布数据 · SPMO 2026-09-19 / MTUM 2026-08-31 生效）。</p>
+    <p class="lead">SPMO（半年度调仓 · 9/18 收盘后生效）· MTUM（季度调仓 · 8/31 生效）· 近期 5 期（含最新官方持仓）· 生成 2026-09-19</p>
+    <p class="note">左列 = 各调仓节点<b>方法重建</b>（标普 500 时点成分 + 12 个月动量，仅看轮动趋势）；<b>最右列 = 最新官方实际持仓</b>（基金公布数据 · SPMO 09-18 口径 / MTUM 08-31 生效）。</p>
   </section>
 
   <!-- SPMO -->
@@ -58,7 +58,7 @@
               <td><span class="tk">GEV</span><span class="mv">+208.5%</span></td>
               <td><span class="tk">MU</span><span class="mv">+239.1%</span><span class="newtag">新</span></td>
               <td><span class="tk">MU</span><span class="mv">+836.5%</span></td>
-              <td><span class="tk">NVDA</span><span class="mv">8.97%</span></td></tr>
+              <td><span class="tk">NVDA</span><span class="mv">8.98%</span></td></tr>
             <tr><td class="rk">3</td>
               <td><span class="tk">AXON</span><span class="mv">+181.4%</span></td>
               <td><span class="tk">STX</span><span class="mv">+219.1%</span><span class="newtag">新</span></td>
@@ -106,7 +106,8 @@
     <div class="card" style="margin-top:10px">
       <div class="trans"><b>2025-12-31</b> <span class="in">▲新进: WDC, MU, STX, WBD, NEM, LRCX, APH</span> <span class="out">▼退出: AXON, NRG, JBL, DASH, NFLX, VST, HWM</span></div>
       <div class="trans"><b>2026-06-30</b> <span class="in">▲新进: INTC, TER, GLW, AMD, AMAT, DELL</span> <span class="out">▼退出: GEV, APH, WBD, PLTR, TPR, NEM</span></div>
-      <div class="trans"><b>最新·2026-09-19</b> <span class="in">▲新进: INTC, SNDK, CSCO, STX, AMAT, GE, PLTR, RTX, WDC, PM</span> <span class="out">▼退出: CAT 及 54 只成分替换（约 40% 仓位换血）</span></div>
+      <div class="trans"><b>最新·2026-09-19</b> <span class="in">▲前十新进: INTC, SNDK（权重大幅上调挤入前十）</span> <span class="out">▼前十退出: CAT（降至 #12）</span></div>
+      <div class="trans" style="margin-top:2px;color:var(--muted)">调仓实质为<b>权重再分配</b>（非成分换血）：S&P 自 2026-09 起把权重上限由「单一证券 9%」改为<b>「单一公司」合并计上限</b>——Alphabet 双类股（GOOGL＋GOOG）合并在内。故 MU 升至 11.3% 居首，半导体/存储集中度进一步提高（前十中 6 只为半导体）。</div>
     </div>
   </section>
 
@@ -188,7 +189,7 @@
       <div class="trans"><b>2025-11-30</b> <span class="in">▲新进: WDC, STX, AVGO, MU, WBD, NEM, LRCX, APH, GOOGL</span> <span class="out">▼退出: AXON, JBL, DASH, GEV, RCL, CCL, VST, UAL, TPR</span></div>
       <div class="trans"><b>2026-02-28</b> <span class="in">▲新进: GLW, TER, GEV, HII</span> <span class="out">▼退出: APH, PLTR, GOOGL, AVGO</span></div>
       <div class="trans"><b>2026-05-31</b> <span class="in">▲新进: INTC, AMD, DELL, ALB</span> <span class="out">▼退出: GEV, WBD, HII, NEM</span></div>
-      <div class="trans"><b>最新·2026-08-31</b> <span class="in">▲新进: CSCO, SNDK, PANW, STX, DELL, UNH, MRVL, KO, WDC, MRK</span> <span class="out">▼退出: AVGO, TER, GLW, ALB；GEV / KLAC 降权</span></div>
+      <div class="trans"><b>最新·2026-08-31</b> <span class="in">▲前十新进: CSCO, SNDK, PANW, STX, DELL（权重上调挤入）</span> <span class="out">▼前十退出: AVGO（大幅削减后离场）</span></div>
     </div>
   </section>
 
@@ -196,7 +197,7 @@
   <section class="section">
     <div class="rule warn">
       <h3>口径说明</h3>
-      <p>最右「最新」列为基金<b>官方公布</b>的前十（动量加权持仓，MU / NVDA / AVGO 等高权重股自然在内），是真实数据。左侧重建列用「12 个月纯收益」排序，与官方存在权重口径差，仅用于观察<b>个股 / 板块轮动</b>。MTUM 重建宇宙用标普 500 近似 MSCI USA（含中盘）。<b>SPMO 本期（2026-09-19 生效）为半年度重构，54 只成分替换、约 40% 仓位换血</b>，半导体与能源权重上升、日常消费与医疗下降。若要各历史节点也用<b>官方精确持仓</b>，需抓 SEC N-PORT 申报（较重，可后续做）。</p>
+      <p>最右「最新」列为基金<b>官方公布</b>的前十（动量加权持仓，MU / NVDA / AVGO 等高权重股自然在内），是真实数据。左侧重建列用「12 个月纯收益」排序，与官方存在权重口径差，仅用于观察<b>个股 / 板块轮动</b>。MTUM 重建宇宙用标普 500 近似 MSCI USA（含中盘）。<b>SPMO 本期（2026-09-18 收盘后生效）以权重再分配为主</b>：S&P 自本次起把权重上限由「单一证券 9%」改为<b>「单一公司」合并计上限</b>（Alphabet 双类股合并），故 MU 升至 11.3% 居首、前十中 6 只为半导体，集中度进一步上升。若要各历史节点也用<b>官方精确持仓</b>，需抓 SEC N-PORT 申报（较重，可后续做）。</p>
     </div>
   </section>
 </div>
