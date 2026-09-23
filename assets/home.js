@@ -51,13 +51,42 @@
     return { mult: 0, label: '停止定投' };
   }
 
-  // 防守仓：价格 vs 甜区档位
+  // 防守仓：价格 vs 档位（保留原函数签名，供其它调用）
   function zoneTier(price, extreme, sweet, fair) {
     if (price <= extreme) return { label: '极度便宜' };
     if (price <= sweet)   return { label: '甜区' };
     if (price <= fair)    return { label: '合适区' };
     return { label: '等待 · 高于合理价' };
   }
+
+  // SCHD 分档：按隐含股息率（TTM ÷ 现价）落档，返回金额与档名
+  function schdTier(price, ttm, cfg) {
+    if (price == null || !ttm) return { amt: 0, label: '暂停' };
+    var y = ttm / price * 100;
+    var tiers = (cfg && cfg.tiers) || [];
+    for (var i = 0; i < tiers.length; i++) {
+      if (y >= tiers[i].yield) return { amt: tiers[i].amt, label: tiers[i].label, yieldPct: y };
+    }
+    return { amt: 0, label: (y < ((cfg && cfg.stopYield) || 3.00) ? '停投' : '暂停'), yieldPct: y };
+  }
+
+  // BRK.B 分档：按 P/B 落档，min ≤ P/B < max 命中该档
+  // 分界取更便宜那档 → 恰等于分界值时落到下一档（如 P/B = 1.30 走 1.20–1.30 档）
+  // max === null 表示无上限（最便宜档）
+  function brkTier(price, bvps, cfg) {
+    if (price == null || !bvps) return { amt: 0, label: '不投' };
+    var pb = price / bvps;
+    var tiers = (cfg && cfg.tiers) || [];
+    for (var i = 0; i < tiers.length; i++) {
+      var t = tiers[i];
+      if (pb < t.max || t.max == null) {
+        if (pb >= t.min) return { amt: t.amt, label: t.label, pb: pb };
+      }
+    }
+    return { amt: 0, label: '不投', pb: pb };
+  }
+
+  function pct(n, d) { return Number(n).toFixed(d == null ? 2 : d) + '%'; }
 
   // ---------- 计算各行 ----------
   var rows = [];
@@ -79,24 +108,32 @@
     note: 'AHR999 ' + d.btc.ahr999 + ' · ' + btcT.label
   });
 
-  // 3) SCHD 定投（每周 × 甜区档位）
+  // 3) SCHD 定投（主力 · 按隐含股息率分档投固定金额）
   var schd = d.defensive.schd;
-  var schdT = zoneTier(schd.price, schd.extreme, schd.sweet, schd.fair);
-  var schdMult = schd.price <= schd.extreme ? 2 : (schd.price <= schd.sweet ? 1 : (schd.price <= schd.fair ? 0.5 : 0));
-  var schdAmt = Math.round((schd.weeklyBase || 5000) * schdMult);
+  var sT = schdTier(schd.price, schd.ttm, schd);
   rows.push({
     name: 'SCHD 定投',
-    val: schdAmt > 0 ? money(schdAmt) + '/周' : '等待',
-    note: usd(schd.price) + ' vs 甜区 ' + usd(schd.sweet)
+    val: sT.amt > 0 ? money(sT.amt) + '/周' : sT.label,
+    note: usd(schd.price) + ' · 股息率 ' + (sT.yieldPct != null ? sT.yieldPct.toFixed(2) + '%' : '—') +
+          '（合理 ' + (schd.fairYield != null ? schd.fairYield.toFixed(2) : '3.16') + '%）'
   });
 
-  // 4) 伯克希尔 今日建议（只给区域，不显示基数）
+  // 4) 伯克希尔 定投（补充仓 · 按 P/B 分档）
   var brk = d.defensive.brk;
-  var brkT = zoneTier(brk.price, brk.extreme, brk.sweet, brk.fair);
+  var bT = brkTier(brk.price, brk.bvps, brk);
   rows.push({
-    name: '伯克希尔',
-    val: brkT.label,
-    note: usd(brk.price) + ' vs 甜区 ' + usd(brk.sweet)
+    name: '伯克希尔定投',
+    val: bT.amt > 0 ? money(bT.amt) + '/周' : bT.label,
+    note: usd(brk.price) + ' · P/B ' + (bT.pb != null ? bT.pb.toFixed(2) + '×' : '—') +
+          '（BVPS ' + usd(brk.bvps) + '）'
+  });
+
+  // 4b) 黄金ETF（战略配置）
+  var gold = d.gold || {};
+  rows.push({
+    name: '黄金ETF',
+    val: gold.zone && gold.zone !== '—' ? gold.zone : '—',
+    note: gold.price != null ? (usd(gold.price) + ' · $' + gold.threshold + ' 以下建仓') : '约 $4100 开第一批'
   });
 
   // 5) 可转债

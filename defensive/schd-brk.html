@@ -94,27 +94,27 @@
   <section class="section">
     <div class="grid k4">
       <div class="card kpi">
-        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#0ea5e9,#06b6d4)">S</span>SCHD 本周系数</div>
-        <div class="val" id="kpi-schd-coeff" style="color:#f59e0b">×0.6</div>
-        <div class="meta" id="kpi-schd-meta">偏贵 / 等待</div>
-        <span class="tag down" id="kpi-schd-tag">减量</span>
+        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#0ea5e9,#06b6d4)">S</span>SCHD 本周投入</div>
+        <div class="val" id="kpi-schd-coeff" style="color:#f59e0b">¥0</div>
+        <div class="meta" id="kpi-schd-meta">股息率 3.14% · 暂停</div>
+        <span class="tag down" id="kpi-schd-tag">暂停</span>
       </div>
       <div class="card kpi">
-        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">B</span>BRK.B 本周系数</div>
-        <div class="val" id="kpi-brk-coeff" style="color:#f59e0b">×0.6</div>
-        <div class="meta" id="kpi-brk-meta">偏贵 / 等待</div>
-        <span class="tag down" id="kpi-brk-tag">减量</span>
+        <div class="top"><span class="ic" style="background:linear-gradient(135deg,#6366f1,#8b5cf6)">B</span>BRK.B 本周投入</div>
+        <div class="val" id="kpi-brk-coeff" style="color:#f59e0b">¥0</div>
+        <div class="meta" id="kpi-brk-meta">P/B 1.45× · 不投</div>
+        <span class="tag down" id="kpi-brk-tag">暂停</span>
       </div>
       <div class="card kpi">
         <div class="top"><span class="ic" style="background:linear-gradient(135deg,#10b981,#14b8a6)">息</span>SCHD 股息率</div>
-        <div class="val">3.01%</div>
+        <div class="val" id="kpi-schd-yield">3.14%</div>
         <div class="meta">合理 3.16%</div>
         <span class="tag flat">偏低</span>
       </div>
       <div class="card kpi">
         <div class="top"><span class="ic" style="background:linear-gradient(135deg,#f59e0b,#ef4444)">P/B</span>BRK.B 市净率</div>
-        <div class="val">1.49×</div>
-        <div class="meta">合理 1.40×</div>
+        <div class="val" id="kpi-brk-pb">1.45×</div>
+        <div class="meta">1.40× 以上不投</div>
         <span class="tag down">偏高</span>
       </div>
     </div>
@@ -131,32 +131,34 @@
         <span class="tag flat">防守</span>
       </div>
       <div class="mc-price-row">
-        <div class="mc-price" id="schd-price">$34.83</div>
-        <span class="tag down" id="schd-zone">偏贵 / 等待</span>
+        <div class="mc-price" id="schd-price">$33.74</div>
+        <span class="tag down" id="schd-zone">偏贵 / 暂停</span>
       </div>
       <div class="mc-mult-row">
-        <div class="mc-mult-label">本周定投系数</div>
-        <div class="mc-mult" id="schd-coeff">×0.6</div>
-        <div class="mc-mult-sub" id="schd-sub">便宜度 0.95 · 股息率 3.01%（合理 3.16%）</div>
+        <div class="mc-mult-label">本周定投</div>
+        <div class="mc-mult" id="schd-coeff">¥0</div>
+        <div class="mc-mult-sub" id="schd-sub">隐含股息率 3.14%（合理 3.16%）· 未达 3.16% 起点，本周暂停</div>
       </div>
       <div class="mc-bar-wrap">
         <div class="mc-bar">
-          <div class="seg" style="width:16.09%;background:#047857"></div>
-          <div class="seg" style="width:23.25%;background:#0d9488"></div>
-          <div class="seg" style="width:21.30%;background:#d97706"></div>
-          <div class="seg" style="width:39.35%;background:#cbd5e1"></div>
-          <div class="cur-dot" style="left:72.99%"></div>
+          <div class="seg" style="width:10.57%;background:#047857"></div>
+          <div class="seg" style="width:30.81%;background:#0d9488"></div>
+          <div class="seg" style="width:26.42%;background:#d97706"></div>
+          <div class="seg" style="width:14.56%;background:#94a3b8"></div>
+          <div class="seg" style="width:17.64%;background:#cbd5e1"></div>
+          <div class="cur-dot" style="left:69.43%"></div>
         </div>
         <div class="mc-axis">
-          <span style="left:16.09%">极度 $27</span>
-          <span style="left:39.35%">甜区 $30</span>
-          <span style="left:60.65%">合理 $33</span>
-          <span style="left:86.43%">偏贵 $37</span>
+          <span style="left:10.57%">≥4.00% $26.5</span>
+          <span style="left:41.38%">3.50% $30.3</span>
+          <span style="left:67.80%">3.16% $33.5</span>
+          <span style="left:82.36%">3.00% $35.3</span>
         </div>
       </div>
       <div class="mc-meta">
-        <div class="mc-row"><span>锚定逻辑</span><b>合理收益率 = 2012–2025 历史中位数 3.16%；各档价 = TTM 分红 ÷ 目标收益率，随分红自动抬高</b></div>
-        <div class="mc-row"><span>信号解读</span><b>价高于合理线 +5.0%，本周按 ×0.6 减量等待</b></div>
+        <div class="mc-row"><span>锚定逻辑</span><b>合理收益率 = 2012–2025 历史中位数 3.16%；档价 = TTM 分红 $1.06 ÷ 目标股息率，随分红自动抬高</b></div>
+        <div class="mc-row"><span>分档金额</span><b>股息率 ≥4.00% → ¥15,000 ｜ 3.50–4.00% → ¥9,000 ｜ 3.16–3.50% → ¥6,000 ｜ ＜3.00% 暂停</b></div>
+        <div class="mc-row"><span>信号解读</span><b>股息率 3.14% 低于 3.16% 起点，本周不投，等价格回到 $33.5 以下</b></div>
       </div>
     </div>
   </section>
@@ -172,32 +174,35 @@
         <span class="tag flat">防守</span>
       </div>
       <div class="mc-price-row">
-        <div class="mc-price" id="brk-price">$503.70</div>
-        <span class="tag down" id="brk-zone">偏贵 / 等待</span>
+        <div class="mc-price" id="brk-price">$503.49</div>
+        <span class="tag down" id="brk-zone">偏贵 / 不投</span>
       </div>
       <div class="mc-mult-row">
-        <div class="mc-mult-label">本周定投系数</div>
-        <div class="mc-mult" id="brk-coeff">×0.6</div>
-        <div class="mc-mult-sub" id="brk-sub">便宜度 0.94 · 市净率 P/B 1.49×（合理 1.40×）</div>
+        <div class="mc-mult-label">本周定投</div>
+        <div class="mc-mult" id="brk-coeff">¥0</div>
+        <div class="mc-mult-sub" id="brk-sub">市净率 P/B 1.45×（1.40× 以上不投）· 补充仓，有低估机会才买</div>
       </div>
       <div class="mc-bar-wrap">
         <div class="mc-bar">
-          <div class="seg" style="width:12.21%;background:#047857"></div>
-          <div class="seg" style="width:30.53%;background:#0d9488"></div>
-          <div class="seg" style="width:30.53%;background:#d97706"></div>
-          <div class="seg" style="width:26.72%;background:#cbd5e1"></div>
-          <div class="cur-dot" style="left:87.71%"></div>
+          <div class="seg" style="width:7.89%;background:#047857"></div>
+          <div class="seg" style="width:30.28%;background:#0d9488"></div>
+          <div class="seg" style="width:15.13%;background:#d97706"></div>
+          <div class="seg" style="width:15.14%;background:#f59e0b"></div>
+          <div class="seg" style="width:15.13%;background:#94a3b8"></div>
+          <div class="seg" style="width:16.43%;background:#cbd5e1"></div>
+          <div class="cur-dot" style="left:75.43%"></div>
         </div>
         <div class="mc-axis">
-          <span style="left:12.21%">极度 $337</span>
-          <span style="left:42.75%">甜区 $404</span>
-          <span style="left:73.28%">合理 $472</span>
-          <span style="left:88.55%">偏贵 $506</span>
+          <span style="left:7.89%">1.00× $348</span>
+          <span style="left:38.17%">1.20× $418</span>
+          <span style="left:53.30%">1.30× $453</span>
+          <span style="left:68.44%">1.40× $487</span>
         </div>
       </div>
       <div class="mc-meta">
-        <div class="mc-row"><span>锚定逻辑</span><b>锚定巴菲特框架：合理 = 1.40×BVPS、甜区 = 1.20×BVPS（显著低估回购区）、偏贵线 = 1.50×BVPS；BVPS = 337.04（2026-06-30）</b></div>
-        <div class="mc-row"><span>信号解读</span><b>价高于合理线 +6.7%，本周按 ×0.6 减量等待</b></div>
+        <div class="mc-row"><span>锚定逻辑</span><b>锚定巴菲特框架：1.20×BVPS 为「显著低估、大规模回购区」，1.40× 为常态溢价上限；BVPS = $348.15（2026Q2）</b></div>
+        <div class="mc-row"><span>分档金额</span><b>P/B 1.30–1.40× → ¥3,000 ｜ 1.20–1.30× → ¥5,000 ｜ 1.00–1.20× → ¥8,000 ｜ ＜1.00× → ¥15,000（分界取更便宜那档）</b></div>
+        <div class="mc-row"><span>信号解读</span><b>P/B 1.45× 高于 1.40× 上限，本周不投；补充仓不设目标金额，等低估机会</b></div>
       </div>
     </div>
   </section>
@@ -208,17 +213,18 @@
       <div class="mc-head">
         <div>
           <div class="mc-ticker">黄金ETF</div>
-          <div class="mc-name">约 $4100/oz 开第一批 · 每跌约 5% 加一批</div>
+          <div class="mc-name">约 $4100/oz 开第一批 · 每跌约 5% 加一批 · 对外称黄金ETF</div>
         </div>
         <span class="tag flat">战略</span>
       </div>
       <div class="mc-price-row">
-        <div class="mc-price" id="gold-price">纽约黄金现货价格</div>
+        <div class="mc-price" id="gold-price">黄金ETF 参考价</div>
         <span class="tag flat" id="gold-zone">—</span>
       </div>
-      <div class="mc-mult-sub" id="gold-note">纽约黄金现货价格；约 $4100/oz 开第一批，每跌约 5% 加一批（越跌越买），高于 $4500 暂停。</div>
+      <div class="mc-mult-sub" id="gold-note">黄金ETF；约 $4100/oz 开第一批，每跌约 5% 加一批（越跌越买），高于 $4500 暂停。</div>
       <div class="mc-meta">
-        <div class="mc-row"><span>常规分批区</span><b id="gold-range">4000–4500</b></div>
+        <div class="mc-row"><span>常规分批区</span><b id="gold-range">4100–4500</b></div>
+        <div class="mc-row"><span>分档规则</span><b>＜$4100 建仓 ｜ $4100–$4500 常规分批 ｜ ＞$4500 暂停</b></div>
         <div class="mc-row"><span>战略占比</span><b>10%（防守仓内）</b></div>
       </div>
     </div>
@@ -226,8 +232,11 @@
     (function(){
       var L = window.DEFENSIVE_LIVE, O = window.ORIGISTAR;
       function fmt(n){ return n==null ? '—' : '$' + Number(n).toLocaleString('en-US',{maximumFractionDigits:2}); }
+      function yuan(n){ return '¥' + Number(n).toLocaleString('zh-CN'); }
       function setTag(el, type, text){ if(!el) return; el.textContent = text; el.className = 'tag ' + (type||'flat'); }
-      // 黄金
+      function txt(id, v){ var el = document.getElementById(id); if(el && v!=null) el.textContent = v; }
+
+      // 黄金ETF
       var g = (L && L.items && L.items.gold) || (O && O.gold) || {};
       var gp = document.getElementById('gold-price');
       if(gp && g.price != null) gp.textContent = fmt(g.price);
@@ -235,30 +244,66 @@
       var og = (O && O.gold) || {};
       var gr = document.getElementById('gold-range');
       if(gr && og.sweet && og.fair) gr.textContent = og.sweet + '–' + og.fair;
-      // SCHD
+
+      // SCHD —— 按隐含股息率分三档：≥4.00% ¥15,000 / 3.50–4.00% ¥9,000 / 3.16–3.50% ¥6,000 / ＜3.00% 暂停
       var s = (L && L.items && L.items.schd) || (O && O.defensive && O.defensive.schd) || {};
+      var scfg = (O && O.defensive && O.defensive.schd) || {};
       var sp = document.getElementById('schd-price');
       if(sp && s.price != null) sp.textContent = fmt(s.price);
-      setTag(document.getElementById('schd-zone'), s.zoneType || 'down', s.zone || '偏贵 / 等待');
+      var ttm = scfg.ttm != null ? scfg.ttm : 1.06;
+      var sYield = (s.price != null) ? (ttm / s.price * 100) : null;
+      // 分档：股息率越高档位越重，取第一个「股息率 ≥ 该档下界」的档
+      var sAmt = 0, sLabel = '暂停';
+      if (sYield != null) {
+        var sTiers = scfg.tiers || [];
+        for (var i = 0; i < sTiers.length; i++) {
+          if (sYield >= sTiers[i].yield) { sAmt = sTiers[i].amt; sLabel = sTiers[i].label; break; }
+        }
+        if (sAmt === 0) sLabel = sYield < (scfg.stopYield || 3.00) ? '停投' : '暂停';
+      }
+      setTag(document.getElementById('schd-zone'), sAmt > 0 ? 'up' : 'down',
+             sAmt > 0 ? ('可投 · ' + sLabel) : (sYield != null && sYield < 3.00 ? '停投' : '偏贵 / 暂停'));
       var sc = document.getElementById('schd-coeff');
-      if(sc && s.coefficient != null) sc.textContent = '×' + Number(s.coefficient).toFixed(1);
+      if(sc && sAmt >= 0) sc.textContent = yuan(sAmt);
       var ksc = document.getElementById('kpi-schd-coeff');
-      if(ksc && s.coefficient != null) ksc.textContent = '×' + Number(s.coefficient).toFixed(1);
+      if(ksc) ksc.textContent = yuan(sAmt);
+      var ssub = document.getElementById('schd-sub');
+      if(ssub && sYield != null) ssub.textContent = '隐含股息率 ' + sYield.toFixed(2) + '%（合理 3.16%）· ' +
+        (sAmt > 0 ? ('命中' + sLabel + '，本周投 ' + yuan(sAmt)) : '未达 3.16% 起点，本周暂停');
       var ksm = document.getElementById('kpi-schd-meta');
-      if(ksm && s.zone) ksm.textContent = s.zone;
-      setTag(document.getElementById('kpi-schd-tag'), s.zoneType || 'down', s.coefficient >= 1 ? '加投' : '减量');
-      // BRK.B
+      if(ksm && sYield != null) ksm.textContent = '股息率 ' + sYield.toFixed(2) + '% · ' + (sAmt > 0 ? sLabel : '暂停');
+      setTag(document.getElementById('kpi-schd-tag'), sAmt > 0 ? 'up' : 'down', sAmt > 0 ? '投' : '暂停');
+      txt('kpi-schd-yield', sYield != null ? sYield.toFixed(2) + '%' : null);
+
+      // BRK.B —— 按 P/B 分四档：1.30–1.40× ¥3,000 / 1.20–1.30× ¥5,000 / 1.00–1.20× ¥8,000 / ＜1.00× ¥15,000
       var b = (L && L.items && L.items.brk) || (O && O.defensive && O.defensive.brk) || {};
+      var bcfg = (O && O.defensive && O.defensive.brk) || {};
       var bp = document.getElementById('brk-price');
       if(bp && b.price != null) bp.textContent = fmt(b.price);
-      setTag(document.getElementById('brk-zone'), b.zoneType || 'down', b.zone || '偏贵 / 等待');
+      var bvps = bcfg.bvps != null ? bcfg.bvps : 348.15;
+      var bPb = (b.price != null && bvps) ? (b.price / bvps) : null;
+      // 分档：min ≤ P/B < max 命中该档；分界取更便宜那档
+      var bAmt = 0, bLabel = '不投';
+      if (bPb != null) {
+        var bTiers = bcfg.tiers || [];
+        for (var j = 0; j < bTiers.length; j++) {
+          var t = bTiers[j];
+          if ((bPb < t.max || t.max == null) && bPb >= t.min) { bAmt = t.amt; bLabel = t.label; break; }
+        }
+      }
+      setTag(document.getElementById('brk-zone'), bAmt > 0 ? 'up' : 'down',
+             bAmt > 0 ? ('可投 · ' + bLabel) : '偏贵 / 不投');
       var bc = document.getElementById('brk-coeff');
-      if(bc && b.coefficient != null) bc.textContent = '×' + Number(b.coefficient).toFixed(1);
+      if(bc && bAmt >= 0) bc.textContent = yuan(bAmt);
       var kbc = document.getElementById('kpi-brk-coeff');
-      if(kbc && b.coefficient != null) kbc.textContent = '×' + Number(b.coefficient).toFixed(1);
+      if(kbc) kbc.textContent = yuan(bAmt);
+      var bsub = document.getElementById('brk-sub');
+      if(bsub && bPb != null) bsub.textContent = '市净率 P/B ' + bPb.toFixed(2) + '×（1.40× 以上不投）· ' +
+        (bAmt > 0 ? ('命中' + bLabel + '，本周投 ' + yuan(bAmt)) : '补充仓，等低估机会');
       var kbm = document.getElementById('kpi-brk-meta');
-      if(kbm && b.zone) kbm.textContent = b.zone;
-      setTag(document.getElementById('kpi-brk-tag'), b.zoneType || 'down', b.coefficient >= 1 ? '加投' : '减量');
+      if(kbm && bPb != null) kbm.textContent = 'P/B ' + bPb.toFixed(2) + '× · ' + (bAmt > 0 ? bLabel : '不投');
+      setTag(document.getElementById('kpi-brk-tag'), bAmt > 0 ? 'up' : 'down', bAmt > 0 ? '投' : '暂停');
+      txt('kpi-brk-pb', bPb != null ? bPb.toFixed(2) + '×' : null);
     })();
     </script>
   </section>
@@ -267,18 +312,21 @@
   <section class="section">
     <div class="section-head"><h2>锚定逻辑</h2><span class="sub">透明可复核</span></div>
     <div class="rule ok">
-      <h3>SCHD — 股息率锚定</h3>
-      <p>合理收益率取 2012–2025 年化股息率中位数 <b>3.16%</b>。各档价 = TTM 分红 ÷ 目标收益率（合理 3.16% / 甜区 3.46% / 极度便宜 3.86% / 偏贵线 2.86%）。因 SCHD 分红逐年增长，各档价会<b>自动抬高</b>，不会像固定价那样越往后越「假贵」。</p>
+      <h3>SCHD — 股息率锚定（主力定投）</h3>
+      <p>合理收益率取 2012–2025 年化股息率中位数 <b>3.16%</b>。档价 = TTM 分红 ÷ 目标股息率，随分红逐年增长<b>自动抬高</b>，不会像固定价那样越往后越「假贵」。<br>
+      当前 TTM 分红 <b>$1.06</b>，对应档价：≥4.00% → <b>$26.5</b> ｜ 3.50% → <b>$30.3</b> ｜ 3.16% → <b>$33.5</b> ｜ 3.00% → <b>$35.3</b>。</p>
     </div>
     <div class="rule ok" style="margin-top:10px">
-      <h3>BRK.B — 市净率（P/B）锚定</h3>
-      <p>采用巴菲特亲手定的估值框架——P/B ≤ 1.2 倍为其认定的「显著低估、大规模回购区」，1.4–1.5 倍为常态 / 乐观溢价。各档价 = 倍数 × 账面价值/股（当前 $337.04/股，2026-06-30）。账面价值每季度增长，各档价同样自动抬高。</p>
+      <h3>BRK.B — 市净率（P/B）锚定（补充仓）</h3>
+      <p>采用巴菲特亲手定的估值框架——P/B ≤ 1.2 倍为其认定的「显著低估、大规模回购区」，1.4 倍为常态溢价上限。各档价 = 倍数 × 账面价值/股（当前 <b>$348.15/股</b>，<b>2026Q2</b>）。账面价值每季度增长，各档价同样自动抬高。<br>
+      梯子线：1.00× → <b>$348</b> ｜ 1.20× → <b>$418</b> ｜ 1.30× → <b>$453</b> ｜ 1.40× → <b>$487</b>。</p>
     </div>
     <div class="rule warn" style="margin-top:10px">
-      <h3>定投系数规则</h3>
+      <h3>定投规则（按档投固定金额）</h3>
       <p>
-        极度便宜 <b>×2.0</b> ｜ 甜区 <b>×1.5</b> ｜ 合理 <b>×1.0</b> ｜ 偏贵 <b>×0.6</b> ｜ 极贵 <b>×0.3</b>。<br>
-        便宜度 = 当前指标 ÷ 合理指标（SCHD = 股息率比；BRK.B = 1.40 ÷ P/B）。
+        <b>SCHD（主力）</b>：股息率 ≥4.00% → <b>¥15,000</b> ｜ 3.50–4.00% → <b>¥9,000</b> ｜ 3.16–3.50% → <b>¥6,000</b> ｜ ＜3.00% 暂停。<br>
+        <b>BRK.B（补充）</b>：P/B 1.30–1.40× → <b>¥3,000</b> ｜ 1.20–1.30× → <b>¥5,000</b> ｜ 1.00–1.20× → <b>¥8,000</b> ｜ ＜1.00× → <b>¥15,000</b> ｜ ≥1.40× 不投。分界价格落档取更便宜那档。<br>
+        <b>黄金ETF</b>：＜$4100 建仓 ｜ $4100–4500 常规分批 ｜ ＞$4500 暂停。BRK.B 为补充仓，不设目标金额与期限，有低估机会就买点。
       </p>
     </div>
   </section>

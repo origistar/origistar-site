@@ -64,7 +64,64 @@ function loadConfig() {
   return fn(sandbox.window);
 }
 
+// ---------- 腾讯行情兜底（Yahoo 被限流时使用） ----------
+// usXXX 系列：~ 分隔；字段 3 = 现价
+// hf_GC（纽约黄金期货主连）：逗号分隔；字段 0 = 现价 $/oz —— 与 GC=F 口径一致
+// 注意：勿用 hf_XAU（伦敦金现货），现货比纽约期货低约 $30–40，会让「$4100 建仓线」判错档
+function curlText(url) {
+  return new Promise((resolve, reject) => {
+    execFile('curl', ['-s', '-m', '20', url], { maxBuffer: 8 * 1024 * 1024 }, (err, stdout) => {
+      if (err) return reject(err);
+      if (!stdout || !stdout.trim()) return reject(new Error('空响应'));
+      resolve(stdout.toString('utf8'));
+    });
+  });
+}
+
+async function fetchTencent(code) {
+  const raw = await curlText(`https://qt.gtimg.cn/q=${code}`);
+  const m = raw.match(/"([^"]*)"/);
+  if (!m || !m[1]) throw new Error('腾讯无数据');
+  const body = m[1];
+  const parts = body.split(body.includes('~') ? '~' : ',');
+  // usXXX：~ 分隔，第 3 段为现价；hf_GC：逗号分隔，第 0 段为现价
+  const price = parseFloat(body.includes('~') ? parts[3] : parts[0]);
+  if (!isFinite(price) || price <= 0) throw new Error('腾讯价格无效');
+  return { price, source: '腾讯财经' };
+}
+
+// SCHD：按隐含股息率（TTM ÷ 现价）分档，档位越高投越多
+function schdZone(price, cfg) {
+  if (price == null) return { zone: '—', coefficient: null, zoneType: 'flat' };
+  const ttm = cfg.ttm != null ? cfg.ttm : 1.06;
+  const y = ttm / price * 100;              // 隐含股息率 %
+  const tiers = cfg.tiers || [];
+  for (const t of tiers) {
+    if (y >= t.yield) return { zone: t.label, coefficient: t.amt / 1000, zoneType: t.amt >= 9000 ? 'up' : 'acc', yieldPct: y };
+  }
+  const stopped = y < (cfg.stopYield || 3.00);
+  return { zone: stopped ? '停投' : '暂停', coefficient: 0, zoneType: 'down', yieldPct: y };
+}
+
+// BRK.B：按 P/B 分档（min ≤ P/B < max 命中该档；分界取更便宜那档）
+function brkZone(price, cfg) {
+  if (price == null) return { zone: '—', coefficient: null, zoneType: 'flat' };
+  const bvps = cfg.bvps || 348.15;
+  const pb = price / bvps;
+  const tiers = cfg.tiers || [];
+  for (const t of tiers) {
+    if ((pb < t.max || t.max == null) && pb >= t.min) {
+      return { zone: t.label, coefficient: t.amt / 1000, zoneType: t.amt >= 8000 ? 'up' : 'acc', pb };
+    }
+  }
+  return { zone: '不投', coefficient: 0, zoneType: 'down', pb };
+}
+
+// 统一分派：gold 用价格阈值，其余按各自分档函数
 function zoneOf(price, cfg) {
+  if (cfg && cfg.ttm != null) return schdZone(price, cfg);
+  if (cfg && cfg.bvps != null) return brkZone(price, cfg);
+  // 兼容旧配置（无 tiers/ttm/bvps 字段时回退到价格阈值）
   if (price == null) return { zone: '—', coefficient: null, zoneType: 'flat' };
   if (price <= cfg.extreme) return { zone: '极度便宜', coefficient: 2.0, zoneType: 'up' };
   if (price <= cfg.sweet)   return { zone: '甜区', coefficient: 1.5, zoneType: 'acc' };
@@ -86,44 +143,58 @@ async function main() {
   const goldCfg = (data && data.gold) || {};
 
   const symbols = [
-    { key: 'schd', sym: 'SCHD', display: 'SCHD', cfg: cfg.schd },
-    { key: 'brk', sym: 'BRK-B', display: 'BRK.B', cfg: cfg.brk },   // Yahoo 用 BRK-B
-    { key: 'gold', sym: 'GC=F', display: 'GC=F', cfg: goldCfg, isGold: true }
+    { key: 'schd', sym: 'SCHD', display: 'SCHD', cfg: cfg.schd, tencent: 'usSCHD' },
+    { key: 'brk', sym: 'BRK-B', display: 'BRK.B', cfg: cfg.brk, tencent: 'usBRK.B' },   // Yahoo 用 BRK-B
+    { key: 'gold', sym: 'GC=F', display: 'GC=F', cfg: goldCfg, isGold: true, tencent: 'hf_GC' }
   ];
 
   const out = { items: {}, errors: [] };
   let fetched = 0;
+  let tencentUsed = 0;
 
-  for (const s of symbols) {
+  // 单标的取价：Yahoo → 腾讯 → 静态
+  async function priceOf(s) {
     try {
       const y = await fetchYahoo(s.sym);
-      if (s.isGold) {
-        const gz = goldZone(y.price, s.cfg.threshold || 4100);
-        out.items.gold = { price: y.price, zone: gz.zone, zoneType: gz.zoneType, symbol: s.display, dataSource: 'Yahoo Finance' };
-      } else {
-        const z = zoneOf(y.price, s.cfg);
-        out.items[s.key] = { price: y.price, zone: z.zone, coefficient: z.coefficient, zoneType: z.zoneType, symbol: s.display, dataSource: 'Yahoo Finance' };
-      }
-      fetched++;
+      return { price: y.price, source: 'Yahoo Finance' };
     } catch (e) {
-      out.errors.push(`${s.sym}: ${e.message || e}`);
-      //  fallback：用静态配置里的 price 兜底
-      const fallbackPrice = s.cfg ? s.cfg.price : null;
-      if (s.isGold) {
-        const gz = goldZone(fallbackPrice, s.cfg.threshold || 4100);
-        out.items.gold = { price: fallbackPrice, zone: gz.zone, zoneType: gz.zoneType, symbol: s.display, dataSource: '静态' };
-      } else {
-        const z = zoneOf(fallbackPrice, s.cfg);
-        out.items[s.key] = { price: fallbackPrice, zone: z.zone, coefficient: z.coefficient, zoneType: z.zoneType, symbol: s.display, dataSource: '静态' };
+      out.errors.push(`${s.sym}(Yahoo): ${e.message || e}`);
+    }
+    if (s.tencent) {
+      try {
+        const t = await fetchTencent(s.tencent);
+        tencentUsed++;
+        return { price: t.price, source: '腾讯财经' };
+      } catch (e) {
+        out.errors.push(`${s.tencent}(腾讯): ${e.message || e}`);
       }
+    }
+    return { price: s.cfg ? s.cfg.price : null, source: '静态' };
+  }
+
+  for (const s of symbols) {
+    const got = await priceOf(s);
+    if (got.source !== '静态') fetched++;
+    if (s.isGold) {
+      const gz = goldZone(got.price, s.cfg.threshold || 4100);
+      out.items.gold = { price: got.price, zone: gz.zone, zoneType: gz.zoneType, symbol: s.display, dataSource: got.source };
+    } else {
+      const z = zoneOf(got.price, s.cfg);
+      out.items[s.key] = {
+        price: got.price, zone: z.zone, coefficient: z.coefficient, zoneType: z.zoneType,
+        yieldPct: z.yieldPct != null ? Number(z.yieldPct.toFixed(2)) : undefined,
+        pb: z.pb != null ? Number(z.pb.toFixed(3)) : undefined,
+        symbol: s.display, dataSource: got.source
+      };
     }
   }
 
   out.generatedAt = beijingTime();
-  out.source = fetched === symbols.length ? 'Yahoo Finance' : (fetched > 0 ? 'Yahoo Finance + 静态' : '静态');
-  out.fetchNote = `${fetched}/${symbols.length} 成功` + (out.errors.length ? '；失败：' + out.errors.join(' / ') : '');
+  out.source = tencentUsed === symbols.length ? '腾讯财经'
+             : (tencentUsed > 0 ? 'Yahoo Finance + 腾讯财经' : (fetched > 0 ? 'Yahoo Finance' : '静态'));
+  out.fetchNote = `${fetched}/${symbols.length} 取价成功` + (out.errors.length ? '；失败：' + out.errors.join(' / ') : '');
 
-  const code = `// 自动生成：防守仓行情快照（SCHD / BRK.B / 黄金 GC=F）\n// 生成时间：${out.generatedAt}\nwindow.DEFENSIVE_LIVE = ${JSON.stringify(out, null, 2)};\n`;
+  const code = `// 自动生成：防守仓行情快照（SCHD / BRK.B / 黄金）\n// 生成时间：${out.generatedAt}\nwindow.DEFENSIVE_LIVE = ${JSON.stringify(out, null, 2)};\n`;
   fs.writeFileSync(outPath, code, 'utf8');
   console.log('生成', outPath);
   console.log('摘要:', out.fetchNote);
