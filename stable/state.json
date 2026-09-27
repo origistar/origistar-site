@@ -604,11 +604,11 @@
       "phase": "①",
       "score": 42,
       "daily": 1500,
-      "premium": 12.2
+      "premium": 12.4
     }
   ],
   "last_data_hash": "30.96|14.87|30608",
-  "generatedAt": "2026-09-27 02:41 北京时间",
+  "generatedAt": "2026-09-27 13:36 北京时间",
   "dataSource": "蛋卷 PE/分位/ROE + Yahoo NDX/VIX/52周高 + 腾讯gtimg现价 + 东财513100净值（指数·汇率修正）",
   "lastNote": "全部成功"
 }
