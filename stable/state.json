@@ -617,11 +617,11 @@
       "phase": "①",
       "score": 42,
       "daily": 1500,
-      "premium": 12.2
+      "premium": 11.6
     }
   ],
   "last_data_hash": "30.96|14.87|30608",
-  "generatedAt": "2026-09-28 03:11 北京时间",
+  "generatedAt": "2026-09-28 13:44 北京时间",
   "dataSource": "蛋卷 PE/分位/ROE + Yahoo NDX/VIX/52周高 + 腾讯gtimg现价 + 东财513100净值（指数·汇率修正）",
-  "lastNote": "回填 2026-09-28: 无历史K线，跳过"
+  "lastNote": "全部成功"
 }
