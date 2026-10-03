@@ -1,5 +1,5 @@
 window.AGGRESSIVE_LIVE = {
-  "generatedAt": "2026-10-03 13:37 北京时间",
+  "generatedAt": "2026-10-03 21:37 北京时间",
   "updateFreq": "每日 3 次（08:30 / 16:30 / 23:00 北京时间）",
   "source": "Yahoo Finance 主力 + 腾讯 gtimg 兜底",
   "fetchNote": "全部标的已更新",
@@ -16,7 +16,7 @@ window.AGGRESSIVE_LIVE = {
       "yahooSymbol": "NVDA",
       "price": 233.95,
       "atrPct": 0.026261929612142458,
-      "buyPoint": 225.37614960631936,
+      "buyPoint": 225.3856243677271,
       "distBuy1": 0.16974999999999996,
       "trigger": "none",
       "stage": 0,

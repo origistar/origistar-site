@@ -1,7 +1,7 @@
 // 自动生成：稳健仓市场快照（NDX / VIX / BTC / AHR999）
-// 生成时间：2026-10-03 13:37 北京时间
+// 生成时间：2026-10-03 21:37 北京时间
 window.MARKET_LIVE = {
-  "generatedAt": "2026-10-03 13:37 北京时间",
+  "generatedAt": "2026-10-03 21:37 北京时间",
   "updateFreq": "每日 3 次（08:30 / 16:30 / 23:00 北京时间）",
   "source": "Yahoo Finance",
   "errors": [],
@@ -12,12 +12,12 @@ window.MARKET_LIVE = {
     "dataSource": "Yahoo Finance"
   },
   "btc": {
-    "price": 84617.24,
-    "ahr999": 0.5637,
-    "p200ma": 1.186,
-    "ma200": 71372,
+    "price": 84898.03,
+    "ahr999": 0.567,
+    "p200ma": 1.189,
+    "ma200": 71426,
     "hi52w": 126198,
-    "dd52w": 32.9,
+    "dd52w": 32.7,
     "ibit": 47.73,
     "mstr": 160.01,
     "mstr52w": 365,
@@ -94,7 +94,7 @@ window.MARKET_LIVE = {
       }
     ],
     "note": "溢价率经指数与汇率修正；QDII 净值 T+2~T+3 滞后，未经修正的 raw 值仅供对照",
-    "updateAt": "2026-10-03 13:37 北京时间"
+    "updateAt": "2026-10-03 21:37 北京时间"
   },
   "fetchNote": "全部成功"
 };
