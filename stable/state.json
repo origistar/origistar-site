@@ -695,11 +695,11 @@
       "phase": "①",
       "score": 43,
       "daily": 1500,
-      "premium": 13.6
+      "premium": 13.7
     }
   ],
   "last_data_hash": "30.95|15.31|30808",
-  "generatedAt": "2026-10-04 02:47 北京时间",
+  "generatedAt": "2026-10-04 14:13 北京时间",
   "dataSource": "蛋卷 PE/分位/ROE + Yahoo NDX/VIX/52周高 + 腾讯gtimg现价 + 东财513100净值（指数·汇率修正）",
   "lastNote": "全部成功"
 }
