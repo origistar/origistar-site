@@ -728,17 +728,17 @@
       "pe": 30.95,
       "pe_pct": 50.8,
       "vix": 15.01,
-      "ndx": 31224,
+      "ndx": 31225,
       "dd_pct": -0.44,
       "tier": "mid_low",
       "phase": "①",
       "score": 42,
       "daily": 1500,
-      "premium": 12.2
+      "premium": 12
     }
   ],
-  "last_data_hash": "30.95|15.01|31224",
-  "generatedAt": "2026-10-07 04:29 北京时间",
+  "last_data_hash": "30.95|15.01|31225",
+  "generatedAt": "2026-10-07 14:20 北京时间",
   "dataSource": "蛋卷 PE/分位/ROE + Yahoo NDX/VIX/52周高 + 腾讯gtimg现价 + 东财513100净值（指数·汇率修正）",
-  "lastNote": "回填 2026-10-07: 无历史K线，跳过"
+  "lastNote": "全部成功"
 }
