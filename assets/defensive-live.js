@@ -1,9 +1,9 @@
 // 自动生成：防守仓行情快照（SCHD / BRK.B / 黄金）
-// 生成时间：2026-10-13 02:08 北京时间
+// 生成时间：2026-10-13 15:00 北京时间
 window.DEFENSIVE_LIVE = {
   "items": {
     "schd": {
-      "price": 33.195,
+      "price": 33.26,
       "zone": "股息率 3.16–3.50%",
       "coefficient": 6,
       "zoneType": "acc",
@@ -12,16 +12,16 @@ window.DEFENSIVE_LIVE = {
       "dataSource": "Yahoo Finance"
     },
     "brk": {
-      "price": 516.559,
+      "price": 517.6,
       "zone": "不投",
       "coefficient": 0,
       "zoneType": "down",
-      "pb": 1.484,
+      "pb": 1.487,
       "symbol": "BRK.B",
       "dataSource": "Yahoo Finance"
     },
     "gold": {
-      "price": 4193.4,
+      "price": 4214.3,
       "zone": "偏贵 / 等待",
       "zoneType": "down",
       "symbol": "GC=F",
@@ -29,7 +29,7 @@ window.DEFENSIVE_LIVE = {
     }
   },
   "errors": [],
-  "generatedAt": "2026-10-13 02:08 北京时间",
+  "generatedAt": "2026-10-13 15:00 北京时间",
   "source": "Yahoo Finance",
   "fetchNote": "3/3 取价成功"
 };
