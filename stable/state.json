@@ -844,18 +844,18 @@
       "date": "2026-10-16",
       "pe": 30.04,
       "pe_pct": 45.1,
-      "vix": 16.46,
+      "vix": 15.82,
       "ndx": 29936,
       "dd_pct": -4.55,
       "tier": "mid_low",
       "phase": "①",
-      "score": 48,
+      "score": 47,
       "daily": 1500,
-      "premium": 17.4
+      "premium": 17.2
     }
   ],
-  "last_data_hash": "30.04|16.46|29936",
-  "generatedAt": "2026-10-16 12:51 北京时间",
+  "last_data_hash": "30.04|15.82|29936",
+  "generatedAt": "2026-10-16 21:28 北京时间",
   "dataSource": "蛋卷 PE/分位/ROE + Yahoo NDX/VIX/52周高 + 腾讯gtimg现价 + 东财513100净值（指数·汇率修正）",
   "lastNote": "全部成功"
 }
