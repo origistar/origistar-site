@@ -1,7 +1,7 @@
 // 自动生成：稳健仓市场快照（NDX / VIX / BTC / AHR999）
-// 生成时间：2026-10-18 20:45 北京时间
+// 生成时间：2026-10-19 02:15 北京时间
 window.MARKET_LIVE = {
-  "generatedAt": "2026-10-18 20:45 北京时间",
+  "generatedAt": "2026-10-19 02:15 北京时间",
   "updateFreq": "每日 3 次（08:30 / 16:30 / 23:00 北京时间）",
   "source": "Yahoo Finance",
   "errors": [],
@@ -12,12 +12,12 @@ window.MARKET_LIVE = {
     "dataSource": "Yahoo Finance"
   },
   "btc": {
-    "price": 81838.93,
-    "ahr999": 0.5121,
-    "p200ma": 1.129,
-    "ma200": 72494,
+    "price": 81066.64,
+    "ahr999": 0.5025,
+    "p200ma": 1.118,
+    "ma200": 72491,
     "hi52w": 116273,
-    "dd52w": 29.6,
+    "dd52w": 30.3,
     "ibit": 46.15,
     "mstr": 136.83,
     "mstr52w": 306,
@@ -33,10 +33,10 @@ window.MARKET_LIVE = {
         "price": 2.356,
         "nav": 2.0057,
         "navDate": "2026-10-15",
-        "adjNav": 1.957,
-        "premium": 20.39,
+        "adjNav": 1.9597,
+        "premium": 20.22,
         "premiumRaw": 17.47,
-        "basis": "净值 2.0057 × 指数 0.9750 × 汇率 1.0007",
+        "basis": "净值 2.0057 × 指数 0.9750 × 汇率 1.0021",
         "signal": "溢价>8% · 换回场外",
         "dataSource": "腾讯 gtimg 现价 + 东财基金净值 + Yahoo NDX/CNY 修正"
       },
@@ -46,10 +46,10 @@ window.MARKET_LIVE = {
         "price": 1.738,
         "nav": 1.5005,
         "navDate": "2026-10-15",
-        "adjNav": 1.464,
-        "premium": 18.71,
+        "adjNav": 1.4661,
+        "premium": 18.55,
         "premiumRaw": 15.83,
-        "basis": "净值 1.5005 × 指数 0.9750 × 汇率 1.0007",
+        "basis": "净值 1.5005 × 指数 0.9750 × 汇率 1.0021",
         "signal": "溢价>8% · 换回场外",
         "dataSource": "腾讯 gtimg 现价 + 东财基金净值 + Yahoo NDX/CNY 修正"
       },
@@ -59,10 +59,10 @@ window.MARKET_LIVE = {
         "price": 2.81,
         "nav": 2.4927,
         "navDate": "2026-10-15",
-        "adjNav": 2.4321,
-        "premium": 15.54,
+        "adjNav": 2.4355,
+        "premium": 15.37,
         "premiumRaw": 12.73,
-        "basis": "净值 2.4927 × 指数 0.9750 × 汇率 1.0007",
+        "basis": "净值 2.4927 × 指数 0.9750 × 汇率 1.0021",
         "signal": "溢价>8% · 换回场外",
         "dataSource": "腾讯 gtimg 现价 + 东财基金净值 + Yahoo NDX/CNY 修正"
       },
@@ -72,10 +72,10 @@ window.MARKET_LIVE = {
         "price": 2.541,
         "nav": 2.2788,
         "navDate": "2026-10-15",
-        "adjNav": 2.2234,
-        "premium": 14.28,
+        "adjNav": 2.2265,
+        "premium": 14.12,
         "premiumRaw": 11.51,
-        "basis": "净值 2.2788 × 指数 0.9750 × 汇率 1.0007",
+        "basis": "净值 2.2788 × 指数 0.9750 × 汇率 1.0021",
         "signal": "溢价>8% · 换回场外",
         "dataSource": "腾讯 gtimg 现价 + 东财基金净值 + Yahoo NDX/CNY 修正"
       },
@@ -85,16 +85,16 @@ window.MARKET_LIVE = {
         "price": 2.497,
         "nav": 2.2511,
         "navDate": "2026-10-15",
-        "adjNav": 2.1964,
-        "premium": 13.69,
+        "adjNav": 2.1995,
+        "premium": 13.53,
         "premiumRaw": 10.92,
-        "basis": "净值 2.2511 × 指数 0.9750 × 汇率 1.0007",
+        "basis": "净值 2.2511 × 指数 0.9750 × 汇率 1.0021",
         "signal": "溢价>8% · 换回场外",
         "dataSource": "腾讯 gtimg 现价 + 东财基金净值 + Yahoo NDX/CNY 修正"
       }
     ],
     "note": "溢价率经指数与汇率修正；QDII 净值 T+2~T+3 滞后，未经修正的 raw 值仅供对照",
-    "updateAt": "2026-10-18 20:45 北京时间"
+    "updateAt": "2026-10-19 02:15 北京时间"
   },
   "fetchNote": "全部成功"
 };
