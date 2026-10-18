@@ -877,11 +877,11 @@
       "phase": "①",
       "score": 54,
       "daily": 3000,
-      "premium": 20.2
+      "premium": 20.4
     }
   ],
   "last_data_hash": "29.39|19.99|29188",
-  "generatedAt": "2026-10-18 01:54 北京时间",
+  "generatedAt": "2026-10-18 13:00 北京时间",
   "dataSource": "蛋卷 PE/分位/ROE + Yahoo NDX/VIX/52周高 + 腾讯gtimg现价 + 东财513100净值（指数·汇率修正）",
   "lastNote": "全部成功"
 }
