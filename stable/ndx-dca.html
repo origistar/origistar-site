@@ -204,7 +204,7 @@
   set('calcLine', dcaVal == null
     ? '—'
     : 'PE×VIX = ' + R.shares.toFixed(1) + ' 份 × DD×' + (R.mult == null ? '—' : R.mult.toFixed(1)) + ' × ¥1,000 = ¥' + dcaVal.toLocaleString());
-  if (R) {
+  if (R && !R.incomplete) {
     set('vixMeta', '当前落在「' + R.vixName + '」');
     (function () {
       function hiOnly(tblId, r, c) {

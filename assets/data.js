@@ -212,6 +212,23 @@ window.NDX_RULE = {
     return bands.length;
   },
   compute: function (pe, vix, dd) {
+    /* ⚠️ 缺值保护（2026-10-19 加）：null / '' / undefined 一律视为"数据未就绪"。
+       不能直接走 +x 强转 —— `+null === 0` 会被判成「PE<28 / VIX<13」的最激进档，
+       反而静默给出比真实值更高的金额（实测 PE=null 时算出 ¥4,500/天，比正常的
+       ¥3,000 还高 50%），而且页面看起来完全正常。缺值必须显式暴露，不能猜。 */
+    var isBad = function (v) { return v === null || v === undefined || v === '' || !isFinite(+v); };
+    if (isBad(pe) || isBad(vix) || isBad(dd)) {
+      return {
+        pe: isBad(pe) ? null : +pe,
+        vix: isBad(vix) ? null : +vix,
+        dd: isBad(dd) ? null : Math.abs(+dd),
+        peIdx: -1, vixIdx: -1, ddIdx: -1,
+        shares: null, mult: null, daily: null,
+        bear: false, paused: true, incomplete: true,
+        peName: '—', vixName: '—', ddName: '—',
+        status: '数据未就绪'
+      };
+    }
     pe = +pe; vix = +vix; dd = Math.abs(+dd || 0);
     var pi = this.bandIdx(pe, this.PE_BANDS);
     var vi = this.bandIdx(vix, this.VIX_BANDS);

@@ -96,7 +96,9 @@
   rows.push({
     name: '纳指定投',
     val: (ndxR && ndxR.daily != null ? money(ndxR.daily) : '—') + '/天',
-    note: (ndxR ? ndxR.status : d.ndx.signal) + ' · PE ' + d.ndx.pe + ' · 回撤 ' + Math.abs(d.ndx.dd) + '%'
+    note: (ndxR ? ndxR.status : d.ndx.signal) +
+      ' · PE ' + (ndxR && ndxR.pe != null ? ndxR.pe : '—') +
+      ' · 回撤 ' + (ndxR && ndxR.dd != null ? ndxR.dd + '%' : '—')
   });
 
   // 2) BTC 定投（每周 × AHR999 档位）
