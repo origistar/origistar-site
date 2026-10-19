@@ -17,6 +17,7 @@
 //   BTC 回撤：距 52 周高点
 //   AHR999 = (现价 / 200MA) × (现价 / 2^年数)，年数 = (今 - 2009-01-03) / 365.25
 //   MSTR：Yahoo MSTR 现价（华尔街情绪代理）
+//   NDX PE-TTM：**雪球基金（蛋卷）口径** —— 分档阈值即由此源历史分位推得，不可换源，见 fetchNdxPE()
 
 import fs from 'fs';
 import path from 'path';
@@ -104,22 +105,35 @@ function sma(arr, n) {
   return s / n;
 }
 
-// NDX PE-TTM（指数整体估值）
-// 口径：fund-factsheet method —— 成员调整后市盈率的加权调和平均，剔除亏损公司。
-//   与 data.js 里人工填的 30.75 同口径（实测与易方达 159696 跟踪指数披露的 29.26 相差 <0.1）。
-// 为什么要专门找源：Yahoo quoteSummary 需 crumb 鉴权、Nasdaq API 不返回、
-//   东财 push2 对指数返回 f162=0、腾讯 usNDX 无 PE 字段 —— 常规源全部拿不到。
+// NDX PE-TTM —— **必须用雪球基金（蛋卷）口径**，这是本页分档阈值的原始基准。
+//
+// 为什么锁死雪球：PE_BANDS 的 28 / 33 / 36 / 38 四档，是按雪球基金历史 30%／70%
+// 分位点推出来的。换源等于换参照系 —— 实测同一时点（2026-10-16）：
+//     雪球基金 29.39 ｜ chartrow factsheet 28.5 ｜ chartrow 自建加权 35.7 ｜ forward 21.3
+// 雪球比 chartrow 长期高近 1 个点，若用 chartrow，档位会整体被判便宜一档 → 多投钱。
+// 所以这里的源不是"随便找个能抓的"，而是唯一的可比口径。
+//
+// 接口：https://danjuanfunds.com/djapi/index_eva/detail/NDX（公开 JSON，免鉴权）
+// 返回字段：pe / pb / pe_percentile / roe / eva_type / date / ts
 // 抓不到就**不写 pe 字段**（不是写 null），页面 Object.assign 后自然回落 data.js 手动值。
 async function fetchNdxPE() {
-  const h = await curlText('https://chartrow.com/nasdaq-100/pe-ratio');
-  const m = h.match(/Factsheet method<\/dt>\s*<dd[^>]*>\s*([\d.]+)/);
-  if (!m) throw new Error('未找到 Factsheet method 字段（页面结构可能已变）');
-  const pe = +m[1];
-  // 合理性护栏：NDX PE-TTM 历史区间约 15–45，越界必是抓错（比如抓到了 median 或自建口径）
+  const d = await curlJson('https://danjuanfunds.com/djapi/index_eva/detail/NDX');
+  if (!d || d.result_code !== 0 || !d.data) {
+    throw new Error('蛋卷接口异常: ' + JSON.stringify(d && d.result_code));
+  }
+  const x = d.data;
+  const pe = +x.pe;
+  // 合理性护栏：NDX PE-TTM 历史区间约 15–45，越界必是抓错（或接口改版）
   if (!(pe > 5 && pe < 100)) throw new Error('PE 越界: ' + pe);
-  // 数据日期：优先用页面上的 ISO 日期（如 2026-10-16）；取不到就留 null，由页面按"未知"处理
-  const d = h.match(/(\d{4}-\d{2}-\d{2})"[^>]{0,80}>as of market close/);
-  return { pe: pe, asOf: d ? d[1] : null };
+  // 数据日期：ts 是北京时间当日 0 点的毫秒值，转成 YYYY-MM-DD
+  let asOf = null;
+  if (x.ts) {
+    const t = new Date(+x.ts + 8 * 3600 * 1000);
+    asOf = t.getUTCFullYear() + '-' +
+      String(t.getUTCMonth() + 1).padStart(2, '0') + '-' +
+      String(t.getUTCDate()).padStart(2, '0');
+  }
+  return { pe, asOf, pct: x.pe_percentile };
 }
 
 async function main() {
@@ -146,7 +160,8 @@ async function main() {
       const p = await fetchNdxPE();
       out.ndx.pe = p.pe;
       out.ndx.peAsOf = p.asOf;
-      out.ndx.peSource = 'chartrow · factsheet 口径';
+      out.ndx.pePct = p.pct == null ? null : +(p.pct * 100).toFixed(1);
+      out.ndx.peSource = '雪球基金 · 蛋卷指数估值';
     } catch (e) { mark('NDX PE: ' + (e.message || e)); }
   } catch (e) { mark('NDX: ' + (e.message || e)); out.ndx = null; }
 

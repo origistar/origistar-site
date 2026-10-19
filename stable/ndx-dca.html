@@ -189,10 +189,12 @@
   set('pe', n.pe); set('peL', n.peLabel);
   tag('peTag', n.peLabel, 'acc');
 
-  /* ---- PE 数据日期 ----
+  /* ---- PE 数据日期 / 历史分位 ----
      PE 是慢变量、且历史上是人工/半自动更新，而 VIX/DD 每天 3 次刷新 ——
      两者并排时页面看起来"全都在更新"，实际 PE 可能是一个月前的值。
-     这里必须把"截至哪天"摆在脸上，并在过期时显式变色提醒。 */
+     这里必须把"截至哪天"摆在脸上，并在过期时显式变色提醒。
+     分位（pePct）来自雪球基金同一接口 —— 本页 28/33/36/38 四档就是按
+     雪球历史 30%/70% 分位推出来的，把分位亮出来才能对照档位是否合理。 */
   (function () {
     var el = document.getElementById('peAsOf');
     if (!el) return;
@@ -201,9 +203,11 @@
     var t = new Date(asOf + 'T00:00:00');
     if (isNaN(t.getTime())) { el.textContent = ' · 截至 ' + asOf; return; }
     var days = Math.floor((Date.now() - t.getTime()) / 86400000);
-    var txt = ' · 截至 ' + asOf.slice(5).replace('-', '/');
-    if (days > 30) { txt += '（' + days + ' 天前，请复核）'; el.style.color = '#ef4444'; el.style.fontWeight = '600'; }
-    else if (days > 14) { txt += '（' + days + ' 天前）'; el.style.color = '#f59e0b'; }
+    var base = ' · 截至 ' + asOf.slice(5).replace('-', '/');
+    if (n.pePct != null) base += ' · 分位 ' + n.pePct + '%';
+    var txt = base;
+    if (days > 30) { txt = base + '（' + days + ' 天前，请复核）'; el.style.color = '#ef4444'; el.style.fontWeight = '600'; }
+    else if (days > 14) { txt = base + '（' + days + ' 天前）'; el.style.color = '#f59e0b'; }
     el.textContent = txt;
   })();
 
