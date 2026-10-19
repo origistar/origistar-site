@@ -6,7 +6,9 @@ window.ORIGISTAR = {
 
   /* 稳健仓 · 纳指定投 (v5.1) */
   ndx: {
-    pe: 30.75,           // 纳指100 当前 PE-TTM
+    pe: 28.5,            // 纳指100 PE-TTM（factsheet 口径，剔除亏损公司）
+    peAsOf: "2026-10-16",// PE 数据日期：页面据此标注；>14 天标黄，>30 天标红提醒
+                         // 自动更新见 scripts/fetch-market.mjs -> fetchNdxPE()（每日 3 次）
     peLabel: "合理偏低",
     vix: 15.71,          // 恐慌指数
     dd: -5.32,           // 距 52 周高点回撤 %

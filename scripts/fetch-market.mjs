@@ -104,14 +104,33 @@ function sma(arr, n) {
   return s / n;
 }
 
+// NDX PE-TTM（指数整体估值）
+// 口径：fund-factsheet method —— 成员调整后市盈率的加权调和平均，剔除亏损公司。
+//   与 data.js 里人工填的 30.75 同口径（实测与易方达 159696 跟踪指数披露的 29.26 相差 <0.1）。
+// 为什么要专门找源：Yahoo quoteSummary 需 crumb 鉴权、Nasdaq API 不返回、
+//   东财 push2 对指数返回 f162=0、腾讯 usNDX 无 PE 字段 —— 常规源全部拿不到。
+// 抓不到就**不写 pe 字段**（不是写 null），页面 Object.assign 后自然回落 data.js 手动值。
+async function fetchNdxPE() {
+  const h = await curlText('https://chartrow.com/nasdaq-100/pe-ratio');
+  const m = h.match(/Factsheet method<\/dt>\s*<dd[^>]*>\s*([\d.]+)/);
+  if (!m) throw new Error('未找到 Factsheet method 字段（页面结构可能已变）');
+  const pe = +m[1];
+  // 合理性护栏：NDX PE-TTM 历史区间约 15–45，越界必是抓错（比如抓到了 median 或自建口径）
+  if (!(pe > 5 && pe < 100)) throw new Error('PE 越界: ' + pe);
+  // 数据日期：优先用页面上的 ISO 日期（如 2026-10-16）；取不到就留 null，由页面按"未知"处理
+  const d = h.match(/(\d{4}-\d{2}-\d{2})"[^>]{0,80}>as of market close/);
+  return { pe: pe, asOf: d ? d[1] : null };
+}
+
 async function main() {
   const out = { generatedAt: beijingTime(), updateFreq: '每日 3 次（08:30 / 16:30 / 23:00 北京时间）', source: 'Yahoo Finance', errors: [] };
   const mark = (e) => { out.errors.push(e); };
 
   // ---------- NDX ----------
-  // 注：NDX PE-TTM 无可靠免费自动源（Yahoo quoteSummary 需 crumb 鉴权、Nasdaq API 不返回）。
-  // PE 为慢变量，由 data.js 人工复核提供；本脚本只自动更新点位 / VIX / 回撤，
-  // 故不输出 pe 字段，页面用 Object.assign 合并时自然回落到 data.js 的手动值。
+  // 点位 / VIX / 回撤：Yahoo Finance。
+  // PE-TTM：走 fetchNdxPE()（chartrow factsheet 口径，见上方说明）。
+  // 2026-10-19 前此处不抓 PE，PE 一直停在 data.js 的 2026-09-16 手动值（33 天未更新），
+  // 页面却每天刷新 VIX/DD，看起来像"全都在更新" —— 已补上自动抓取 + 页面日期标注。
   try {
     const ndx = await fetchYahooChart('^NDX');
     const price = ndx.meta.regularMarketPrice;
@@ -122,6 +141,13 @@ async function main() {
       ndx: price, vix: vix, dd: dd != null ? +dd.toFixed(2) : null,
       dataSource: 'Yahoo Finance'
     };
+    // PE 独立 try —— 抓不到不影响点位/VIX/DD，也不覆盖 data.js 的手动值
+    try {
+      const p = await fetchNdxPE();
+      out.ndx.pe = p.pe;
+      out.ndx.peAsOf = p.asOf;
+      out.ndx.peSource = 'chartrow · factsheet 口径';
+    } catch (e) { mark('NDX PE: ' + (e.message || e)); }
   } catch (e) { mark('NDX: ' + (e.message || e)); out.ndx = null; }
 
   // ---------- BTC ----------

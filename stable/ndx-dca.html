@@ -32,7 +32,7 @@
       <div class="card kpi">
         <div class="top"><span class="ic" style="background:linear-gradient(135deg,#4f46e5,#6366f1)">PE</span>纳指100 估值</div>
         <div class="val"><span id="pe">—</span></div>
-        <div class="meta">标签：<b id="peL">—</b></div>
+        <div class="meta">标签：<b id="peL">—</b><span id="peAsOf"></span></div>
         <span class="tag flat" id="peTag">—</span>
       </div>
       <div class="card kpi">
@@ -188,6 +188,25 @@
 
   set('pe', n.pe); set('peL', n.peLabel);
   tag('peTag', n.peLabel, 'acc');
+
+  /* ---- PE 数据日期 ----
+     PE 是慢变量、且历史上是人工/半自动更新，而 VIX/DD 每天 3 次刷新 ——
+     两者并排时页面看起来"全都在更新"，实际 PE 可能是一个月前的值。
+     这里必须把"截至哪天"摆在脸上，并在过期时显式变色提醒。 */
+  (function () {
+    var el = document.getElementById('peAsOf');
+    if (!el) return;
+    var asOf = n.peAsOf || null;
+    if (!asOf) { el.textContent = ' · 日期未知'; el.style.color = '#f59e0b'; return; }
+    var t = new Date(asOf + 'T00:00:00');
+    if (isNaN(t.getTime())) { el.textContent = ' · 截至 ' + asOf; return; }
+    var days = Math.floor((Date.now() - t.getTime()) / 86400000);
+    var txt = ' · 截至 ' + asOf.slice(5).replace('-', '/');
+    if (days > 30) { txt += '（' + days + ' 天前，请复核）'; el.style.color = '#ef4444'; el.style.fontWeight = '600'; }
+    else if (days > 14) { txt += '（' + days + ' 天前）'; el.style.color = '#f59e0b'; }
+    el.textContent = txt;
+  })();
+
   set('vix', n.vix);
   set('dd', n.dd);
 
