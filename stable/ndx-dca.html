@@ -197,13 +197,13 @@
      「1.5 份 × DD×1.0」「VIX 15.71」「<6 ×1.0 高亮」写死在标记里 ——
      VIX 涨到 19.99 / DD 到 6.93% 后，卡片、矩阵、金额三者自相矛盾。 */
   var R = window.NDX_RULE ? window.NDX_RULE.compute(n.pe, n.vix, n.dd) : null;
-  var dcaVal = R ? R.daily : (n.dailyDCA || 0);
-  set('dca', dcaVal.toLocaleString());
+  var dcaVal = R && R.daily != null ? R.daily : null;
+  set('dca', dcaVal == null ? '—' : dcaVal.toLocaleString());
   set('stage', R ? R.status : n.signal);
   set('dcaStage', R ? R.status : n.signal);
-  set('calcLine', R
-    ? 'PE×VIX = ' + R.shares.toFixed(1) + ' 份 × DD×' + (R.mult == null ? '—' : R.mult.toFixed(1)) + ' × ¥1,000 = ¥' + dcaVal.toLocaleString()
-    : '—');
+  set('calcLine', dcaVal == null
+    ? '—'
+    : 'PE×VIX = ' + R.shares.toFixed(1) + ' 份 × DD×' + (R.mult == null ? '—' : R.mult.toFixed(1)) + ' × ¥1,000 = ¥' + dcaVal.toLocaleString());
   if (R) {
     set('vixMeta', '当前落在「' + R.vixName + '」');
     (function () {
@@ -218,8 +218,6 @@
     })();
     set('mCap', '当前 PE ' + R.pe.toFixed(2) + ' / VIX ' + R.vix.toFixed(2) + ' → 落在「' + R.peName + ' × ' + R.vixName + '」格 = ' + R.shares.toFixed(1) + ' 份（高亮）。');
     set('ddCap', '当前 DD ' + R.dd.toFixed(2) + '% → ' + (R.bear ? '熊市池' : '日常池') + '「' + R.ddName + '%」档 ' + (R.mult == null ? '暂停' : '×' + R.mult.toFixed(1)) + '。DD<20% 走日常池；DD 20–30% 且 ≤1 月反转窗口双池齐发；DD>30% 或 >1 月长熊期熊市池独立。');
-  } else {
-    set('dca', (n.dailyDCA || 0).toLocaleString());
   }
   set('ndxPt', n.ndx ? n.ndx.toLocaleString() : '—');
   set('roe', n.roe);

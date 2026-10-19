@@ -13,7 +13,8 @@ window.ORIGISTAR = {
     ndx: 29125,          // 纳指100 点位
     roe: 30.0,           // 指数 ROE %
     premium: 11.5,       // 513100 溢价率 %
-    dailyDCA: 1500,      // 自用每日定投 ¥
+    dailyDCA: null,      // 已废弃：每日金额一律由 window.NDX_RULE.compute() 现算，
+                         // 此字段仅占位。历史上写死 1500 曾导致卡片与 PE/VIX/DD 自相矛盾。
     score: 46,           // 性价比评分
     scoreLabel: "中等",  // 71-100极高 / 41-70中等 / 10-40偏低
     signal: "日常期 · 常态定投",

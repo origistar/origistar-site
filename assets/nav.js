@@ -111,15 +111,15 @@
       /* ndx 合并实时快照（nav 可能先于其它脚本执行，自己合一次更稳） */
       var n = Object.assign({}, d.ndx, (window.MARKET_LIVE && window.MARKET_LIVE.ndx) || {});
       var nr = window.NDX_RULE ? window.NDX_RULE.compute(n.pe, n.vix, n.dd) : null;
-      var dcaNow = nr ? nr.daily : n.dailyDCA;
+      var dcaNow = nr && nr.daily != null ? nr.daily : null;
       return sectionHead('重点概览') +
         kv([
           { k: '纳指 PE', v: fmt(n.pe, 2), sub: n.peLabel },
           { k: 'VIX', v: fmt(n.vix, 2) },
           { k: '回撤', v: fmt(Math.abs(n.dd), 2) + '%', sub: '52周高点' },
-          { k: '今日定投', v: '¥' + dcaNow, sub: nr ? nr.shares + ' 份 × DD×' + (nr.mult == null ? '—' : nr.mult) : '份数' }
+          { k: '今日定投', v: dcaNow == null ? '—' : '¥' + dcaNow, sub: nr ? nr.shares + ' 份 × DD×' + (nr.mult == null ? '—' : nr.mult) : '份数' }
         ]) +
-        sigRow(nr ? nr.status : n.signal, n.signalType, '今日定投 ¥' + dcaNow) +
+        sigRow(nr ? nr.status : n.signal, n.signalType, dcaNow == null ? '今日定投 —' : '今日定投 ¥' + dcaNow) +
         kv([
           { k: 'BTC AHR999', v: fmt(b.ahr999, 2), sub: b.ahr999Label },
           { k: 'BTC 价格', v: '$' + (b.price ? b.price.toLocaleString() : '—') },
