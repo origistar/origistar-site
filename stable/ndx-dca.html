@@ -14,6 +14,7 @@
 </head>
 <body>
 <script src="../assets/data.js"></script>
+<script src="../assets/market-live.js"></script>
 <script src="../assets/nav.js" data-system="stable" data-page="ndx-dca"></script>
 
 <div class="wrap">
@@ -37,7 +38,7 @@
       <div class="card kpi">
         <div class="top"><span class="ic" style="background:linear-gradient(135deg,#0ea5e9,#22d3ee)">VIX</span>恐慌指数</div>
         <div class="val"><span id="vix">—</span></div>
-        <div class="meta">平稳区间 13–18</div>
+        <div class="meta" id="vixMeta">区间 13–18 为平稳</div>
         <span class="tag flat">市场情绪</span>
       </div>
       <div class="card kpi">
@@ -101,14 +102,14 @@
     <div class="section-head"><h2 id="sec-matrix">PE × VIX 基准矩阵</h2><span class="sub">份数 = 基数</span></div>
     <div class="card">
       <div class="scroll-x">
-        <table class="matrix">
+        <table class="matrix" id="mMatrix">
           <tr><th>PE ＼ VIX</th><th>贪婪 &lt;13</th><th>平稳 13–18</th><th>恐慌 18–30</th><th>极恐 &gt;30</th></tr>
           <tr><td class="lb">PE &lt; 28</td><td>1.0</td><td>2.0</td><td>3.0</td><td>4.0</td></tr>
-          <tr><td class="lb">28 ~ 33</td><td>0.5</td><td class="hi">1.5</td><td>2.0</td><td>3.0</td></tr>
+          <tr><td class="lb">28 ~ 33</td><td>0.5</td><td>1.5</td><td>2.0</td><td>3.0</td></tr>
           <tr><td class="lb">33 ~ 36</td><td>0.5</td><td>1.0</td><td>1.5</td><td>2.0</td></tr>
           <tr><td class="lb">36 ~ 38</td><td class="dim">0.0</td><td>0.5</td><td>1.0</td><td>1.5</td></tr>
           <tr><td class="lb">&gt; 38</td><td class="dim">0</td><td class="dim">0</td><td class="dim">0</td><td class="dim">0</td></tr>
-          <caption>当前 PE 30.75 / VIX 15.71 → 落在「28~33 × 平稳」格 = 1.5 份（高亮）。</caption>
+          <caption id="mCap">—</caption>
         </table>
       </div>
     </div>
@@ -119,11 +120,11 @@
     <div class="section-head"><h2 id="sec-dd">DD 回撤乘数 · 三阶段</h2><span class="sub">加码力度</span></div>
     <div class="card">
       <div class="scroll-x">
-        <table class="matrix">
+        <table class="matrix" id="ddMatrix">
           <tr><th>阶段＼回撤</th><th>&lt;6</th><th>6–10</th><th>10–15</th><th>15–20</th><th>20–25</th><th>25–30</th><th>&gt;30</th></tr>
-          <tr><td class="lb">日常</td><td class="hi">×1.0</td><td>×1.5</td><td>×2.0</td><td>×3.0</td><td class="dim">暂停</td><td class="dim">暂停</td><td class="dim">暂停</td></tr>
+          <tr><td class="lb">日常</td><td>×1.0</td><td>×1.5</td><td>×2.0</td><td>×3.0</td><td class="dim">暂停</td><td class="dim">暂停</td><td class="dim">暂停</td></tr>
           <tr><td class="lb">熊市</td><td class="dim">—</td><td class="dim">—</td><td class="dim">—</td><td class="dim">—</td><td>×4.0</td><td>×5.0</td><td>×6.0</td></tr>
-          <caption>DD&lt;20%：日常池 · DD 20–30% 且 ≤1 月：反转窗口双池齐发 · DD&gt;30% 或 &gt;1 月：长熊期熊市池独立运作。</caption>
+          <caption id="ddCap">—</caption>
         </table>
       </div>
     </div>
@@ -170,7 +171,6 @@
 <footer class="foot">Origistar · 长坡厚雪，守拙日拱 · 数据仅供参考，非投资建议</footer>
 
 <script src="../assets/chart.umd.js"></script>
-<script src="../assets/market-live.js"></script>
 <script>
 (function () {
   var d = window.ORIGISTAR; if (!d) return;
@@ -190,10 +190,37 @@
   tag('peTag', n.peLabel, 'acc');
   set('vix', n.vix);
   set('dd', n.dd);
-  set('dca', n.dailyDCA.toLocaleString());
-  set('stage', n.signal);
-  set('calcLine', 'PE×VIX = 1.5 份 × DD×1.0 × ¥1,000 = ¥' + n.dailyDCA.toLocaleString());
-  set('dcaStage', n.signal);
+
+  /* ---- 份数 / 金额 / 高亮：全部由 NDX_RULE 现算（单一数据源，禁止硬编码） ----
+     v5.1：金额 = ¥1,000 × 份数(PE×VIX) × DD 乘数。
+     历史坑（2026-10-19）：此处曾直接显示 data.js 的 dailyDCA=1500，并把
+     「1.5 份 × DD×1.0」「VIX 15.71」「<6 ×1.0 高亮」写死在标记里 ——
+     VIX 涨到 19.99 / DD 到 6.93% 后，卡片、矩阵、金额三者自相矛盾。 */
+  var R = window.NDX_RULE ? window.NDX_RULE.compute(n.pe, n.vix, n.dd) : null;
+  var dcaVal = R ? R.daily : (n.dailyDCA || 0);
+  set('dca', dcaVal.toLocaleString());
+  set('stage', R ? R.status : n.signal);
+  set('dcaStage', R ? R.status : n.signal);
+  set('calcLine', R
+    ? 'PE×VIX = ' + R.shares.toFixed(1) + ' 份 × DD×' + (R.mult == null ? '—' : R.mult.toFixed(1)) + ' × ¥1,000 = ¥' + dcaVal.toLocaleString()
+    : '—');
+  if (R) {
+    set('vixMeta', '当前落在「' + R.vixName + '」');
+    (function () {
+      function hiOnly(tblId, r, c) {
+        var tbl = document.getElementById(tblId); if (!tbl) return;
+        var olds = tbl.querySelectorAll('.hi');
+        for (var i = 0; i < olds.length; i++) { olds[i].classList.remove('hi'); }
+        if (tbl.rows[r] && tbl.rows[r].cells[c]) { tbl.rows[r].cells[c].classList.add('hi'); }
+      }
+      hiOnly('mMatrix', R.peIdx + 1, R.vixIdx + 1);
+      hiOnly('ddMatrix', R.bear ? 2 : 1, R.ddIdx + 1);
+    })();
+    set('mCap', '当前 PE ' + R.pe.toFixed(2) + ' / VIX ' + R.vix.toFixed(2) + ' → 落在「' + R.peName + ' × ' + R.vixName + '」格 = ' + R.shares.toFixed(1) + ' 份（高亮）。');
+    set('ddCap', '当前 DD ' + R.dd.toFixed(2) + '% → ' + (R.bear ? '熊市池' : '日常池') + '「' + R.ddName + '%」档 ' + (R.mult == null ? '暂停' : '×' + R.mult.toFixed(1)) + '。DD<20% 走日常池；DD 20–30% 且 ≤1 月反转窗口双池齐发；DD>30% 或 >1 月长熊期熊市池独立。');
+  } else {
+    set('dca', (n.dailyDCA || 0).toLocaleString());
+  }
   set('ndxPt', n.ndx ? n.ndx.toLocaleString() : '—');
   set('roe', n.roe);
   set('prem', n.premium);

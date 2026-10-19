@@ -2,7 +2,7 @@
    更新方式：本地改此文件，或后续用任意云函数/定时脚本回写。
    当前为最近一次人工核对值（示意），页面会显示“更新于”日期。 */
 window.ORIGISTAR = {
-  updated: "2026-10-19 02:15 北京时间",
+  updated: "2026-09-16 13:06 北京时间",
 
   /* 稳健仓 · 纳指定投 (v5.1) */
   ndx: {
@@ -177,5 +177,60 @@ window.ORIGISTAR = {
         "再平衡记录与决策留痕完整性"
       ]
     }
+  }
+};
+
+/* =========================================================
+   纳指定投规则引擎（v5.1）· 单一数据源
+   ---------------------------------------------------------
+   份数与金额一律由这里算，禁止在 HTML / 各页面脚本里硬编码
+   （2026-10-19 修：ndx-dca 页面曾把「1.5 份 / DD×1.0 / ¥1500」
+    写死在标记与文案里，导致 VIX 19.99 时卡片与矩阵自相矛盾）。
+
+   金额 = 基数 ¥1,000 × 份数(PE×VIX 查表) × DD 乘数
+   ========================================================= */
+window.NDX_RULE = {
+  BASE: 1000,
+  PE_BANDS: [28, 33, 36, 38],          /* <28 / 28–33 / 33–36 / 36–38 / >38 */
+  VIX_BANDS: [13, 18, 30],             /* <13 贪婪 / 13–18 平稳 / 18–30 恐慌 / >30 极恐 */
+  MATRIX: [                            /* 行 = PE 档，列 = VIX 档（份数） */
+    [1.0, 2.0, 3.0, 4.0],
+    [0.5, 1.5, 2.0, 3.0],
+    [0.5, 1.0, 1.5, 2.0],
+    [0.0, 0.5, 1.0, 1.5],
+    [0.0, 0.0, 0.0, 0.0]
+  ],
+  DD_BANDS: [6, 10, 15, 20, 25, 30],   /* <6 / 6–10 / 10–15 / 15–20 / 20–25 / 25–30 / >30 */
+  DD_DAILY: [1.0, 1.5, 2.0, 3.0],      /* 日常池：仅 DD<20% 段适用 */
+  DD_BEAR: { 4: 4.0, 5: 5.0, 6: 6.0 }, /* 熊市池：DD≥20% 段（20–25 / 25–30 / >30） */
+  PE_NAMES: ['< 28', '28 ~ 33', '33 ~ 36', '36 ~ 38', '> 38'],
+  VIX_NAMES: ['贪婪 <13', '平稳 13–18', '恐慌 18–30', '极恐 >30'],
+  DD_NAMES: ['<6', '6–10', '10–15', '15–20', '20–25', '25–30', '>30'],
+  bandIdx: function (v, bands) {
+    for (var i = 0; i < bands.length; i++) { if (v < bands[i]) return i; }
+    return bands.length;
+  },
+  compute: function (pe, vix, dd) {
+    pe = +pe; vix = +vix; dd = Math.abs(+dd || 0);
+    var pi = this.bandIdx(pe, this.PE_BANDS);
+    var vi = this.bandIdx(vix, this.VIX_BANDS);
+    var di = this.bandIdx(dd, this.DD_BANDS);
+    var shares = this.MATRIX[pi][vi];
+    var bear = dd >= 20;                                  /* DD≥20% 交给熊市池乘数 */
+    var mult = bear ? (this.DD_BEAR[di] == null ? null : this.DD_BEAR[di])
+                    : (this.DD_DAILY[di] == null ? null : this.DD_DAILY[di]);
+    var daily = (mult == null || !shares) ? 0 : Math.round(this.BASE * shares * mult);
+    var status;
+    if (!shares) { status = '停止主动定投'; }
+    else if (bear) { status = '熊市池 · 加码'; }
+    else if (dd >= 15) { status = '日常期 · 深度回调加码'; }
+    else if (dd >= 6) { status = '日常期 · 回调加码'; }
+    else { status = '日常期 · 常态定投'; }
+    return {
+      pe: pe, vix: vix, dd: dd, peIdx: pi, vixIdx: vi, ddIdx: di,
+      shares: shares, mult: mult, daily: daily, bear: bear, paused: mult == null,
+      peName: this.PE_NAMES[pi], vixName: this.VIX_NAMES[vi], ddName: this.DD_NAMES[di],
+      status: status
+    };
   }
 };

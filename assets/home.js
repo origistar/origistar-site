@@ -91,11 +91,12 @@
   // ---------- 计算各行 ----------
   var rows = [];
 
-  // 1) 纳指定投（每日）
+  // 1) 纳指定投（每日）——金额由 NDX_RULE 现算，勿再读 data.js 的静态 dailyDCA
+  var ndxR = window.NDX_RULE ? window.NDX_RULE.compute(d.ndx.pe, d.ndx.vix, d.ndx.dd) : null;
   rows.push({
     name: '纳指定投',
-    val: money(d.ndx.dailyDCA) + '/天',
-    note: d.ndx.signal + ' · PE ' + d.ndx.pe + ' · 回撤 ' + d.ndx.dd + '%'
+    val: money(ndxR ? ndxR.daily : d.ndx.dailyDCA) + '/天',
+    note: (ndxR ? ndxR.status : d.ndx.signal) + ' · PE ' + d.ndx.pe + ' · 回撤 ' + Math.abs(d.ndx.dd) + '%'
   });
 
   // 2) BTC 定投（每周 × AHR999 档位）
