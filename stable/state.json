@@ -987,18 +987,18 @@
       "date": "2026-10-27",
       "pe": 28.89,
       "pe_pct": 39.3,
-      "vix": 18.39,
-      "ndx": 29273,
-      "dd_pct": -6.66,
+      "vix": 17.74,
+      "ndx": 29509,
+      "dd_pct": -5.91,
       "tier": "mid_low",
       "phase": "①",
-      "score": 53,
-      "daily": 3000,
-      "premium": 15
+      "score": 52,
+      "daily": 1500,
+      "premium": 13.6
     }
   ],
-  "last_data_hash": "28.89|18.39|29273",
-  "generatedAt": "2026-10-27 13:26 北京时间",
+  "last_data_hash": "28.89|17.74|29509",
+  "generatedAt": "2026-10-27 22:51 北京时间",
   "dataSource": "蛋卷 PE/分位/ROE + Yahoo NDX/VIX/52周高 + 腾讯gtimg现价 + 东财513100净值（指数·汇率修正）",
   "lastNote": "全部成功"
 }
