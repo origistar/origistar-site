@@ -1,7 +1,7 @@
 // 自动生成：稳健仓市场快照（NDX / VIX / BTC / AHR999）
-// 生成时间：2026-10-31 14:09 北京时间
+// 生成时间：2026-10-31 22:40 北京时间
 window.MARKET_LIVE = {
-  "generatedAt": "2026-10-31 14:09 北京时间",
+  "generatedAt": "2026-10-31 22:40 北京时间",
   "updateFreq": "每日 3 次（08:30 / 16:30 / 23:00 北京时间）",
   "source": "Yahoo Finance",
   "errors": [],
@@ -16,16 +16,16 @@ window.MARKET_LIVE = {
     "peSource": "雪球基金 · 蛋卷指数估值"
   },
   "btc": {
-    "price": 77092.07,
-    "ahr999": 0.4453,
-    "p200ma": 1.054,
-    "ma200": 73115,
+    "price": 77372.91,
+    "ahr999": 0.4485,
+    "p200ma": 1.058,
+    "ma200": 73131,
     "hi52w": 111167,
-    "dd52w": 30.7,
+    "dd52w": 30.4,
     "ibit": 43.36,
     "mstr": 130.51,
-    "mstr52w": 276,
-    "mstrDd": -52.8,
+    "mstr52w": 270,
+    "mstrDd": -51.7,
     "mnav": null,
     "dataSource": "Yahoo Finance"
   },
@@ -98,7 +98,7 @@ window.MARKET_LIVE = {
       }
     ],
     "note": "溢价率经指数与汇率修正；QDII 净值 T+2~T+3 滞后，未经修正的 raw 值仅供对照",
-    "updateAt": "2026-10-31 14:09 北京时间"
+    "updateAt": "2026-10-31 22:41 北京时间"
   },
   "fetchNote": "全部成功"
 };
