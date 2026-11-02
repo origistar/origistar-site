@@ -1,5 +1,5 @@
 // 自动生成：防守仓行情快照（SCHD / BRK.B / 黄金）
-// 生成时间：2026-11-02 03:51 北京时间
+// 生成时间：2026-11-02 14:39 北京时间
 window.DEFENSIVE_LIVE = {
   "items": {
     "schd": {
@@ -21,7 +21,7 @@ window.DEFENSIVE_LIVE = {
       "dataSource": "Yahoo Finance"
     },
     "gold": {
-      "price": 3898.9,
+      "price": 3917,
       "zone": "建仓",
       "zoneType": "up",
       "symbol": "GC=F",
@@ -29,7 +29,7 @@ window.DEFENSIVE_LIVE = {
     }
   },
   "errors": [],
-  "generatedAt": "2026-11-02 03:51 北京时间",
+  "generatedAt": "2026-11-02 14:39 北京时间",
   "source": "Yahoo Finance",
   "fetchNote": "3/3 取价成功"
 };
