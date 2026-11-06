@@ -1115,20 +1115,20 @@
     },
     {
       "date": "2026-11-06",
-      "pe": 27.48,
-      "pe_pct": 28.3,
-      "vix": 22.31,
-      "ndx": 27141,
-      "dd_pct": -13.46,
+      "pe": 25.96,
+      "pe_pct": 20,
+      "vix": 28.18,
+      "ndx": 26630,
+      "dd_pct": -15.09,
       "tier": "low",
       "phase": "①",
-      "score": 64,
-      "daily": 6000,
-      "premium": 22.5
+      "score": 74,
+      "daily": 9000,
+      "premium": 21.1
     }
   ],
-  "last_data_hash": "27.48|22.31|27141",
-  "generatedAt": "2026-11-06 00:41 北京时间",
+  "last_data_hash": "25.96|28.18|26630",
+  "generatedAt": "2026-11-06 15:13 北京时间",
   "dataSource": "蛋卷 PE/分位/ROE + Yahoo NDX/VIX/52周高 + 腾讯gtimg现价 + 东财513100净值（指数·汇率修正）",
-  "lastNote": "回填 2026-11-06: 无历史K线，跳过"
+  "lastNote": "全部成功"
 }
