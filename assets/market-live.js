@@ -1,7 +1,7 @@
 // 自动生成：稳健仓市场快照（NDX / VIX / BTC / AHR999）
-// 生成时间：2026-11-28 07:39 北京时间
+// 生成时间：2026-11-28 16:18 北京时间
 window.MARKET_LIVE = {
-  "generatedAt": "2026-11-28 07:39 北京时间",
+  "generatedAt": "2026-11-28 16:18 北京时间",
   "updateFreq": "每日 3 次（08:30 / 16:30 / 23:00 北京时间）",
   "source": "Yahoo Finance",
   "errors": [],
@@ -10,18 +10,18 @@ window.MARKET_LIVE = {
     "vix": 23.81,
     "dd": 14.78,
     "dataSource": "Yahoo Finance",
-    "pe": 24.6111,
-    "peAsOf": "2026-11-26",
-    "pePct": 10,
+    "pe": 25.1447,
+    "peAsOf": "2026-11-27",
+    "pePct": 12.9,
     "peSource": "雪球基金 · 蛋卷指数估值"
   },
   "btc": {
-    "price": 59765.25,
-    "ahr999": 0.266,
-    "p200ma": 0.832,
-    "ma200": 71810,
+    "price": 59548.09,
+    "ahr999": 0.2642,
+    "p200ma": 0.83,
+    "ma200": 71706,
     "hi52w": 97861,
-    "dd52w": 38.9,
+    "dd52w": 39.2,
     "ibit": 33.86,
     "mstr": 81.62,
     "mstr52w": 198,
@@ -37,8 +37,8 @@ window.MARKET_LIVE = {
         "price": 2.108,
         "nav": 1.7407,
         "navDate": "2026-11-26",
-        "adjNav": 1.7889,
-        "premium": 17.84,
+        "adjNav": 1.7888,
+        "premium": 17.85,
         "premiumRaw": 21.1,
         "basis": "净值 1.7407 × 指数 1.0261 × 汇率 1.0015",
         "signal": "溢价>8% · 换回场外",
@@ -50,8 +50,8 @@ window.MARKET_LIVE = {
         "price": 1.571,
         "nav": 1.3007,
         "navDate": "2026-11-26",
-        "adjNav": 1.3367,
-        "premium": 17.53,
+        "adjNav": 1.3366,
+        "premium": 17.54,
         "premiumRaw": 20.78,
         "basis": "净值 1.3007 × 指数 1.0261 × 汇率 1.0015",
         "signal": "溢价>8% · 换回场外",
@@ -63,8 +63,8 @@ window.MARKET_LIVE = {
         "price": 2.6,
         "nav": 2.1579,
         "navDate": "2026-11-26",
-        "adjNav": 2.2176,
-        "premium": 17.24,
+        "adjNav": 2.2175,
+        "premium": 17.25,
         "premiumRaw": 20.49,
         "basis": "净值 2.1579 × 指数 1.0261 × 汇率 1.0015",
         "signal": "溢价>8% · 换回场外",
@@ -76,7 +76,7 @@ window.MARKET_LIVE = {
         "price": 2.363,
         "nav": 1.9775,
         "navDate": "2026-11-26",
-        "adjNav": 2.0322,
+        "adjNav": 2.0321,
         "premium": 16.28,
         "premiumRaw": 19.49,
         "basis": "净值 1.9775 × 指数 1.0261 × 汇率 1.0015",
@@ -89,8 +89,8 @@ window.MARKET_LIVE = {
         "price": 2.344,
         "nav": 1.9538,
         "navDate": "2026-11-26",
-        "adjNav": 2.0079,
-        "premium": 16.74,
+        "adjNav": 2.0078,
+        "premium": 16.75,
         "premiumRaw": 19.97,
         "basis": "净值 1.9538 × 指数 1.0261 × 汇率 1.0015",
         "signal": "溢价>8% · 换回场外",
@@ -98,7 +98,7 @@ window.MARKET_LIVE = {
       }
     ],
     "note": "溢价率经指数与汇率修正；QDII 净值 T+2~T+3 滞后，未经修正的 raw 值仅供对照",
-    "updateAt": "2026-11-28 07:39 北京时间"
+    "updateAt": "2026-11-28 16:18 北京时间"
   },
   "fetchNote": "全部成功"
 };
